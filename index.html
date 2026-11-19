@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PT Satelit Komunika Nusantara (SKN) | Distributor Smartphone Sumatera, Sulawesi, Maluku</title>
-<meta name="description" content="PT Satelit Komunika Nusantara (SKN) adalah perusahaan distribusi smartphone Infinix, itel, dan V-GeN dengan jaringan depo dan store di Sumatera, Sulawesi, dan Maluku.">
+<title>PT Satelit Komunika Nusantara (SKN) | Distributor Smartphone, Aksesori &amp; Memori</title>
+<meta name="description" content="PT Satelit Komunika Nusantara (SKN) adalah distributor smartphone, aksesori, memori, dan kopi dengan jaringan depo dan store di seluruh Indonesia.">
 <meta name="theme-color" content="#0c1424">
 <link rel="icon" type="image/png" href="img/ikon.png">
 <link rel="apple-touch-icon" href="img/ikon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root{
@@ -401,6 +401,50 @@ html.diam .tl::before{transform:none}
   .cta .btn{flex:1 1 100%}
   .brand small{display:none}
 }
+/* ===== v2: bahasa, flagship, lini produk ===== */
+.menu{margin-left:auto}
+.lang{display:flex;align-items:center;gap:2px;margin-left:26px}
+.lang button{background:none;border:0;border-bottom:1px solid transparent;color:#aeb6c6;font-size:11.5px;font-weight:600;letter-spacing:.12em;padding:8px 8px;transition:color .3s,border-color .3s}
+.lang button:hover{color:#fff}
+.lang button[aria-pressed=true]{color:#fff;border-color:var(--gold-l)}
+.about{align-items:end}
+.about .txt p{margin-bottom:0}
+#tentang .tl{margin-top:96px}
+.vision{margin-top:96px;border-bottom:0;padding-bottom:0}
+a.row{color:inherit}
+.brands.four{grid-template-columns:repeat(4,1fr)}
+.four .bcard{padding:44px 26px 48px}
+.four .bcard:first-child{padding-left:0}
+.four .bname{font-size:clamp(26px,2.5vw,34px);margin:16px 0 16px}
+.bcard small{color:var(--red);font-family:var(--serif);font-weight:500;font-size:14px;letter-spacing:.06em}
+.flag{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:104px;padding-top:64px;border-top:1px solid var(--text)}
+.flag h3{font-size:clamp(28px,3.4vw,44px);margin-top:24px}
+.flag-r p{color:#3d4556;font-size:18px}
+.flag-pts{list-style:none;margin:30px 0 34px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid var(--line)}
+.flag-pts li{padding-top:18px}
+.flag-pts b{display:block;font-family:var(--serif);font-weight:500;font-size:14px;color:var(--red);letter-spacing:.06em}
+.flag-pts span{display:block;margin-top:6px;font-weight:500}
+.fcard{justify-content:flex-end}
+html[lang^=zh]{--serif:"Noto Serif SC","Songti SC","Source Han Serif SC","SimSun",serif;--sans:"Inter","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif}
+html[lang^=zh] em,html[lang^=zh] blockquote,html[lang^=zh] .cap-n,html[lang^=zh] .foot-top p,html[lang^=zh] .orb .tag span{font-style:normal}
+html[lang^=zh] h1,html[lang^=zh] h2,html[lang^=zh] h3{letter-spacing:0;line-height:1.32}
+html[lang^=zh] .label,html[lang^=zh] .menu a:not(.btn),html[lang^=zh] .btn{letter-spacing:.12em;font-size:13px}
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr}
+  .lang{margin-left:auto;margin-right:10px}
+  .flag{grid-template-columns:1fr;gap:28px;margin-top:72px;padding-top:48px}
+  .brands.four{grid-template-columns:1fr 1fr}
+  .four .bcard:nth-child(odd){border-left:0;padding-left:0}
+  .four .bcard:nth-child(n+3){border-top:1px solid var(--line)}
+  #tentang .tl{margin-top:64px}
+}
+@media (max-width:700px){
+  .brands.four{grid-template-columns:1fr}
+  .four .bcard{padding:36px 0;border-top:0!important}
+  .vision{margin-top:64px;padding-bottom:0}
+  .lang button{padding:8px 6px;font-size:11px}
+  .logo{height:36px}
+}
 </style>
 </head>
 <body>
@@ -408,21 +452,25 @@ html.diam .tl::before{transform:none}
 <div id="prog" aria-hidden="true"></div>
 <header class="nav" id="nav">
   <div class="wrap nav-in">
-    <a href="#beranda" class="brand" aria-label="SKN - Beranda">
+    <a href="#beranda" class="brand" aria-label="SKN">
       <img class="logo" src="img/logo.png" alt="SKN" width="641" height="200">
       <small>PT Satelit Komunika Nusantara</small>
     </a>
-    <button class="burger" id="burger" aria-label="Buka menu" aria-expanded="false" aria-controls="menu">
+    <nav class="menu" id="menu" aria-label="Menu">
+      <a href="#tentang" data-t="n1">Tentang</a>
+      <a href="#layanan" data-t="n2">Layanan</a>
+      <a href="#jaringan" data-t="n3">Depo &amp; Store</a>
+      <a href="#produk" data-t="n4">Produk</a>
+      <a class="btn btn-red" href="#kontak" data-t="n5">Hubungi Kami</a>
+    </nav>
+    <div class="lang" id="lang" role="group" aria-label="Bahasa / Language / 语言">
+      <button type="button" data-l="id" aria-pressed="true">ID</button>
+      <button type="button" data-l="en" aria-pressed="false">EN</button>
+      <button type="button" data-l="zh" aria-pressed="false">中文</button>
+    </div>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
     </button>
-    <nav class="menu" id="menu" aria-label="Menu utama">
-      <a href="#tentang">Tentang</a>
-      <a href="#layanan">Layanan</a>
-      <a href="#jaringan">Depo &amp; Store</a>
-      <a href="#pabrik">Pabrik</a>
-      <a href="#brand">Brand</a>
-      <a class="btn btn-red" href="#kontak">Hubungi Kami</a>
-    </nav>
   </div>
 </header>
 
@@ -430,14 +478,14 @@ html.diam .tl::before{transform:none}
 <section class="hero" id="beranda">
   <div class="wrap hero-grid">
     <div class="hero-in">
-      <span class="label">Distribusi Smartphone Nasional · Sejak 2002</span>
-      <h1 aria-label="Mengantar teknologi ke seluruh Nusantara">Mengantar teknologi ke <em aria-hidden="true"><span id="rot">seluruh Nusantara.</span></em></h1>
-      <p class="lead">PT Satelit Komunika Nusantara adalah perusahaan distribusi smartphone yang berfokus pada pengembangan pasar, jaringan distribusi, dan pelayanan mitra bisnis di Sumatera, Sulawesi, dan Maluku.</p>
+      <span class="label" data-t="h0">Distribusi Nasional · Sejak 2002</span>
+      <h1><span data-t="h1">Mengantar teknologi ke</span> <em><span id="rot">seluruh Indonesia.</span></em></h1>
+      <p class="lead" data-t="h2">Distributor smartphone, aksesori, memori, dan kopi dengan jaringan depo dan store di seluruh Indonesia.</p>
       <div class="cta">
-        <a class="btn btn-red" href="#jaringan">Temukan depo &amp; store
+        <a class="btn btn-red" href="#jaringan"><span data-t="h3">Temukan depo &amp; store</span>
           <svg class="arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
         </a>
-        <a class="btn btn-ghost" href="#tentang">Tentang perusahaan</a>
+        <a class="btn btn-ghost" href="#tentang" data-t="h4">Tentang perusahaan</a>
       </div>
     </div>
     <div class="orb" aria-hidden="true">
@@ -457,19 +505,19 @@ html.diam .tl::before{transform:none}
         <circle cx="300" cy="300" r="86" fill="url(#cr)" stroke="#dcc296" stroke-opacity=".7"/>
         <circle cx="300" cy="300" r="94" fill="none" stroke="#fff" stroke-opacity=".12"/>
         <text class="core-t" x="303" y="310" text-anchor="middle">SKN</text>
-        <text class="core-s" x="301.700" y="334" text-anchor="middle">SEJAK 2002</text>
+        <text class="core-s" x="301.700" y="334" text-anchor="middle" data-t="o0">SEJAK 2002</text>
       </svg>
-      <div class="tag t1"><div><b>Sumatera</b><span>9 depo · 9 store</span></div></div>
-      <div class="tag t2"><div><b>Sulawesi</b><span>6 depo</span></div></div>
-      <div class="tag t3"><div><b>Maluku</b><span>2 depo</span></div></div>
+      <div class="tag t1"><div><b data-t="p_sum">Sumatera</b><span data-t="o1">9 depo · 9 store</span></div></div>
+      <div class="tag t2"><div><b data-t="p_sul">Sulawesi</b><span data-t="o2">6 depo</span></div></div>
+      <div class="tag t3"><div><b data-t="p_mal">Maluku</b><span data-t="o3">2 depo</span></div></div>
     </div>
   </div>
   <div class="stats">
     <div class="wrap stats-in" id="stats">
-      <div class="stat"><b><span data-count="18">18</span></b><span>Depo distribusi</span></div>
-      <div class="stat"><b><span data-count="9">9</span></b><span>Infinix Store</span></div>
-      <div class="stat"><b><span data-count="15">15</span><sup>+</sup></b><span>Provinsi terjangkau</span></div>
-      <div class="stat"><b><span data-count="227">227</span></b><span>Anggota tim</span></div>
+      <div class="stat"><b><span data-count="18">18</span></b><span data-t="s1">Depo distribusi</span></div>
+      <div class="stat"><b><span data-count="9">9</span></b><span data-t="s2">Store</span></div>
+      <div class="stat"><b><span data-count="15">15</span><sup>+</sup></b><span data-t="s3">Provinsi terjangkau</span></div>
+      <div class="stat"><b><span data-count="227">227</span></b><span data-t="s4">Anggota tim</span></div>
     </div>
   </div>
 </section>
@@ -478,24 +526,22 @@ html.diam .tl::before{transform:none}
   <div class="wrap">
     <div class="about">
       <div class="rv">
-        <span class="label"><b>01</b>Tentang perusahaan</span>
-        <h2>Distribusi yang profesional, cepat, dan terpercaya.</h2>
+        <span class="label"><b>01</b><span data-t="a0">Tentang perusahaan</span></span>
+        <h2 data-t="a1">Distribusi yang profesional, cepat, dan terpercaya.</h2>
       </div>
       <div class="txt rv">
-        <p>Berdiri sejak 2002, PT Satelit Komunika Nusantara (PT SKN) adalah perusahaan distributor telepon seluler, smartphone, kartu memori, dan aksesori, dengan jaringan distribusi di berbagai wilayah Indonesia.</p>
-        <p>SKN menjadi pilihan utama untuk mendistribusikan produk telepon seluler dan smartphone dari berbagai brand ke beragam segmen pasar di Indonesia, berkat etos kerja yang profesional dan konsisten.</p>
-        <p>SKN dipercaya sebagai importir dan distributor sejumlah brand, serta master dealer untuk produk kartu memori dan aksesori telepon seluler.</p>
+        <p data-t="a2">Sejak 2002, PT Satelit Komunika Nusantara (SKN) mendistribusikan smartphone, aksesori, dan memori ke mitra di seluruh Indonesia.</p>
       </div>
     </div>
-    <div class="vision rv" id="visi">
-      <small>Visi</small>
-      <blockquote>“Melayani Orang yang Melayani Orang Lain”</blockquote>
-      <p>Menjadi perusahaan distribusi yang profesional, terpercaya, dan mampu memberikan pelayanan terbaik kepada mitra bisnis serta pelanggan secara berkelanjutan.</p>
+    <div class="tl" id="tl">
+      <div class="tstep rv"><b data-t="t1a">2002 – 2010</b><p data-t="t1b">Berawal di Riau. Membangun service center dan memetakan pasar dari pintu ke pintu.</p></div>
+      <div class="tstep rv"><b data-t="t2a">2010 – 2019</b><p data-t="t2b">Meluas ke seluruh provinsi di Sumatera, lalu ke Sulawesi.</p></div>
+      <div class="tstep rv"><b data-t="t3a">2019 – Sekarang</b><p data-t="t3b">Distributor resmi telepon seluler dan AIoT. Menjangkau Bodetabek, Sulawesi, dan Maluku.</p></div>
     </div>
-    <div class="mission">
-      <div class="rv"><b>Misi 01</b><p>Memberikan pelayanan terbaik dalam pendistribusian produk kepada mitra bisnis dan pelanggan.</p></div>
-      <div class="rv"><b>Misi 02</b><p>Mengembangkan jaringan distribusi secara profesional dan berkelanjutan.</p></div>
-      <div class="rv"><b>Misi 03</b><p>Mendukung pertumbuhan pasar melalui pelayanan, kualitas distribusi, dan penguatan operasional perusahaan.</p></div>
+    <div class="vision rv" id="visi">
+      <small data-t="v0">Visi</small>
+      <blockquote data-t="v1">“Melayani Orang yang Melayani Orang Lain”</blockquote>
+      <p data-t="v2">Menjadi perusahaan distribusi yang profesional, terpercaya, dan memberi pelayanan terbaik bagi mitra.</p>
     </div>
   </div>
 </section>
@@ -503,15 +549,14 @@ html.diam .tl::before{transform:none}
 <section class="sec ivory" id="layanan">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="label"><b>02</b>Layanan</span><h2>Satu mitra untuk distribusi, pasar, dan dukungan dealer.</h2></div>
-      <p>Layanan distribusi smartphone dan produk teknologi melalui jaringan penjualan, dukungan gudang, pengembangan pasar, serta pelayanan mitra bisnis.</p>
+      <div><span class="label"><b>02</b><span data-t="n2">Layanan</span></span><h2 data-t="l1">Satu mitra untuk distribusi, pasar, dan purnajual.</h2></div>
     </div>
     <div class="rows">
-      <article class="row rv"><span class="no">01</span><h3>Jaringan Distribusi</h3><p>Jaringan distribusi dan mitra bisnis di berbagai wilayah Indonesia.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
-      <article class="row rv"><span class="no">02</span><h3>Pengembangan Pasar</h3><p>Berfokus pada pengembangan pasar dan pertumbuhan brand secara berkelanjutan.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
-      <article class="row rv"><span class="no">03</span><h3>Dukungan Dealer</h3><p>Dukungan kepada dealer melalui pelayanan, ketersediaan produk, dan koordinasi penjualan.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
-      <article class="row rv"><span class="no">04</span><h3>Gudang &amp; Logistik</h3><p>Pengelolaan stok, pengiriman, dan distribusi barang secara efektif dan terstruktur.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
-      <article class="row rv"><span class="no">05</span><h3>Dukungan Sales &amp; Operasional</h3><p>Tim sales dan operasional memastikan proses distribusi berjalan profesional.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
+      <article class="row rv"><span class="no">01</span><h3 data-t="l2a">Jaringan Distribusi</h3><p data-t="l2b">Depo dan mitra bisnis di berbagai wilayah Indonesia.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
+      <article class="row rv"><span class="no">02</span><h3 data-t="l3a">Pengembangan Pasar</h3><p data-t="l3b">Membuka dan menumbuhkan pasar secara berkelanjutan.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
+      <article class="row rv"><span class="no">03</span><h3 data-t="l4a">Dukungan Dealer</h3><p data-t="l4b">Ketersediaan produk dan pendampingan tim sales.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
+      <article class="row rv"><span class="no">04</span><h3 data-t="l5a">Gudang &amp; Logistik</h3><p data-t="l5b">Stok dan pengiriman yang terkelola rapi.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></article>
+      <a class="row rv" id="service" href="https://www.carlcare.com/id/service-center/" target="_blank" rel="noopener"><span class="no">05</span><h3 data-t="l6a">Service Center</h3><p data-t="l6b">Layanan purnajual resmi. Cari service center terdekat.</p><svg class="ar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
     </div>
   </div>
 </section>
@@ -519,13 +564,12 @@ html.diam .tl::before{transform:none}
 <section class="sec on-dark" id="keunggulan">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="label"><b>03</b>Keunggulan</span><h2>Pesanan sampai ke dealer dalam satu hari.</h2></div>
-      <p>SKN mengutamakan kinerja distribusi sampai pesanan tiba di tangan dealer, didukung gudang di tiap provinsi dan tim sales yang terlatih.</p>
+      <div><span class="label"><b>03</b><span data-t="k0">Keunggulan</span></span><h2 data-t="k1">Pesanan sampai ke dealer dalam satu hari.</h2></div>
     </div>
     <div class="caps">
-      <article class="cap rv"><small>Kinerja distribusi</small><div class="cap-n">1 hari</div><p>Gudang tersedia di setiap ibu kota provinsi. Tiap gudang memiliki 3 sampai 6 orang yang mengatur pengiriman hingga pesanan tiba di dealer dalam 1 hari.</p></article>
-      <article class="cap rv"><small>Channel fill &amp; logistik</small><div class="cap-n">Pusat ke wilayah</div><p>Produk didistribusikan merata di setiap area yang kami tangani. Barang dari pemasok dikirim dari gudang pusat, lalu dipasok ke gudang wilayah untuk memenuhi permintaan dealer.</p></article>
-      <article class="cap rv"><small>Kapabilitas sales</small><div class="cap-n">Terlatih</div><p>Setiap sales melewati tahap pelatihan sebelum memegang area, mendapat arahan langsung dari supervisor, dan ditinjau secara berkala untuk terus memperbaiki kinerja.</p></article>
+      <article class="cap rv"><small data-t="k2a">Kecepatan</small><div class="cap-n" data-t="k2b">1 hari</div><p data-t="k2c">Gudang di setiap ibu kota provinsi. Pesanan tiba di dealer dalam satu hari.</p></article>
+      <article class="cap rv"><small data-t="k3a">Logistik</small><div class="cap-n" data-t="k3b">Pusat ke wilayah</div><p data-t="k3c">Barang mengalir dari gudang pusat ke gudang wilayah, merata di setiap area.</p></article>
+      <article class="cap rv"><small data-t="k4a">Tim sales</small><div class="cap-n" data-t="k4b">Terlatih</div><p data-t="k4c">Setiap sales dilatih sebelum memegang area dan ditinjau secara berkala.</p></article>
     </div>
   </div>
 </section>
@@ -533,72 +577,75 @@ html.diam .tl::before{transform:none}
 <section class="sec" id="jaringan">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="label"><b>04</b>Depo &amp; Store</span><h2>Hadir dekat dengan mitra, dari Aceh hingga Ambon.</h2></div>
-      <p>Cari berdasarkan kota, pilih pulau, atau izinkan lokasi Anda untuk menemukan depo dan store terdekat beserta petunjuk arahnya.</p>
+      <div><span class="label"><b>04</b><span data-t="n3">Depo &amp; Store</span></span><h2 data-t="j1">Hadir dekat dengan mitra, dari Aceh hingga Ambon.</h2></div>
+      <p data-t="j2">Cari kota, pilih pulau, atau temukan yang terdekat dari Anda.</p>
     </div>
   </div>
-  <div class="gal rv" id="gal" aria-label="Galeri foto depo dan store"></div>
+  <div class="gal rv" id="gal"></div>
   <div class="wrap">
     <div class="net-tools rv">
       <label class="search">
-        <span style="position:absolute;left:-9999px">Cari kota atau alamat</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>
-        <input id="q" type="search" placeholder="Cari kota, misalnya Medan atau Makassar" autocomplete="off">
+        <input id="q" type="search" placeholder="Cari kota, misalnya Medan atau Makassar" data-tp="j3" aria-label="Cari kota" autocomplete="off">
       </label>
-      <button class="btn btn-ink" id="near" type="button">Terdekat dari saya</button>
-      <div class="legend"><span><i style="background:#b8121f"></i>Depo</span><span><i style="background:#0c1424"></i>Infinix Store</span></div>
+      <button class="btn btn-ink" id="near" type="button" data-t="j4">Terdekat dari saya</button>
+      <div class="legend"><span><i style="background:#b8121f"></i><span data-t="depo">Depo</span></span><span><i style="background:#0c1424"></i><span data-t="store">Store</span></span></div>
     </div>
-    <div class="chips rv" id="chips" role="group" aria-label="Saring lokasi"></div>
+    <div class="chips rv" id="chips" role="group"></div>
     <div class="net-grid rv">
-      <div id="map" role="region" aria-label="Peta lokasi depo dan store SKN"></div>
+      <div id="map" role="region" aria-label="Peta"></div>
       <div class="list" id="list" aria-live="polite"></div>
     </div>
     <p class="note" id="note"></p>
+
+    <div class="flag rv" id="flagship">
+      <div class="flag-l">
+        <span class="label"><span data-t="f0">Flagship Store · Padang</span></span>
+        <h3 data-t="f1">Store terbesar kami, karena paling lengkap.</h3>
+      </div>
+      <div class="flag-r">
+        <p data-t="f2">Di Basko City Mall, Padang. Seluruh lini produk ada dalam satu tempat, lengkap dengan robot kopi yang menyeduh kopi untuk pengunjung.</p>
+        <ul class="flag-pts">
+          <li><b>01</b><span data-t="f3">Paling luas</span></li>
+          <li><b>02</b><span data-t="f4">Produk terlengkap</span></li>
+          <li><b>03</b><span data-t="f5">Robot kopi</span></li>
+        </ul>
+        <a class="btn btn-ink" href="#map" data-lok="22"><span data-t="f6">Lihat di peta</span>
+          <svg class="arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec ivory" id="produk">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="label"><b>05</b><span data-t="r0">Lini produk</span></span><h2 data-t="r1">Empat lini, satu jaringan distribusi.</h2></div>
+    </div>
+    <div class="brands four">
+      <article class="bcard rv"><small>01</small><div class="bname" data-t="r2a">Smartphone</div><p data-t="r2b">Telepon seluler dan smartphone untuk beragam segmen pasar.</p><i></i></article>
+      <article class="bcard rv"><small>02</small><div class="bname" data-t="r3a">Aksesori</div><p data-t="r3b">Pelengkap gadget untuk kebutuhan sehari-hari.</p><i></i></article>
+      <article class="bcard rv"><small>03</small><div class="bname" data-t="r4a">Memori</div><p data-t="r4b">Kartu memori dan media penyimpanan.</p><i></i></article>
+      <article class="bcard rv"><small>04</small><div class="bname" data-t="r5a">Kopi</div><p data-t="r5b">Hadir lewat robot kopi di Flagship Store Padang.</p><i></i></article>
+    </div>
   </div>
 </section>
 
 <section class="sec on-dark" id="pabrik">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="label"><b>05</b>Pabrik</span><h2>Didukung dua fasilitas pabrik.</h2></div>
-      <p>Selain jaringan distribusi, SKN didukung dua pabrik: YIFANG dan AMR.</p>
+      <div><span class="label"><b>06</b><span data-t="b0">Pabrik</span></span><h2 data-t="b1">Didukung dua fasilitas pabrik.</h2></div>
     </div>
     <div class="fab-grid">
       <article class="fcard rv">
         <svg viewBox="0 0 380 380" aria-hidden="true" fill="none"><circle cx="190" cy="190" r="189" stroke="rgba(255,255,255,.1)"/><circle cx="190" cy="190" r="130" stroke="rgba(220,194,150,.38)"/><circle cx="190" cy="190" r="72" stroke="rgba(255,255,255,.1)"/><circle cx="60" cy="190" r="4" fill="#dcc296"/></svg>
-        <small>Pabrik 01</small><h3>YIFANG</h3><p>Lokasi, kapasitas, dan keterangan pabrik akan dilengkapi.</p>
+        <small><span data-t="b0">Pabrik</span> 01</small><h3>YIFANG</h3>
       </article>
       <article class="fcard rv">
         <svg viewBox="0 0 380 380" aria-hidden="true" fill="none"><circle cx="190" cy="190" r="189" stroke="rgba(255,255,255,.1)"/><circle cx="190" cy="190" r="130" stroke="rgba(220,194,150,.38)"/><circle cx="190" cy="190" r="72" stroke="rgba(255,255,255,.1)"/><circle cx="190" cy="320" r="4" fill="#dcc296"/></svg>
-        <small>Pabrik 02</small><h3>AMR</h3><p>Lokasi, kapasitas, dan keterangan pabrik akan dilengkapi.</p>
+        <small><span data-t="b0">Pabrik</span> 02</small><h3>AMR</h3>
       </article>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="brand">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div><span class="label"><b>06</b>Brand</span><h2>Mendukung pertumbuhan brand lewat distribusi yang profesional.</h2></div>
-      <p>Tiga brand yang kami distribusikan ke dealer di seluruh wilayah jangkauan SKN.</p>
-    </div>
-    <div class="brands">
-      <article class="bcard rv"><small>Smartphone</small><div class="bname">Infinix</div><p>Didistribusikan ke dealer melalui depo SKN dan dijual langsung di Infinix Store yang dikelola SKN.</p><i></i></article>
-      <article class="bcard rv"><small>Smartphone</small><div class="bname">itel</div><p>Didistribusikan ke dealer di seluruh wilayah jangkauan SKN.</p><i></i></article>
-      <article class="bcard rv"><small>Aksesori</small><div class="bname">V-GeN</div><p>Produk aksesori dan penyimpanan untuk melengkapi kebutuhan dealer.</p><i></i></article>
-    </div>
-  </div>
-</section>
-
-<section class="sec ivory" id="perjalanan">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div><span class="label"><b>07</b>Perjalanan</span><h2>Tumbuh bersama mitra, dari Sumatera ke berbagai provinsi.</h2></div>
-    </div>
-    <div class="tl">
-      <div class="tstep rv"><b>2002 – 2010</b><p>Awal perusahaan, bersama brand Garsindo selama kurang lebih 7 tahun. SKN mulai mendirikan service center dan memetakan area Riau dari pintu ke pintu.</p></div>
-      <div class="tstep rv"><b>2010 – 2019</b><p>Mengembangkan wilayah ke seluruh provinsi di Sumatera, lalu dipercaya brand untuk memperluas distribusi ke Sulawesi.</p></div>
-      <div class="tstep rv"><b>2019 – Sekarang</b><p>Dipercaya sebagai distributor resmi telepon seluler dan AIoT. Berawal dari Sumatera, kini menjangkau Bodetabek, Sulawesi, dan Maluku, dan terus bertumbuh.</p></div>
     </div>
   </div>
 </section>
@@ -606,27 +653,26 @@ html.diam .tl::before{transform:none}
 <section class="sec" id="tim">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="label"><b>08</b>Tim &amp; Organisasi</span><h2>Orang-orang di balik setiap pengiriman.</h2></div>
-      <p>Dari sales lapangan hingga gudang, setiap tim bekerja dengan peran yang jelas dalam satu susunan organisasi.</p>
+      <div><span class="label"><b>07</b><span data-t="m0">Tim &amp; Organisasi</span></span><h2 data-t="m1">Orang-orang di balik setiap pengiriman.</h2></div>
     </div>
     <div class="team">
-      <div class="team-n rv"><b><span data-count="227">227</span></b><span>Anggota tim di 18 divisi</span></div>
+      <div class="team-n rv"><b><span data-count="227">227</span></b><span data-t="m2">Anggota tim di 18 divisi</span></div>
       <div class="bars rv">
-        <div class="bar"><span>Gudang</span><i style="--w:100%"></i><b>80</b></div>
-        <div class="bar"><span>Penjualan &amp; lapangan</span><i style="--w:86%"></i><b>69</b></div>
-        <div class="bar"><span>Finance</span><i style="--w:30%"></i><b>24</b></div>
-        <div class="bar"><span>Support &amp; online</span><i style="--w:26%"></i><b>21</b></div>
-        <div class="bar"><span>Infinix Store</span><i style="--w:22.500%"></i><b>18</b></div>
-        <div class="bar"><span>Divisi lainnya</span><i style="--w:19%"></i><b>15</b></div>
+        <div class="bar"><span data-t="m3">Gudang</span><i style="--w:100%"></i><b>80</b></div>
+        <div class="bar"><span data-t="m4">Penjualan &amp; lapangan</span><i style="--w:86%"></i><b>69</b></div>
+        <div class="bar"><span data-t="m5">Finance</span><i style="--w:30%"></i><b>24</b></div>
+        <div class="bar"><span data-t="m6">Support &amp; online</span><i style="--w:26%"></i><b>21</b></div>
+        <div class="bar"><span data-t="store">Store</span><i style="--w:22.500%"></i><b>18</b></div>
+        <div class="bar"><span data-t="m7">Divisi lainnya</span><i style="--w:19%"></i><b>15</b></div>
       </div>
     </div>
     <div class="org rv">
-      <div class="org-top"><span class="onode main">Komisaris</span><span class="oline"></span><span class="onode main">Presiden Direktur</span><span class="oline"></span></div>
+      <div class="org-top"><span class="onode main" data-t="g1">Komisaris</span><span class="oline"></span><span class="onode main" data-t="g2">Presiden Direktur</span><span class="oline"></span></div>
       <div class="org-row">
-        <div class="ocol"><span class="onode">Direktur</span><ul><li>General Manager</li><li>Regional General Manager<em>Sumatera Bagian Utara · Sumatera Bagian Selatan · Jabodetabek</em></li><li>Area Sales Manager</li><li>Supervisor wilayah</li><li>Sales Consultant Lapangan</li></ul></div>
-        <div class="ocol"><span class="onode">Manager Purchasing</span><ul><li>Gudang</li><li>Service</li><li>Infinix Store</li></ul></div>
-        <div class="ocol"><span class="onode">Kepala Keuangan</span><ul><li>Finance, Accounting &amp; Admin</li></ul></div>
-        <div class="ocol"><span class="onode">HRD</span><ul><li>Staf HRD</li><li>Creative &amp; Support</li></ul></div>
+        <div class="ocol"><span class="onode" data-t="g3">Direktur</span><ul><li>General Manager</li><li>Regional General Manager</li><li>Area Sales Manager</li><li data-t="g4">Supervisor wilayah</li><li data-t="g5">Sales Consultant Lapangan</li></ul></div>
+        <div class="ocol"><span class="onode" data-t="g6">Manager Purchasing</span><ul><li data-t="m3">Gudang</li><li>Service</li><li data-t="store">Store</li></ul></div>
+        <div class="ocol"><span class="onode" data-t="g7">Kepala Keuangan</span><ul><li>Finance, Accounting &amp; Admin</li></ul></div>
+        <div class="ocol"><span class="onode">HRD</span><ul><li data-t="g8">Staf HRD</li><li>Creative &amp; Support</li></ul></div>
       </div>
     </div>
   </div>
@@ -634,13 +680,12 @@ html.diam .tl::before{transform:none}
 
 <section class="sec ivory" id="pimpinan">
   <div class="wrap leader">
-    <figure class="lphoto rv"><img src="img/founder.jpg" alt="Roben Nakata, Founder dan Owner PT Satelit Komunika Nusantara" width="900" height="1352" loading="lazy"></figure>
+    <figure class="lphoto rv"><img src="img/founder.jpg" alt="Roben Nakata" width="900" height="1352" loading="lazy"></figure>
     <div class="txt rv">
-      <span class="label"><b>09</b>Pimpinan</span>
+      <span class="label"><b>08</b><span data-t="d0">Pimpinan</span></span>
       <h3>Roben Nakata</h3>
       <div class="role">Founder &amp; Owner</div>
-      <p>Founder PT Satelit Komunika Nusantara yang berfokus pada pengembangan jaringan distribusi nasional, penguatan pasar, dan pembangunan sistem operasional perusahaan yang profesional dan berkelanjutan.</p>
-      <p>Di bawah kepemimpinan Bapak Roben Nakata, PT SKN terus berkembang sebagai perusahaan distribusi yang mengedepankan pelayanan, kepercayaan mitra bisnis, serta pertumbuhan pasar yang konsisten.</p>
+      <p data-t="d1">Membangun SKN sejak 2002 dengan fokus pada jaringan distribusi nasional, kepercayaan mitra, dan pertumbuhan pasar yang konsisten.</p>
     </div>
   </div>
 </section>
@@ -648,37 +693,36 @@ html.diam .tl::before{transform:none}
 <section class="sec on-dark" id="kontak">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="label"><b>10</b>Hubungi kami</span><h2>Mari berbicara tentang distribusi dan kemitraan.</h2></div>
-      <p>Tim kami siap mendukung distribusi, kemitraan, dan pengembangan pasar Anda.</p>
+      <div><span class="label"><b>09</b><span data-t="n5">Hubungi Kami</span></span><h2 data-t="c1">Mari berbicara tentang distribusi dan kemitraan.</h2></div>
     </div>
     <div class="contact">
       <div class="cinfo rv">
-        <div class="crow"><small>Kantor pusat</small><div>Jl. Victoria River Park, Pondok Jagung, Kec. Serpong Utara, Kota Tangerang Selatan, Banten 15326</div></div>
+        <div class="crow"><small data-t="c2">Kantor pusat</small><div>Jl. Victoria River Park, Pondok Jagung, Kec. Serpong Utara, Kota Tangerang Selatan, Banten 15326</div></div>
         <div class="crow"><small>WhatsApp</small><a href="https://wa.me/628117566789" target="_blank" rel="noopener">+62 811-7566-789</a></div>
         <div class="crow"><small>Email</small><a href="mailto:ptsatelitkomunikanusantara134@gmail.com" style="word-break:break-all">ptsatelitkomunikanusantara134@gmail.com</a></div>
-        <div class="crow"><small>Jam kerja</small><div>Senin – Sabtu, 09.00 – 18.30 WIB</div></div>
+        <div class="crow"><small data-t="c3">Jam kerja</small><div data-t="c4">Senin – Sabtu, 09.00 – 18.30 WIB</div></div>
+        <div class="crow"><small data-t="l6a">Service Center</small><a href="https://www.carlcare.com/id/service-center/" target="_blank" rel="noopener" data-t="c5">Cari service center terdekat ↗</a></div>
       </div>
       <form class="cform rv" id="waform">
-        <h3>Kirim pesan</h3>
-        <p>Isi singkat, lalu pesan Anda terbuka di WhatsApp dan siap dikirim ke tim SKN.</p>
+        <h3 data-t="w0">Kirim pesan</h3>
+        <p data-t="w1">Isi singkat, lalu pesan Anda terbuka di WhatsApp.</p>
         <div class="two">
-          <div class="field"><label for="f-nama">Nama</label><input id="f-nama" required autocomplete="name" placeholder="Nama Anda"></div>
-          <div class="field"><label for="f-kota">Kota</label><input id="f-kota" required autocomplete="address-level2" placeholder="Kota Anda"></div>
+          <div class="field"><label for="f-nama" data-t="w2">Nama</label><input id="f-nama" required autocomplete="name"></div>
+          <div class="field"><label for="f-kota" data-t="w3">Kota</label><input id="f-kota" required autocomplete="address-level2"></div>
         </div>
-        <div class="field"><label for="f-perlu">Keperluan</label>
+        <div class="field"><label for="f-perlu" data-t="w4">Keperluan</label>
           <select id="f-perlu">
-            <option>Ingin menjadi dealer / mitra</option>
-            <option>Informasi produk dan ketersediaan</option>
-            <option>Kerja sama brand / principal</option>
-            <option>Karier di SKN</option>
-            <option>Lainnya</option>
+            <option value="mitra" data-t="w5">Ingin menjadi dealer / mitra</option>
+            <option value="produk" data-t="w6">Informasi produk dan ketersediaan</option>
+            <option value="principal" data-t="w7">Kerja sama principal</option>
+            <option value="karier" data-t="w8">Karier di SKN</option>
+            <option value="lain" data-t="w9">Lainnya</option>
           </select>
         </div>
-        <div class="field"><label for="f-pesan">Pesan</label><textarea id="f-pesan" placeholder="Tulis pesan Anda"></textarea></div>
-        <button class="btn btn-red" type="submit">Lanjut ke WhatsApp
+        <div class="field"><label for="f-pesan" data-t="w10">Pesan</label><textarea id="f-pesan"></textarea></div>
+        <button class="btn btn-red" type="submit"><span data-t="w11">Lanjut ke WhatsApp</span>
           <svg class="arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
         </button>
-        <div class="hint">Pesan baru terkirim setelah Anda menekan kirim di WhatsApp.</div>
       </form>
     </div>
   </div>
@@ -689,52 +733,51 @@ html.diam .tl::before{transform:none}
   <div class="wrap">
     <div class="foot-top">
       <img class="logo" src="img/logo.png" alt="SKN" width="641" height="200" loading="lazy">
-      <p>“Melayani Orang yang Melayani Orang Lain”</p>
+      <p data-t="v1">“Melayani Orang yang Melayani Orang Lain”</p>
     </div>
-    <nav class="foot" aria-label="Peta situs">
-      <div><h4>Tentang Kami</h4><ul>
-        <li><a href="#tentang">Profil Perusahaan</a></li>
-        <li><a href="#visi">Visi &amp; Misi</a></li>
-        <li><a href="#keunggulan">Keunggulan</a></li>
-        <li><a href="#perjalanan">Perjalanan</a></li>
-        <li><a href="#tim">Tim &amp; Organisasi</a></li>
-        <li><a href="#pimpinan">Pimpinan</a></li>
+    <nav class="foot" aria-label="Sitemap">
+      <div><h4 data-t="q1">Tentang Kami</h4><ul>
+        <li><a href="#tentang" data-t="q2">Profil &amp; Perjalanan</a></li>
+        <li><a href="#visi" data-t="v0">Visi</a></li>
+        <li><a href="#keunggulan" data-t="k0">Keunggulan</a></li>
+        <li><a href="#tim" data-t="m0">Tim &amp; Organisasi</a></li>
+        <li><a href="#pimpinan" data-t="d0">Pimpinan</a></li>
       </ul></div>
-      <div><h4>Layanan</h4><ul>
-        <li><a href="#layanan">Jaringan Distribusi</a></li>
-        <li><a href="#layanan">Pengembangan Pasar</a></li>
-        <li><a href="#layanan">Dukungan Dealer</a></li>
-        <li><a href="#layanan">Gudang &amp; Logistik</a></li>
-        <li><a href="#layanan">Dukungan Sales &amp; Operasional</a></li>
+      <div><h4 data-t="n2">Layanan</h4><ul>
+        <li><a href="#layanan" data-t="l2a">Jaringan Distribusi</a></li>
+        <li><a href="#layanan" data-t="l3a">Pengembangan Pasar</a></li>
+        <li><a href="#layanan" data-t="l4a">Dukungan Dealer</a></li>
+        <li><a href="#layanan" data-t="l5a">Gudang &amp; Logistik</a></li>
+        <li><a href="https://www.carlcare.com/id/service-center/" target="_blank" rel="noopener" data-t="l6a">Service Center</a></li>
       </ul></div>
-      <div><h4>Depo &amp; Store</h4><ul>
-        <li><a href="#jaringan" data-saring="pulau:Sumatera">Sumatera</a></li>
-        <li><a href="#jaringan" data-saring="pulau:Jawa">Jawa</a></li>
-        <li><a href="#jaringan" data-saring="pulau:Sulawesi">Sulawesi</a></li>
-        <li><a href="#jaringan" data-saring="pulau:Maluku">Maluku</a></li>
-        <li><a href="#jaringan" data-saring="jenis:store">Infinix Store</a></li>
+      <div><h4 data-t="n3">Depo &amp; Store</h4><ul>
+        <li><a href="#jaringan" data-saring="pulau:Sumatera" data-t="p_sum">Sumatera</a></li>
+        <li><a href="#jaringan" data-saring="pulau:Jawa" data-t="p_jaw">Jawa</a></li>
+        <li><a href="#jaringan" data-saring="pulau:Sulawesi" data-t="p_sul">Sulawesi</a></li>
+        <li><a href="#jaringan" data-saring="pulau:Maluku" data-t="p_mal">Maluku</a></li>
+        <li><a href="#flagship" data-t="q3">Flagship Store Padang</a></li>
       </ul></div>
       <div class="fbig"><ul>
-        <li><a href="#brand">Brand</a></li>
-        <li><a href="#pabrik">Pabrik</a></li>
-        <li><a href="#kontak" data-perlu="Ingin menjadi dealer / mitra">Jadi Mitra</a></li>
-        <li><a href="#kontak" data-perlu="Karier di SKN">Karier</a></li>
-        <li><a href="#kontak">Hubungi Kami</a></li>
+        <li><a href="#produk" data-t="n4">Produk</a></li>
+        <li><a href="#pabrik" data-t="b0">Pabrik</a></li>
+        <li><a href="#kontak" data-perlu="mitra" data-t="q4">Jadi Mitra</a></li>
+        <li><a href="#kontak" data-perlu="karier" data-t="q5">Karier</a></li>
+        <li><a href="#kontak" data-t="n5">Hubungi Kami</a></li>
       </ul></div>
-      <div><h4>Hubungi Kami</h4><ul class="faddr">
+      <div><h4 data-t="n5">Hubungi Kami</h4><ul class="faddr">
         <li>Jl. Victoria River Park, Pondok Jagung</li>
         <li>Kec. Serpong Utara, Kota Tangerang Selatan</li>
         <li>Banten 15326, Indonesia</li>
         <li>W. <a href="https://wa.me/628117566789" target="_blank" rel="noopener">+62 811-7566-789</a></li>
         <li>E. <a href="mailto:ptsatelitkomunikanusantara134@gmail.com" style="overflow-wrap:anywhere;font-size:12.5px;letter-spacing:-.01em">ptsatelitkomunikanusantara134@gmail.com</a></li>
-        <li>Senin – Sabtu, 09.00 – 18.30 WIB</li>
+        <li data-t="c4">Senin – Sabtu, 09.00 – 18.30 WIB</li>
       </ul></div>
     </nav>
-    <div class="copy"><span>© <span id="yr">2026</span> PT Satelit Komunika Nusantara. Infinix, itel, dan V-GeN adalah merek dagang pemiliknya masing-masing.</span><button type="button" class="stopanim" id="stopanim">Hentikan animasi</button></div>
+    <div class="copy"><span>© <span id="yr">2026</span> PT Satelit Komunika Nusantara</span><button type="button" class="stopanim" id="stopanim"></button></div>
   </div>
 </footer>
 
-<a class="wa" href="https://wa.me/628117566789" target="_blank" rel="noopener" aria-label="Chat WhatsApp SKN">
+<a class="wa" href="https://wa.me/628117566789" target="_blank" rel="noopener" aria-label="WhatsApp SKN">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2zm5.500 14.200c-.200.600-1.300 1.200-1.800 1.300-.500.100-1.100.100-1.700-.100-2.800-.900-4.700-3.100-5.800-5-.600-1.100-.700-2.300.200-3.200.300-.300.600-.400.900-.400h.600c.200 0 .400 0 .600.500l.900 2.100c.100.200.100.400 0 .600l-.700.900c-.100.200-.200.300 0 .600.700 1.200 1.700 2.100 3 2.700.300.100.500.100.600-.100l.800-1c.200-.200.400-.200.600-.100l2 .900c.300.100.400.200.500.300 0 .200 0 .600-.200 1z"/></svg>
 </a>
 
@@ -775,15 +818,148 @@ var LOKASI=[
 /* Foto per lokasi (urutan sama dengan LOKASI; '' = belum ada foto). File ada di img/lokasi/<nama>.jpg */
 ['aceh','medan','pekanbaru','padang','jambi','lampung','palembang','bengkulu','babel','','','parepare','palu','kendari','gorontalo','manado','ambon','ternate','s_mts','s_siantar','s_sudirman','','s_basko','s_ptc','s_ps','','s_kartini']
   .forEach(function(f,i){LOKASI[i].f=f?'img/lokasi/'+f+'.jpg':''});
-
 /* ===== util ===== */
 var $=function(s,r){return (r||document).querySelector(s)};
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+/* ===== BAHASA: Indonesia (bawaan, tertulis di halaman) / English / 中文 =====
+   Untuk mengubah terjemahan, ubah teks di daftar T di bawah. Kuncinya sama dengan data-t di halaman. */
+var T={
+en:{n1:'About',n2:'Services',n3:'Depots &amp; Stores',n4:'Products',n5:'Contact Us',
+ h0:'Nationwide Distribution · Since 2002',h1:'Delivering technology',
+ h2:'A distributor of smartphones, accessories, memory, and coffee, with depots and stores across Indonesia.',
+ h3:'Find a depot or store',h4:'About the company',o0:'SINCE 2002',
+ p_sum:'Sumatra',p_jaw:'Java',p_sul:'Sulawesi',p_mal:'Maluku',o1:'9 depots · 9 stores',o2:'6 depots',o3:'2 depots',
+ s1:'Distribution depots',s2:'Stores',s3:'Provinces reached',s4:'Team members',
+ a0:'About the company',a1:'Distribution that is professional, fast, and trusted.',
+ a2:'Since 2002, PT Satelit Komunika Nusantara (SKN) has distributed smartphones, accessories, and memory to partners across Indonesia.',
+ t3a:'2019 – Today',
+ t1b:'Started in Riau. Built service centers and mapped the market door to door.',
+ t2b:'Expanded to every province in Sumatra, then to Sulawesi.',
+ t3b:'Authorized distributor of mobile phones and AIoT. Now reaching Greater Jakarta, Sulawesi, and Maluku.',
+ v0:'Vision',v1:'“Serving People Who Serve Others”',v2:'To be a professional, trusted distribution company that gives its partners the best service.',
+ l1:'One partner for distribution, market growth, and after-sales.',
+ l2a:'Distribution Network',l2b:'Depots and business partners across Indonesia.',
+ l3a:'Market Development',l3b:'Opening and growing markets for the long term.',
+ l4a:'Dealer Support',l4b:'Product availability and a sales team by your side.',
+ l5a:'Warehousing &amp; Logistics',l5b:'Stock and deliveries, managed with care.',
+ l6a:'Service Center',l6b:'Official after-sales service. Find the nearest service center.',
+ k0:'Strengths',k1:'Orders reach dealers within one day.',
+ k2a:'Speed',k2b:'1 day',k2c:'A warehouse in every provincial capital. Orders reach dealers within one day.',
+ k3a:'Logistics',k3b:'Hub to region',k3c:'Goods flow from the central warehouse to regional warehouses, evenly across every area.',
+ k4a:'Sales team',k4b:'Trained',k4c:'Every salesperson is trained before taking an area and reviewed regularly.',
+ j1:'Close to our partners, from Aceh to Ambon.',j2:'Search a city, pick an island, or find the one nearest to you.',j4:'Nearest to me',
+ depo:'Depot',store:'Store',
+ f0:'Flagship Store · Padang',f1:'Our largest store, because it is the most complete.',
+ f2:'At Basko City Mall, Padang. Every product line in one place, complete with a coffee robot that brews coffee for visitors.',
+ f3:'Largest space',f4:'Widest range',f5:'Coffee robot',f6:'See on the map',
+ r0:'Product lines',r1:'Four lines, one distribution network.',
+ r2a:'Smartphones',r2b:'Mobile phones and smartphones for every market segment.',
+ r3a:'Accessories',r3b:'Gadget companions for everyday needs.',
+ r4a:'Memory',r4b:'Memory cards and storage media.',
+ r5a:'Coffee',r5b:'Served by the coffee robot at our Flagship Store in Padang.',
+ b0:'Factory',b1:'Backed by two factories.',
+ m0:'Team &amp; Organization',m1:'The people behind every delivery.',m2:'Team members across 18 divisions',
+ m3:'Warehouse',m4:'Sales &amp; field',m5:'Finance',m6:'Support &amp; online',m7:'Other divisions',
+ g1:'Commissioner',g2:'President Director',g3:'Director',g4:'Regional supervisors',g5:'Field Sales Consultants',g6:'Purchasing Manager',g7:'Head of Finance',g8:'HR staff',
+ d0:'Leadership',d1:'Has built SKN since 2002, focused on a nationwide distribution network, partner trust, and consistent market growth.',
+ c1:'Let’s talk about distribution and partnership.',c2:'Head office',c3:'Office hours',c4:'Monday – Saturday, 09:00 – 18:30 (GMT+7)',c5:'Find the nearest service center ↗',
+ w0:'Send a message',w1:'Fill in briefly and your message opens in WhatsApp.',w2:'Name',w3:'City',w4:'Purpose',
+ w5:'I want to become a dealer / partner',w6:'Product information and availability',w7:'Principal partnership',w8:'Careers at SKN',w9:'Other',w10:'Message',w11:'Continue to WhatsApp',
+ q1:'About Us',q2:'Profile &amp; Journey',q3:'Padang Flagship Store',q4:'Become a Partner',q5:'Careers'},
+zh:{n1:'关于',n2:'服务',n3:'仓库与门店',n4:'产品',n5:'联系我们',
+ h0:'全国分销 · 始于 2002 年',h1:'把科技送到',
+ h2:'智能手机、配件、存储产品与咖啡的分销商，仓库与门店遍布印度尼西亚。',
+ h3:'查找仓库与门店',h4:'关于公司',o0:'始于 2002',
+ p_sum:'苏门答腊',p_jaw:'爪哇',p_sul:'苏拉威西',p_mal:'马鲁古',o1:'9 个仓库 · 9 家门店',o2:'6 个仓库',o3:'2 个仓库',
+ s1:'分销仓库',s2:'门店',s3:'覆盖省份',s4:'团队成员',
+ a0:'关于公司',a1:'专业、快速、值得信赖的分销。',
+ a2:'自 2002 年起，PT Satelit Komunika Nusantara（SKN）向印度尼西亚各地的合作伙伴分销智能手机、配件与存储产品。',
+ t3a:'2019 年至今',
+ t1b:'始于廖内省。建立服务中心，挨家挨户开拓市场。',
+ t2b:'扩展至苏门答腊所有省份，随后进入苏拉威西。',
+ t3b:'手机与 AIoT 产品的官方分销商，业务覆盖大雅加达地区、苏拉威西与马鲁古。',
+ v0:'愿景',v1:'“服务那些服务他人的人”',v2:'成为专业、可信赖的分销企业，为合作伙伴提供最佳服务。',
+ l1:'分销、市场拓展与售后，一站式合作伙伴。',
+ l2a:'分销网络',l2b:'仓库与合作伙伴遍布印度尼西亚各地。',
+ l3a:'市场拓展',l3b:'持续开拓并培育市场。',
+ l4a:'经销商支持',l4b:'保障货源，销售团队全程支持。',
+ l5a:'仓储与物流',l5b:'库存与配送管理有序。',
+ l6a:'服务中心',l6b:'官方售后服务。查找最近的服务中心。',
+ k0:'优势',k1:'订单一天内送达经销商。',
+ k2a:'速度',k2b:'1 天',k2c:'每个省会都设有仓库，订单一天内送达经销商。',
+ k3a:'物流',k3b:'中心到区域',k3c:'货物从中心仓发往各区域仓，均衡覆盖每个地区。',
+ k4a:'销售团队',k4b:'训练有素',k4c:'每位销售上岗前均经过培训，并定期考核。',
+ j1:'贴近合作伙伴，从亚齐到安汶。',j2:'搜索城市、选择岛屿，或查找离您最近的地点。',j4:'离我最近',
+ depo:'仓库',store:'门店',
+ f0:'旗舰店 · 巴东',f1:'我们最大的门店，因为它最齐全。',
+ f2:'位于巴东 Basko City Mall。所有产品线汇聚一处，还有为顾客现场冲煮咖啡的咖啡机器人。',
+ f3:'面积最大',f4:'产品最全',f5:'咖啡机器人',f6:'在地图上查看',
+ r0:'产品线',r1:'四条产品线，一个分销网络。',
+ r2a:'智能手机',r2b:'面向各细分市场的手机与智能手机。',
+ r3a:'配件',r3b:'满足日常需求的数码配件。',
+ r4a:'存储',r4b:'存储卡与存储设备。',
+ r5a:'咖啡',r5b:'由巴东旗舰店的咖啡机器人呈现。',
+ b0:'工厂',b1:'两座工厂提供支持。',
+ m0:'团队与组织',m1:'每一次配送背后的人。',m2:'名团队成员，分布于 18 个部门',
+ m3:'仓储',m4:'销售与外勤',m5:'财务',m6:'支持与线上',m7:'其他部门',
+ g1:'监事',g2:'总裁',g3:'董事',g4:'区域主管',g5:'外勤销售顾问',g6:'采购经理',g7:'财务负责人',g8:'人事专员',
+ d0:'领导层',d1:'自 2002 年创立并发展 SKN，专注于全国分销网络、合作伙伴的信任与持续的市场增长。',
+ c1:'欢迎洽谈分销与合作。',c2:'总部',c3:'办公时间',c4:'周一至周六 09:00 – 18:30（GMT+7）',c5:'查找最近的服务中心 ↗',
+ w0:'发送留言',w1:'简单填写，留言将在 WhatsApp 中打开。',w2:'姓名',w3:'城市',w4:'事由',
+ w5:'希望成为经销商 / 合作伙伴',w6:'产品信息与供货情况',w7:'品牌方合作',w8:'加入 SKN',w9:'其他',w10:'留言',w11:'前往 WhatsApp',
+ q1:'关于我们',q2:'简介与历程',q3:'巴东旗舰店',q4:'成为合作伙伴',q5:'招贤纳士'}
+};
+/* teks yang dibuat oleh skrip (peta, daftar, tombol) */
+var S={
+id:{title:'PT Satelit Komunika Nusantara (SKN) | Distributor Smartphone, Aksesori & Memori',
+ desc:'PT Satelit Komunika Nusantara (SKN) adalah distributor smartphone, aksesori, memori, dan kopi dengan jaringan depo dan store di seluruh Indonesia.',
+ rot:['seluruh Indonesia.','Sumatera.','Jawa.','Sulawesi.','Maluku.'],ph:'Cari kota, misalnya Medan atau Makassar',
+ all:'Semua',allIsl:'Semua pulau',dir:'Petunjuk arah',empty:'Tidak ada lokasi yang cocok. Coba kata lain atau hapus saringan.',
+ note:function(n,m){return n+' dari '+m+' lokasi ditampilkan'},near:', diurutkan dari yang terdekat dengan Anda.',
+ noGeo:'Perangkat ini tidak mendukung pencarian lokasi.',cari:'Mencari lokasi Anda...',geoFail:'Lokasi tidak bisa dibaca. Izinkan akses lokasi di browser, atau cari lewat nama kota.',
+ mapFail:'Peta tidak dapat dimuat. Daftar lokasi tetap bisa dipakai.',stop:'Hentikan animasi',start:'Nyalakan animasi',loc:'id-ID'},
+en:{title:'PT Satelit Komunika Nusantara (SKN) | Smartphone, Accessory & Memory Distributor',
+ desc:'PT Satelit Komunika Nusantara (SKN) is a distributor of smartphones, accessories, memory, and coffee with depots and stores across Indonesia.',
+ rot:['across Indonesia.','to Sumatra.','to Java.','to Sulawesi.','to Maluku.'],ph:'Search a city, e.g. Medan or Makassar',
+ all:'All',allIsl:'All islands',dir:'Directions',empty:'No matching location. Try another word or clear the filters.',
+ note:function(n,m){return 'Showing '+n+' of '+m+' locations'},near:', sorted by distance from you.',
+ noGeo:'This device does not support location search.',cari:'Finding your location...',geoFail:'Your location could not be read. Allow location access in the browser, or search by city name.',
+ mapFail:'The map could not be loaded. The location list still works.',stop:'Stop animation',start:'Turn on animation',loc:'en-US'},
+zh:{title:'PT Satelit Komunika Nusantara (SKN) | 智能手机、配件与存储产品分销商',
+ desc:'PT Satelit Komunika Nusantara（SKN）是智能手机、配件、存储产品与咖啡的分销商，仓库与门店遍布印度尼西亚。',
+ rot:['全印度尼西亚。','苏门答腊。','爪哇。','苏拉威西。','马鲁古。'],ph:'搜索城市，例如 Medan 或 Makassar',
+ all:'全部',allIsl:'全部岛屿',dir:'导航前往',empty:'没有匹配的地点。请换个关键词或清除筛选。',
+ note:function(n,m){return '共 '+m+' 个地点，当前显示 '+n+' 个'},near:'，按与您的距离排序。',
+ noGeo:'此设备不支持定位搜索。',cari:'正在查找您的位置…',geoFail:'无法读取您的位置。请在浏览器中允许定位，或按城市名称搜索。',
+ mapFail:'地图无法加载。地点列表仍可使用。',stop:'停止动画',start:'开启动画',loc:'zh-CN'}
+};
+var PULAU={Sumatera:'p_sum',Jawa:'p_jaw',Sulawesi:'p_sul',Maluku:'p_mal'};
+var lang='id',ASLI={},segarkan=function(){};
+document.querySelectorAll('[data-t]').forEach(function(el){var k=el.dataset.t;if(!(k in ASLI))ASLI[k]=el.innerHTML});
+function tx(k){return lang==='id'?ASLI[k]:(T[lang][k]||ASLI[k])}
+function sx(k){return S[lang][k]}
+try{var simpan=localStorage.getItem('skn-lang');var qp=(location.search.match(/[?&]lang=(id|en|zh)\b/)||[])[1];
+  if(qp)lang=qp;else if(simpan&&S[simpan])lang=simpan}catch(e){}
+
 /* gerak menyala secara bawaan; pengunjung bisa menghentikannya (tersimpan di perangkatnya) */
 var reduce=false;try{reduce=localStorage.getItem('skn-diam')==='1'}catch(e){}
 if(reduce)document.documentElement.classList.add('diam');
-(function(){var b=$('#stopanim');b.textContent=reduce?'Nyalakan animasi':'Hentikan animasi';
-  b.addEventListener('click',function(){try{localStorage.setItem('skn-diam',reduce?'0':'1')}catch(e){}location.reload()})})();
+$('#stopanim').addEventListener('click',function(){try{localStorage.setItem('skn-diam',reduce?'0':'1')}catch(e){}location.reload()});
+
+var rotN=0;
+function pasangBahasa(l){lang=l;
+  document.documentElement.lang=l==='zh'?'zh-Hans':l;
+  document.querySelectorAll('[data-t]').forEach(function(el){el.innerHTML=tx(el.dataset.t)});
+  document.querySelectorAll('[data-tp]').forEach(function(el){el.placeholder=sx('ph')});
+  document.title=sx('title');var md=$('meta[name="description"]');if(md)md.setAttribute('content',sx('desc'));
+  $('#stopanim').textContent=reduce?sx('start'):sx('stop');
+  rotN=0;$('#rot').textContent=sx('rot')[0];
+  [].forEach.call($('#lang').children,function(b){b.setAttribute('aria-pressed',b.dataset.l===l)});
+  segarkan();
+}
+$('#lang').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  try{localStorage.setItem('skn-lang',b.dataset.l)}catch(x){}pasangBahasa(b.dataset.l)});
 
 /* ===== nav + garis kemajuan ===== */
 var nav=$('#nav'),menu=$('#menu'),burger=$('#burger'),prog=$('#prog');
@@ -803,48 +979,31 @@ if('IntersectionObserver' in window){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;e.target.classList.add('in');
     e.target.querySelectorAll('[data-count]').forEach(countUp);io.unobserve(e.target)})},{threshold:.12});
   document.querySelectorAll('.rv').forEach(function(el){var s=el.parentNode.children,i=[].indexOf.call(s,el);el.style.transitionDelay=Math.min(i,4)*110+'ms';io.observe(el)});
-  io.observe($('#stats'));io.observe($('.tl'));
+  io.observe($('#stats'));io.observe($('#tl'));
   var links=[].slice.call(menu.querySelectorAll('a[href^="#"]:not(.btn)'));
   var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)})})},{rootMargin:'-45% 0px -50% 0px'});
   document.querySelectorAll('main section[id]').forEach(function(s){so.observe(s)});
 }else{document.querySelectorAll('.rv,.tl').forEach(function(el){el.classList.add('in')})}
 
 /* ===== kata berganti di judul (halus) ===== */
-(function(){var rot=$('#rot'),d=['seluruh Nusantara.','Sumatera.','Sulawesi.','Maluku.'],n=0;
-  if(!reduce)setInterval(function(){n=(n+1)%d.length;rot.style.animation='none';rot.offsetWidth;rot.textContent=d[n];rot.style.animation='wordIn 1.1s cubic-bezier(.22,.7,.2,1)'},3600)})();
-
-/* ===== foto berganti di pembuka (depo & store) ===== */
-(function(){
-  if(!$('#show'))return;
-  var pilihan=['aceh','s_ptc','pekanbaru','s_kartini','palembang','s_mts','lampung','s_siantar','bengkulu','manado'];
-  var d=pilihan.map(function(k){for(var i=0;i<LOKASI.length;i++)if(LOKASI[i].f==='img/lokasi/'+k+'.jpg')return LOKASI[i]}).filter(Boolean);
-  if(!d.length){$('#show').style.display='none';return}
-  var box=$('#show-in'),bar=$('#show-bar'),n=-1,imgs=[];
-  d.forEach(function(x,i){var im=new Image();im.alt='';im.decoding='async';if(i<2)im.src=x.f;box.appendChild(im);imgs.push(im)});
-  function pad(v){return (v<10?'0':'')+v}
-  function tampil(){n=(n+1)%d.length;var x=d[n],nx=(n+1)%d.length;
-    if(!imgs[nx].src)imgs[nx].src=d[nx].f;
-    imgs.forEach(function(im,i){im.classList.toggle('on',i===n)});
-    $('#show-j').textContent=x.j==='depo'?'Depo':'Infinix Store';$('#show-n').textContent=x.n.replace(/^Depo |^Infinix Store /,'');
-    $('#show-i').textContent=pad(n+1)+' / '+pad(d.length);
-    bar.classList.remove('run');bar.offsetWidth;if(!reduce)bar.classList.add('run')}
-  tampil();if(!reduce)setInterval(tampil,5000);
-})();
+(function(){var rot=$('#rot');
+  if(!reduce)setInterval(function(){var d=sx('rot');rotN=(rotN+1)%d.length;rot.style.animation='none';rot.offsetWidth;rot.textContent=d[rotN];rot.style.animation='wordIn 1.1s cubic-bezier(.22,.7,.2,1)'},3600)})();
 
 /* ===== peta + pencari lokasi ===== */
 (function(){
   var st={jenis:'semua',pulau:'semua',q:'',me:null,aktif:-1};
   var listEl=$('#list'),chipsEl=$('#chips'),note=$('#note');
-  var map=null,marks=[];
+  var map=null,marks=[],pesan='';
   function ikon(j){return L.divIcon({className:'',html:'<div class="pin '+j+'"></div>',iconSize:[16,16],iconAnchor:[8,8],popupAnchor:[0,-10]})}
+  function jns(j){return tx(j==='depo'?'depo':'store')}
   if(window.L){
     map=L.map('map',{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,zoomControl:true});
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(map);
     LOKASI.forEach(function(d,i){
       var m=L.marker([d.lat,d.lng],{icon:ikon(d.j),title:d.n,alt:d.n});
-      m.bindPopup('<div class="pop">'+(d.f?'<img class="pop-img" src="'+d.f+'" alt="" width="230" height="128">':'')+'<b>'+esc(d.n)+'</b>'+esc(d.a)+'<br><a href="'+d.u+'" target="_blank" rel="noopener">Petunjuk arah</a></div>',{minWidth:230});
+      m.bindPopup(function(){return '<div class="pop">'+(d.f?'<img class="pop-img" src="'+d.f+'" alt="" width="230" height="128">':'')+'<b>'+esc(d.n)+'</b>'+esc(d.a)+'<br><a href="'+d.u+'" target="_blank" rel="noopener">'+sx('dir')+'</a></div>'},{minWidth:230});
       m.on('click',function(){pilih(i,false)});marks[i]=m});
-  }else{$('#map').innerHTML='<div class="empty" style="margin:20px">Peta tidak dapat dimuat. Daftar lokasi tetap bisa dipakai.</div>'}
+  }
 
   function jarak(a,b){var R=6371,r=Math.PI/180,dLa=(b.lat-a.lat)*r,dLo=(b.lng-a.lng)*r,
     h=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)*Math.sin(dLo/2);return 2*R*Math.asin(Math.sqrt(h))}
@@ -853,8 +1012,8 @@ if('IntersectionObserver' in window){
   function hitung(f){return LOKASI.filter(f).length}
 
   function chips(){
-    var jenis=[['semua','Semua',hitung(function(){return 1})],['depo','Depo',hitung(function(d){return d.j==='depo'})],['store','Infinix Store',hitung(function(d){return d.j==='store'})]];
-    var pulau=[['semua','Semua pulau']].concat(['Sumatera','Jawa','Sulawesi','Maluku'].map(function(p){return [p,p,hitung(function(d){return d.p===p})]}));
+    var jenis=[['semua',sx('all'),hitung(function(){return 1})],['depo',tx('depo'),hitung(function(d){return d.j==='depo'})],['store',tx('store'),hitung(function(d){return d.j==='store'})]];
+    var pulau=[['semua',sx('allIsl')]].concat(['Sumatera','Jawa','Sulawesi','Maluku'].map(function(p){return [p,tx(PULAU[p]),hitung(function(d){return d.p===p})]}));
     function b(g,v,t,n,on){return '<button type="button" class="chip" data-g="'+g+'" data-v="'+v+'" aria-pressed="'+on+'">'+t+(n!=null?'<span class="n">'+n+'</span>':'')+'</button>'}
     chipsEl.innerHTML=jenis.map(function(c){return b('jenis',c[0],c[1],c[2],st.jenis===c[0])}).join('')+'<span class="chip-sep"></span>'+pulau.map(function(c){return b('pulau',c[0],c[1],c[2],st.pulau===c[0])}).join('');
   }
@@ -862,16 +1021,18 @@ if('IntersectionObserver' in window){
   $('#q').addEventListener('input',function(e){st.q=e.target.value;st.aktif=-1;render(true)});
 
   function render(fit){
+    if(!map&&!$('#map').firstChild)$('#map').innerHTML='<div class="empty" style="margin:20px"></div>';
+    if(!map)$('#map').firstChild.textContent=sx('mapFail');
     var idx=[];LOKASI.forEach(function(d,i){if(cocok(d))idx.push(i)});
     if(st.me)idx.sort(function(a,b){return jarak(st.me,LOKASI[a])-jarak(st.me,LOKASI[b])});
     listEl.innerHTML=idx.length?idx.map(function(i){var d=LOKASI[i],km=st.me?jarak(st.me,d):null;
-      return '<article class="loc'+(i===st.aktif?' on':'')+'" data-i="'+i+'" tabindex="0" role="button" aria-label="Lihat '+esc(d.n)+' di peta">'+
-        (d.f?'<img class="loc-img" src="'+d.f+'" alt="Foto '+esc(d.n)+'" loading="lazy" width="800" height="520">':'')+'<div class="loc-body">'+
-        '<div class="loc-top"><span class="badge '+d.j+'">'+(d.j==='depo'?'Depo':'Infinix Store')+'</span>'+(km!=null?'<span class="dist">± '+(km<10?km.toFixed(1).replace('.',','):Math.round(km).toLocaleString('id-ID'))+' km</span>':'')+'</div>'+
+      return '<article class="loc'+(i===st.aktif?' on':'')+'" data-i="'+i+'" tabindex="0" role="button" aria-label="'+esc(d.n)+'">'+
+        (d.f?'<img class="loc-img" src="'+d.f+'" alt="'+esc(d.n)+'" loading="lazy" width="800" height="520">':'')+'<div class="loc-body">'+
+        '<div class="loc-top"><span class="badge '+d.j+'">'+jns(d.j)+'</span>'+(km!=null?'<span class="dist">± '+(km<10?(Math.round(km*10)/10).toLocaleString(sx('loc')):Math.round(km).toLocaleString(sx('loc')))+' km</span>':'')+'</div>'+
         '<h3>'+esc(d.n)+'</h3><p>'+esc(d.a)+'</p>'+
-        '<div class="loc-act"><a href="'+d.u+'" target="_blank" rel="noopener">Petunjuk arah</a></div></div></article>'}).join('')
-      :'<div class="empty">Tidak ada lokasi yang cocok. Coba kata lain atau hapus saringan.</div>';
-    note.textContent=idx.length+' dari '+LOKASI.length+' lokasi ditampilkan'+(st.me?', diurutkan dari yang terdekat dengan Anda.':'.');
+        '<div class="loc-act"><a href="'+d.u+'" target="_blank" rel="noopener">'+sx('dir')+'</a></div></div></article>'}).join('')
+      :'<div class="empty">'+sx('empty')+'</div>';
+    note.textContent=pesan?sx(pesan):sx('note')(idx.length,LOKASI.length)+(st.me?sx('near'):(lang==='zh'?'。':'.'));
     if(map){var b=[];LOKASI.forEach(function(d,i){var on=idx.indexOf(i)>-1;if(on){marks[i].addTo(map);b.push([d.lat,d.lng])}else map.removeLayer(marks[i])});
       if(fit&&b.length)map.fitBounds(b,{padding:[60,60],maxZoom:13,animate:!reduce})}
   }
@@ -883,16 +1044,17 @@ if('IntersectionObserver' in window){
       if(window.innerWidth<=1020)$('#map').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})}}
   listEl.addEventListener('click',function(e){if(e.target.closest('a'))return;var c=e.target.closest('.loc');if(c)pilih(+c.dataset.i,true)});
   listEl.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('loc')){e.preventDefault();pilih(+e.target.dataset.i,true)}});
+  function bersih(){st.jenis='semua';st.pulau='semua';st.q='';$('#q').value='';st.aktif=-1;pesan=''}
 
   var near=$('#near');
   near.addEventListener('click',function(){
-    if(!navigator.geolocation){note.textContent='Perangkat ini tidak mendukung pencarian lokasi.';return}
-    var t=near.innerHTML;near.disabled=true;near.textContent='Mencari lokasi Anda...';
+    if(!navigator.geolocation){pesan='noGeo';render(false);return}
+    near.disabled=true;near.textContent=sx('cari');
     navigator.geolocation.getCurrentPosition(function(p){
-      st.me={lat:p.coords.latitude,lng:p.coords.longitude};st.jenis='semua';st.pulau='semua';st.q='';$('#q').value='';chips();render(false);
-      near.disabled=false;near.innerHTML=t;
+      bersih();st.me={lat:p.coords.latitude,lng:p.coords.longitude};chips();render(false);
+      near.disabled=false;near.innerHTML=tx('j4');
       var first=listEl.querySelector('.loc');if(first)pilih(+first.dataset.i,true);
-    },function(){near.disabled=false;near.innerHTML=t;note.textContent='Lokasi tidak bisa dibaca. Izinkan akses lokasi di browser, atau cari lewat nama kota.'},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+    },function(){near.disabled=false;near.innerHTML=tx('j4');pesan='geoFail';render(false)},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
   });
 
   /* galeri foto berjalan: dua baris, arah berlawanan, pelan */
@@ -903,20 +1065,26 @@ if('IntersectionObserver' in window){
     var t=Math.ceil(ada.length/2);
     $('#gal').innerHTML=baris(ada.slice(0,t),false)+baris(ada.slice(t),true);
     $('#gal').addEventListener('click',function(e){var b=e.target.closest('.gitem');if(!b)return;
-      st.jenis='semua';st.pulau='semua';st.q='';$('#q').value='';chips();render(false);pilih(+b.dataset.i,true);
+      bersih();chips();render(false);pilih(+b.dataset.i,true);
       $('#map').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})});
   })();
-  /* tautan peta situs di bagian bawah: langsung menyaring daftar lokasi / mengisi keperluan */
-  document.addEventListener('click',function(e){var a=e.target.closest('[data-saring],[data-perlu]');if(!a)return;
+  /* tautan di halaman: menyaring daftar lokasi / membuka satu lokasi / mengisi keperluan */
+  document.addEventListener('click',function(e){var a=e.target.closest('[data-saring],[data-perlu],[data-lok]');if(!a)return;
     if(a.dataset.perlu){$('#f-perlu').value=a.dataset.perlu;return}
-    var p=a.dataset.saring.split(':');st.jenis='semua';st.pulau='semua';st.q='';$('#q').value='';st[p[0]]=p[1];st.aktif=-1;chips();render(true)});
+    if(a.dataset.lok){e.preventDefault();bersih();chips();render(false);pilih(+a.dataset.lok,true);
+      $('#map').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});return}
+    var p=a.dataset.saring.split(':');bersih();st[p[0]]=p[1];chips();render(true)});
+  segarkan=function(){chips();render(false);if(map)map.closePopup()};
   chips();render(true);
   if(map)setTimeout(function(){map.invalidateSize();render(true)},300);
 })();
 
-/* ===== form -> WhatsApp ===== */
+pasangBahasa(lang);
+
+/* ===== form -> WhatsApp (pesan selalu berbahasa Indonesia supaya mudah dibaca tim SKN) ===== */
 $('#waform').addEventListener('submit',function(e){e.preventDefault();
-  var t='Halo SKN, saya '+$('#f-nama').value.trim()+' dari '+$('#f-kota').value.trim()+'.\nKeperluan: '+$('#f-perlu').value+(($('#f-pesan').value.trim())?'\n\n'+$('#f-pesan').value.trim():'');
+  var o=$('#f-perlu').selectedOptions[0];
+  var t='Halo SKN, saya '+$('#f-nama').value.trim()+' dari '+$('#f-kota').value.trim()+'.\nKeperluan: '+ASLI[o.dataset.t].replace(/&amp;/g,'&')+(($('#f-pesan').value.trim())?'\n\n'+$('#f-pesan').value.trim():'');
   window.open('https://wa.me/628117566789?text='+encodeURIComponent(t),'_blank','noopener')});
 </script>
 </body>
