@@ -594,7 +594,7 @@ function gambarAreaKab() {
 }
 $('btnUnduhArea').onclick = () => {
   const ar = areaTerpilih();
-  if (!ar.length) return;
+  if (!ar.length) { alert('Tidak ada kabupaten yang cocok dengan saringan ini, jadi tidak ada yang bisa diunduh.'); return; }
   const u8 = buatXlsx([['ID', 'WILAYAH', 'KAB', 'JUMLAH TOKO', 'TIDAK TERJANGKAU', 'STATUS', 'PETA', 'KETERANGAN', 'TITIK']]
     .concat(ar.map(a => [a.id, a.wil, a.kab, a.toko, a.tak, a.status, a.warna, a.ket, a.titik])));
   simpanFile(u8, 'Peta-Jangkauan-Kabupaten' + (F.wil ? '-' + F.wil.replace(/\s+/g, '-') : '') + '-' + (WAKTU || '').slice(0, 10) + '.xlsx');
@@ -725,7 +725,12 @@ function simpanFile(u8, nama) {
 }
 $('btnUnduh').onclick = () => {
   const d = terpilih();
-  if (!d.length) return;
+  if (!d.length) {
+    // wilayah yang baru punya data ringkas per kabupaten (belum ada daftar tokonya): unduh daftar kabupatennya
+    if (areaTerpilih().length) { $('btnUnduhArea').onclick(); return; }
+    alert('Tidak ada data yang cocok dengan saringan ini, jadi tidak ada yang bisa diunduh.');
+    return;
+  }
   unduhExcel(d, 'Peta-Jangkauan-Toko' + (F.wil ? '-' + F.wil.replace(/\s+/g, '-') : '') + '-' + (WAKTU || '').slice(0, 10) + '.xlsx');
 };
 
