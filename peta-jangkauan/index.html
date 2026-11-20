@@ -105,7 +105,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <div><label for="fScl">SC / SCL</label><select id="fScl"></select></div>
       <div><label for="fAei">AE Infinix</label><select id="fAei"></select></div>
       <div><label for="fAet">AE itel</label><select id="fAet"></select></div>
-      <div><label for="fQ">Cari nama toko</label><input id="fQ" type="search" placeholder="ketik nama toko"></div>
+      <div><label for="fQ">Cari nama toko</label><input id="fQ" name="cari-nama-toko" type="search" placeholder="ketik nama toko" autocomplete="off" data-lpignore="true"></div>
     </div>
     <div class="baris-bawah">
       <span id="chipWarna"></span>
@@ -203,8 +203,8 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <h2 style="font-size:16px;margin:0 0 8px">Masuk untuk mengisi data</h2>
       <p class="catatan">Melihat peta tidak perlu masuk. Mengubah data hanya untuk TS yang punya kode.</p>
       <div class="form" style="grid-template-columns:1fr">
-        <div><label for="inNama">Nama</label><input id="inNama" type="text" autocomplete="off"></div>
-        <div><label for="inKode">Kode</label><input id="inKode" type="password" autocomplete="off"></div>
+        <div><label for="inNama">Nama</label><input id="inNama" name="nama-pengisi" type="text" autocomplete="username"></div>
+        <div><label for="inKode">Kode</label><input id="inKode" name="kode-pengisi" type="password" autocomplete="current-password"></div>
         <div><button class="tombol utama" id="btnMasuk" type="button">Masuk</button></div>
       </div>
       <div id="pesanMasuk"></div>
@@ -218,7 +218,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <div class="dua">
         <div class="kotak">
           <h3 style="font-size:15px;margin:0 0 8px">Ubah satu toko</h3>
-          <input id="cariToko" type="search" placeholder="ketik nama toko, kecamatan, atau sales">
+          <input id="cariToko" name="cari-toko-ubah" type="search" placeholder="ketik nama toko, kecamatan, atau sales" autocomplete="off" data-lpignore="true">
           <div id="hasilCari"></div>
           <p style="margin:10px 0 0"><button class="tombol" id="btnBaru" type="button">+ Tambah toko baru</button></p>
         </div>
@@ -929,6 +929,9 @@ function setAkun(nama, kode) {
   AKUN.nama = nama; AKUN.kode = kode;
   try { if (nama) { sessionStorage.setItem('pj_nama', nama); sessionStorage.setItem('pj_kode', kode); } else { sessionStorage.removeItem('pj_nama'); sessionStorage.removeItem('pj_kode'); } } catch (e) { }
   $('isiMasuk').hidden = !!nama; $('isiPanel').hidden = !nama;
+  // selama kotak masuk tersembunyi, jangan ada kolom kata sandi di halaman:
+  // browser suka mengisi nama pengisi ke kotak teks lain (mis. "Cari nama toko") dan peta jadi tersaring
+  $('inKode').value = ''; $('inKode').type = nama ? 'text' : 'password';
   $('siapa').textContent = nama;
   if (nama && menunggu) { const id = menunggu; menunggu = ''; bukaForm(DATA.find(t => t.id === id)); }
 }
@@ -1119,6 +1122,10 @@ $('fileExcel').onchange = e => { const f = e.target.files[0]; if (f) periksaExce
 
 /* ================================================================ mulai */
 try { const n = sessionStorage.getItem('pj_nama'), k = sessionStorage.getItem('pj_kode'); if (n && k) setAkun(n, k); } catch (e) { }
+// jaga-jaga: kalau browser tetap mengisi kotak cari sendiri (bukan diketik orang), kosongkan lagi
+let diketik = false;
+['keydown', 'paste', 'focus'].forEach(ev => $('fQ').addEventListener(ev, () => { diketik = true; }));
+[400, 1500, 3000].forEach(ms => setTimeout(() => { if (!diketik && $('fQ').value) { $('fQ').value = ''; if (F.q) { F.q = ''; gambar(); } } }, ms));
 muat();
 </script>
 </body>
