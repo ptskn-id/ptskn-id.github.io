@@ -78,8 +78,9 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
 .hasil-cari button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #edf0f3;background:#fff;padding:9px 10px;cursor:pointer}
 .hasil-cari button:hover{background:#f5f8fc}
 .dua{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
-.kotak-kab div{min-width:28px;height:22px;border-radius:4px;border:2px solid #fff;color:#fff;font:700 11px/18px system-ui,Arial,sans-serif;text-align:center;padding:0 3px;box-shadow:0 1px 3px rgba(0,0,0,.45);white-space:nowrap}
-.kotak-kab div.KUNING{color:#3a2a00}
+.kotak-kab div{position:absolute;transform:translate(-50%,-50%);display:flex;height:22px;border-radius:4px;border:2px solid #fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.45);white-space:nowrap}
+.kotak-kab i{font:700 11px/18px system-ui,Arial,sans-serif;font-style:normal;color:#fff;min-width:20px;text-align:center;padding:0 4px}
+.kotak-kab i.KUNING{color:#3a2a00}
 .legenda b.kk{display:inline-block;min-width:20px;height:14px;border-radius:3px;background:#5d6b7a;color:#fff;font-size:10px;line-height:14px;text-align:center;margin-right:5px;vertical-align:-2px}
 .strip{background:#fff;border:1px solid var(--garis);border-left:5px solid #5d6b7a;border-radius:10px;padding:9px 12px;margin:-4px 0 12px;font-size:13.5px}
 .popup b{font-size:14px} .popup p{margin:4px 0;font-size:13px}
@@ -134,7 +135,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <span><i style="background:var(--kuning)"></i>Kuning: sedang</span>
       <span><i style="background:var(--merah)"></i>Merah: sulit dijangkau</span>
       <span><i style="background:#5d6b7a"></i>Bulat = satu toko</span>
-      <span><b class="kk">33</b>Kotak = satu kabupaten (angka = jumlah toko)</span>
+      <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (hijau = bisa dijangkau, kuning/merah = tidak terjangkau)</span>
       <span id="ketPeta"></span>
     </div>
   </section>
@@ -344,13 +345,25 @@ function siapkanArea(a) {
   a.lat = k ? parseFloat(k[0]) : null; a.lng = k ? parseFloat(k[1]) : null;
   a.nToko = parseInt(a.toko, 10) || 0; a.nTak = parseInt(a.tak, 10) || 0;
   a.cari = [a.kab, a.wil, a.ket, a.status].join(' ').toUpperCase();
+  // Pisahkan toko kabupaten jadi dua bagian: yang tidak terjangkau memakai warna status, sisanya hijau.
+  const tak = Math.min(a.nTak, a.nToko);
+  a.jml = { HIJAU: 0, KUNING: 0, MERAH: 0 };
+  if (a.jml[a.warna] === undefined) a.jml.HIJAU = a.nToko;
+  else if (!tak && a.warna !== 'HIJAU') a.jml[a.warna] = a.nToko;       // status kuning/merah tapi angka tidak terjangkau 0: seluruh kabupaten ikut status
+  else { a.jml.HIJAU = a.nToko - tak; a.jml[a.warna === 'HIJAU' ? 'KUNING' : a.warna] += tak; } // status hijau tapi ada yang tidak terjangkau: bagian itu kuning
   return a;
+}
+/* Bagian kabupaten yang tampil menurut saringan warna. Kabupaten tanpa toko ikut warna statusnya. */
+function bagianArea(a) {
+  const b = URUT_WARNA.filter(w => a.jml[w] > 0 && F.warna[w]).map(w => ({ w: w, n: a.jml[w] }));
+  if (!b.length && !a.nToko && F.warna[a.warna]) b.push({ w: a.warna, n: 0 });
+  return b;
 }
 function lolosArea(a) {
   if (F.kec || F.scl || F.aei || F.aet) return false; // data kabupaten tidak punya kecamatan dan nama sales
   if (F.wil && a.wil !== F.wil) return false;
   if (F.kab && a.kab !== F.kab) return false;
-  if (!F.warna[a.warna]) return false;
+  if (!bagianArea(a).length) return false;
   if (F.q && a.cari.indexOf(F.q) < 0) return false;
   return true;
 }
@@ -415,10 +428,9 @@ function gambar() {
   $('ringkasArea').hidden = !ar.length;
   if (ar.length) {
     const c = { HIJAU: 0, KUNING: 0, MERAH: 0 }; let nt = 0, nx = 0;
-    ar.forEach(a => { if (c[a.warna] !== undefined) c[a.warna]++; nt += a.nToko; nx += a.nTak; });
-    $('ringkasArea').innerHTML = '<b>Data ringkas per kabupaten:</b> ' + angka(ar.length) + ' kabupaten · ' + angka(nt) + ' toko, ' +
-      angka(nx) + ' di antaranya tidak terjangkau (' + persen(nx, nt) + '%) · ' +
-      URUT_WARNA.map(w => '<span class="cap ' + w + '">' + c[w] + ' ' + w.toLowerCase() + '</span>').join(' ') +
+    ar.forEach(a => { URUT_WARNA.forEach(w => { c[w] += a.jml[w]; }); nt += a.nToko; nx += a.nTak; });
+    $('ringkasArea').innerHTML = '<b>Data ringkas per kabupaten:</b> ' + angka(ar.length) + ' kabupaten · ' + angka(nt) + ' toko: ' +
+      URUT_WARNA.map(w => '<span class="cap ' + w + '">' + angka(c[w]) + ' toko ' + w.toLowerCase() + '</span>').join(' ') +
       ' <span style="color:var(--abu)">— belum termasuk di kartu toko di atas.</span>';
   }
   if (tabAktif === 'peta') gambarPeta(d);
@@ -451,7 +463,8 @@ function isiPopup(t, p) {
 }
 function isiPopupArea(a) {
   return '<div class="popup"><b>' + esc(a.kab) + '</b>' +
-    '<p><span class="cap ' + esc(a.warna) + '">' + esc(a.warna) + ' · ' + esc((WARNA[a.warna] || {}).t || '') + '</span> <span class="cap abu">data per kabupaten</span></p>' +
+    '<p>' + (URUT_WARNA.filter(w => a.jml[w] > 0).map(w => '<span class="cap ' + w + '">' + angka(a.jml[w]) + ' toko ' + w.toLowerCase() + '</span>').join(' ') || '<span class="cap abu">belum ada toko</span>') +
+    ' <span class="cap abu">data per kabupaten</span></p>' +
     '<p>' + esc(a.wil) + '</p>' +
     '<p>Status dari TS: ' + esc(a.status || '-') + '<br>Jumlah toko: ' + angka(a.nToko) + '<br>Tidak terjangkau: ' + angka(a.nTak) + ' toko (' + persen(a.nTak, a.nToko) + '%)</p>' +
     '<p>Keterangan: ' + esc(a.ket || '-') + '</p>' +
@@ -489,7 +502,7 @@ function gambarPeta(d) {
     if (a.lat === null) return;
     nKab++;
     L.marker([a.lat, a.lng], {
-      icon: L.divIcon({ className: 'kotak-kab', iconSize: [34, 22], iconAnchor: [17, 11], html: '<div class="' + esc(a.warna) + '" style="background:' + (WARNA[a.warna] || { c: '#777' }).c + '">' + angka(a.nToko) + '</div>' }),
+      icon: L.divIcon({ className: 'kotak-kab', iconSize: [0, 0], iconAnchor: [0, 0], html: '<div>' + bagianArea(a).map(b => '<i class="' + b.w + '" style="background:' + WARNA[b.w].c + '">' + angka(b.n) + '</i>').join('') + '</div>' }),
       title: a.kab, keyboard: false
     }).bindPopup(() => isiPopupArea(a), { maxWidth: 300, autoPanPaddingTopLeft: [56, 12], autoPanPaddingBottomRight: [12, 12] }).addTo(lapis);
     batas.push([a.lat, a.lng]);
@@ -571,24 +584,24 @@ function gambarAreaKab() {
   ar.forEach(a => {
     let g = m.get(a.wil);
     if (!g) { g = { wil: a.wil, n: 0, toko: 0, tak: 0, HIJAU: 0, KUNING: 0, MERAH: 0 }; m.set(a.wil, g); }
-    g.n++; g.toko += a.nToko; g.tak += a.nTak; if (g[a.warna] !== undefined) g[a.warna]++;
+    g.n++; g.toko += a.nToko; g.tak += a.nTak; URUT_WARNA.forEach(w => { g[w] += a.jml[w]; });
   });
   const prov = Array.from(m.values());
   prov.forEach(g => { g.pt = persen(g.tak, g.toko); });
   tabel('tblAreaProv', [
     { k: 'wil', j: 'Provinsi / wilayah' }, { k: 'n', j: 'Kabupaten', num: true },
-    { k: 'HIJAU', j: 'Kab. hijau', num: true }, { k: 'KUNING', j: 'Kab. kuning', num: true }, { k: 'MERAH', j: 'Kab. merah', num: true },
+    { k: 'toko', j: 'Toko', num: true, f: g => angka(g.toko) },
+    { k: 'HIJAU', j: 'Toko hijau', num: true, f: g => angka(g.HIJAU) }, { k: 'KUNING', j: 'Toko kuning', num: true, f: g => angka(g.KUNING) }, { k: 'MERAH', j: 'Toko merah', num: true, f: g => angka(g.MERAH) },
     { k: 'bar', j: 'Susunan', urut: false, f: bar },
-    { k: 'toko', j: 'Toko', num: true, f: g => angka(g.toko) }, { k: 'tak', j: 'Tidak terjangkau', num: true, f: g => angka(g.tak) },
     { k: 'pt', j: '% tidak terjangkau', num: true, f: g => g.pt + '%' }
   ], prov, { k: 'tak', naik: false }, g => { F.wil = g.wil; F.kab = ''; isiPilihan(); gambar(); });
-  ar.forEach(a => { a.pt = persen(a.nTak, a.nToko); });
+  ar.forEach(a => { a.pt = persen(a.nTak, a.nToko); a.jH = a.jml.HIJAU; a.jK = a.jml.KUNING; a.jM = a.jml.MERAH; });
   tabel('tblAreaKab', [
     { k: 'wil', j: 'Provinsi / wilayah' }, { k: 'kab', j: 'Kabupaten / Kota' },
-    { k: 'warna', j: 'Warna', f: a => '<span class="cap ' + esc(a.warna) + '">' + esc(a.warna) + '</span>' },
     { k: 'status', j: 'Status dari TS' },
-    { k: 'nToko', j: 'Toko', num: true }, { k: 'nTak', j: 'Tidak terjangkau', num: true },
-    { k: 'pt', j: '%', num: true, f: a => a.pt + '%' },
+    { k: 'nToko', j: 'Toko', num: true },
+    { k: 'jH', j: 'Hijau', num: true }, { k: 'jK', j: 'Kuning', num: true }, { k: 'jM', j: 'Merah', num: true },
+    { k: 'bar', j: 'Susunan', urut: false, f: a => bar(a.jml) },
     { k: 'ket', j: 'Keterangan' }
   ], ar, { k: 'nTak', naik: false }, a => { F.wil = a.wil; F.kab = a.kab; isiPilihan(); bukaTab('peta'); });
 }
