@@ -135,7 +135,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <span><i style="background:var(--kuning)"></i>Kuning: sedang</span>
       <span><i style="background:var(--merah)"></i>Merah: sulit dijangkau</span>
       <span><i style="background:#5d6b7a"></i>Bulat = satu toko</span>
-      <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (merah = tidak bisa dijangkau, kuning = butuh perjadin atau butuh waktu, hijau = bisa dijangkau)</span>
+      <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (merah = tidak bisa dijangkau atau butuh perjadin, kuning = butuh waktu, hijau = bisa dijangkau)</span>
       <span id="ketPeta"></span>
     </div>
   </section>
@@ -345,15 +345,14 @@ function siapkanArea(a) {
   a.lat = k ? parseFloat(k[0]) : null; a.lng = k ? parseFloat(k[1]) : null;
   a.nToko = parseInt(a.toko, 10) || 0; a.nTak = parseInt(a.tak, 10) || 0;
   a.cari = [a.kab, a.wil, a.ket, a.status].join(' ').toUpperCase();
-  // Aturan user (20 Nov 2026): jumlah toko yang tidak bisa dijangkau = MERAH;
-  // sisa tokonya ikut status kabupaten: bisa dijangkau = HIJAU, butuh perjadin / butuh waktu = KUNING.
+  // Aturan user (20 Nov 2026, final): toko di kolom "tidak bisa dijangkau" = MERAH apa pun statusnya;
+  // sisa tokonya ikut status kabupaten: bisa dijangkau = HIJAU, butuh waktu = KUNING, butuh perjadin = MERAH.
   const tak = Math.min(a.nTak, a.nToko);
   const s = rapi(a.status).toUpperCase();
-  let sisa = s === 'BISA DIJANGKAU' ? 'HIJAU' : (s.indexOf('PERJADIN') >= 0 || s === 'BUTUH WAKTU') ? 'KUNING' : a.warna;
+  let sisa = s === 'BISA DIJANGKAU' ? 'HIJAU' : s === 'BUTUH WAKTU' ? 'KUNING' : s.indexOf('PERJADIN') >= 0 ? 'MERAH' : a.warna;
   if (!WARNA[sisa]) sisa = 'HIJAU';
   a.jml = { HIJAU: 0, KUNING: 0, MERAH: 0 };
-  // "Butuh waktu" lebih ringan daripada tidak bisa dijangkau: toko tidak terjangkaunya kuning, bukan merah.
-  a.jml[s === 'BUTUH WAKTU' ? 'KUNING' : 'MERAH'] += tak;
+  a.jml.MERAH += tak;
   a.jml[sisa] += a.nToko - tak;
   a.warnaSisa = sisa;
   return a;
@@ -892,7 +891,7 @@ async function bacaExcel(file, maju) {
 function warnaDariStatus(status, semuaTeks) {
   const s = rapi(status).toUpperCase();
   if (s === 'BISA DIJANGKAU') return 'HIJAU';
-  if (s.indexOf('PERJADIN') >= 0) return 'KUNING'; // merah kini = jumlah toko tidak terjangkau, bukan kata "jauh"
+  if (s.indexOf('PERJADIN') >= 0) return 'MERAH'; // aturan final user: butuh perjadin = merah (kata "jauh" tidak dipakai lagi)
   if (s === 'BUTUH WAKTU') return 'KUNING';
   return '';
 }
