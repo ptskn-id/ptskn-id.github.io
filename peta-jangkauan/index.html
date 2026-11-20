@@ -135,7 +135,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <span><i style="background:var(--kuning)"></i>Kuning: sedang</span>
       <span><i style="background:var(--merah)"></i>Merah: sulit dijangkau</span>
       <span><i style="background:#5d6b7a"></i>Bulat = satu toko</span>
-      <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (hijau = bisa dijangkau, kuning/merah = tidak terjangkau)</span>
+      <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (merah = tidak bisa dijangkau, kuning = butuh perjadin/waktu, hijau = bisa dijangkau)</span>
       <span id="ketPeta"></span>
     </div>
   </section>
@@ -345,18 +345,22 @@ function siapkanArea(a) {
   a.lat = k ? parseFloat(k[0]) : null; a.lng = k ? parseFloat(k[1]) : null;
   a.nToko = parseInt(a.toko, 10) || 0; a.nTak = parseInt(a.tak, 10) || 0;
   a.cari = [a.kab, a.wil, a.ket, a.status].join(' ').toUpperCase();
-  // Pisahkan toko kabupaten jadi dua bagian: yang tidak terjangkau memakai warna status, sisanya hijau.
+  // Aturan user (20 Nov 2026): jumlah toko yang tidak bisa dijangkau = MERAH;
+  // sisa tokonya ikut status kabupaten: bisa dijangkau = HIJAU, butuh perjadin / butuh waktu = KUNING.
   const tak = Math.min(a.nTak, a.nToko);
+  const s = rapi(a.status).toUpperCase();
+  let sisa = s === 'BISA DIJANGKAU' ? 'HIJAU' : (s.indexOf('PERJADIN') >= 0 || s === 'BUTUH WAKTU') ? 'KUNING' : a.warna;
+  if (!WARNA[sisa]) sisa = 'HIJAU';
   a.jml = { HIJAU: 0, KUNING: 0, MERAH: 0 };
-  if (a.jml[a.warna] === undefined) a.jml.HIJAU = a.nToko;
-  else if (!tak && a.warna !== 'HIJAU') a.jml[a.warna] = a.nToko;       // status kuning/merah tapi angka tidak terjangkau 0: seluruh kabupaten ikut status
-  else { a.jml.HIJAU = a.nToko - tak; a.jml[a.warna === 'HIJAU' ? 'KUNING' : a.warna] += tak; } // status hijau tapi ada yang tidak terjangkau: bagian itu kuning
+  a.jml.MERAH = tak;
+  a.jml[sisa] += a.nToko - tak;
+  a.warnaSisa = sisa;
   return a;
 }
 /* Bagian kabupaten yang tampil menurut saringan warna. Kabupaten tanpa toko ikut warna statusnya. */
 function bagianArea(a) {
   const b = URUT_WARNA.filter(w => a.jml[w] > 0 && F.warna[w]).map(w => ({ w: w, n: a.jml[w] }));
-  if (!b.length && !a.nToko && F.warna[a.warna]) b.push({ w: a.warna, n: 0 });
+  if (!b.length && !a.nToko && F.warna[a.warnaSisa]) b.push({ w: a.warnaSisa, n: 0 });
   return b;
 }
 function lolosArea(a) {
@@ -887,7 +891,7 @@ async function bacaExcel(file, maju) {
 function warnaDariStatus(status, semuaTeks) {
   const s = rapi(status).toUpperCase();
   if (s === 'BISA DIJANGKAU') return 'HIJAU';
-  if (s.indexOf('PERJADIN') >= 0) return /jauh/i.test(semuaTeks) ? 'MERAH' : 'KUNING';
+  if (s.indexOf('PERJADIN') >= 0) return 'KUNING'; // merah kini = jumlah toko tidak terjangkau, bukan kata "jauh"
   if (s === 'BUTUH WAKTU') return 'KUNING';
   return '';
 }
