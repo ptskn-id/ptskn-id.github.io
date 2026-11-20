@@ -135,7 +135,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <span><i style="background:var(--kuning)"></i>Kuning: sedang</span>
       <span><i style="background:var(--merah)"></i>Merah: sulit dijangkau</span>
       <span><i style="background:#5d6b7a"></i>Bulat = satu toko</span>
-      <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (merah = tidak bisa dijangkau, kuning = butuh perjadin/waktu, hijau = bisa dijangkau)</span>
+      <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (merah = tidak bisa dijangkau, kuning = butuh perjadin atau butuh waktu, hijau = bisa dijangkau)</span>
       <span id="ketPeta"></span>
     </div>
   </section>
@@ -352,7 +352,8 @@ function siapkanArea(a) {
   let sisa = s === 'BISA DIJANGKAU' ? 'HIJAU' : (s.indexOf('PERJADIN') >= 0 || s === 'BUTUH WAKTU') ? 'KUNING' : a.warna;
   if (!WARNA[sisa]) sisa = 'HIJAU';
   a.jml = { HIJAU: 0, KUNING: 0, MERAH: 0 };
-  a.jml.MERAH = tak;
+  // "Butuh waktu" lebih ringan daripada tidak bisa dijangkau: toko tidak terjangkaunya kuning, bukan merah.
+  a.jml[s === 'BUTUH WAKTU' ? 'KUNING' : 'MERAH'] += tak;
   a.jml[sisa] += a.nToko - tak;
   a.warnaSisa = sisa;
   return a;
