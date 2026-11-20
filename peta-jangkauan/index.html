@@ -78,6 +78,10 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
 .hasil-cari button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #edf0f3;background:#fff;padding:9px 10px;cursor:pointer}
 .hasil-cari button:hover{background:#f5f8fc}
 .dua{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.kotak-kab div{min-width:28px;height:22px;border-radius:4px;border:2px solid #fff;color:#fff;font:700 11px/18px system-ui,Arial,sans-serif;text-align:center;padding:0 3px;box-shadow:0 1px 3px rgba(0,0,0,.45);white-space:nowrap}
+.kotak-kab div.KUNING{color:#3a2a00}
+.legenda b.kk{display:inline-block;min-width:20px;height:14px;border-radius:3px;background:#5d6b7a;color:#fff;font-size:10px;line-height:14px;text-align:center;margin-right:5px;vertical-align:-2px}
+.strip{background:#fff;border:1px solid var(--garis);border-left:5px solid #5d6b7a;border-radius:10px;padding:9px 12px;margin:-4px 0 12px;font-size:13.5px}
 .popup b{font-size:14px} .popup p{margin:4px 0;font-size:13px}
 .leaflet-popup-content{margin:11px 13px}
 @media (max-width:560px){ .titik{grid-template-columns:1fr 1fr} .kartu b{font-size:21px} .wadah{padding:10px 12px 40px} }
@@ -112,6 +116,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
   </div>
 
   <div class="ringkas" id="ringkas"></div>
+  <div class="strip" id="ringkasArea" hidden></div>
 
   <nav class="tab" id="tab">
     <button data-t="peta" class="aktif" type="button">Peta</button>
@@ -128,6 +133,8 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <span><i style="background:var(--hijau)"></i>Hijau: bisa dijangkau</span>
       <span><i style="background:var(--kuning)"></i>Kuning: sedang</span>
       <span><i style="background:var(--merah)"></i>Merah: sulit dijangkau</span>
+      <span><i style="background:#5d6b7a"></i>Bulat = satu toko</span>
+      <span><b class="kk">33</b>Kotak = satu kabupaten (angka = jumlah toko)</span>
       <span id="ketPeta"></span>
     </div>
   </section>
@@ -144,6 +151,16 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
     </div>
     <p class="catatan">"Belum terjangkau" = area yang tidak punya satu pun toko hijau. Klik baris untuk melihat tokonya di peta.</p>
     <div class="gulir" id="tblArea"></div>
+
+    <div id="areaKabKotak" hidden>
+      <div class="kepala" style="margin-top:22px">
+        <h2>Data ringkas per kabupaten</h2>
+        <button class="tombol" id="btnUnduhArea" type="button">Unduh Excel kabupaten</button>
+      </div>
+      <p class="catatan">Untuk wilayah yang belum punya rincian per toko. Angkanya diisi per kabupaten: jumlah toko, dan berapa di antaranya yang tidak terjangkau. Klik baris untuk melihatnya di peta.</p>
+      <div class="gulir" id="tblAreaProv" style="margin-bottom:12px"></div>
+      <div class="gulir" id="tblAreaKab"></div>
+    </div>
   </section>
 
   <section class="tampil" id="v-sales">
@@ -207,7 +224,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
         </div>
         <div class="kotak">
           <h3 style="font-size:15px;margin:0 0 8px">Ubah banyak toko sekaligus (Excel)</h3>
-          <p class="catatan" style="margin-top:0">Unduh Excel, ubah isinya, lalu upload lagi. Upload hanya mengubah dan menambah toko. Toko yang tidak ada di file tidak dihapus, dan sel kosong tidak menghapus isi lama.</p>
+          <p class="catatan" style="margin-top:0">Unduh Excel, ubah isinya, lalu upload lagi. Upload hanya mengubah dan menambah toko. Toko yang tidak ada di file tidak dihapus, dan sel kosong tidak menghapus isi lama. File ringkas per kabupaten (kolom PROVINSI, KABUPATEN, JUMLAH TOKO) juga bisa diupload di sini.</p>
           <input id="fileExcel" type="file" accept=".xlsx">
           <div id="uploadPesan"></div>
         </div>
@@ -237,6 +254,7 @@ const angka = n => Number(n).toLocaleString('id-ID');
 const persen = (a, b) => b ? Math.round(a * 100 / b) : 0;
 
 let DATA = [];
+let AREA = [];   // data ringkas per kabupaten
 let WAKTU = '';
 let RIWAYAT = null;
 const F = { wil: '', kab: '', kec: '', scl: '', aei: '', aet: '', q: '', warna: { HIJAU: true, KUNING: true, MERAH: true } };
@@ -296,9 +314,10 @@ async function muat() {
     const r = await api('data');
     if (!r.ok) throw new Error(r.pesan || 'Gagal memuat');
     DATA = r.toko.map(siapkan);
+    AREA = (r.area || []).map(siapkanArea);
     WAKTU = r.waktu || '';
     RIWAYAT = null;
-    $('ket').textContent = angka(DATA.length) + ' toko · dimuat ' + WAKTU + ' WIB';
+    $('ket').textContent = angka(DATA.length) + ' toko' + (AREA.length ? ' + ' + angka(AREA.length) + ' kabupaten ringkas' : '') + ' · dimuat ' + WAKTU + ' WIB';
     isiPilihan();
     gambar();
   } catch (e) {
@@ -320,6 +339,23 @@ function lolos(t, tanpa) {
 }
 const terpilih = () => DATA.filter(t => lolos(t));
 
+function siapkanArea(a) {
+  const k = koordinat(a.titik);
+  a.lat = k ? parseFloat(k[0]) : null; a.lng = k ? parseFloat(k[1]) : null;
+  a.nToko = parseInt(a.toko, 10) || 0; a.nTak = parseInt(a.tak, 10) || 0;
+  a.cari = [a.kab, a.wil, a.ket, a.status].join(' ').toUpperCase();
+  return a;
+}
+function lolosArea(a) {
+  if (F.kec || F.scl || F.aei || F.aet) return false; // data kabupaten tidak punya kecamatan dan nama sales
+  if (F.wil && a.wil !== F.wil) return false;
+  if (F.kab && a.kab !== F.kab) return false;
+  if (!F.warna[a.warna]) return false;
+  if (F.q && a.cari.indexOf(F.q) < 0) return false;
+  return true;
+}
+const areaTerpilih = () => AREA.filter(lolosArea);
+
 function isiSelect(id, nilai, daftar, semua) {
   const el = $(id);
   const unik = Array.from(new Set(daftar.filter(Boolean))).sort((a, b) => a.localeCompare(b, 'id'));
@@ -327,9 +363,9 @@ function isiSelect(id, nilai, daftar, semua) {
   return unik.indexOf(nilai) >= 0 ? nilai : '';
 }
 function isiPilihan() {
-  F.wil = isiSelect('fWil', F.wil, DATA.map(t => t.wil), 'Semua wilayah');
+  F.wil = isiSelect('fWil', F.wil, DATA.map(t => t.wil).concat(AREA.map(a => a.wil)), 'Semua wilayah');
   const dw = DATA.filter(t => !F.wil || t.wil === F.wil);
-  F.kab = isiSelect('fKab', F.kab, dw.map(t => t.kab), 'Semua kabupaten');
+  F.kab = isiSelect('fKab', F.kab, dw.map(t => t.kab).concat(AREA.filter(a => !F.wil || a.wil === F.wil).map(a => a.kab)), 'Semua kabupaten');
   const dk = dw.filter(t => !F.kab || t.kab === F.kab);
   F.kec = isiSelect('fKec', F.kec, dk.map(t => t.kec), 'Semua kecamatan');
   F.scl = isiSelect('fScl', F.scl, dw.map(t => t.scl), 'Semua SC/SCL');
@@ -375,6 +411,16 @@ function gambar() {
     '<div class="kartu m"><b>' + angka(h.MERAH) + '</b><small style="color:var(--merah-t)">' + persen(h.MERAH, h.n) + '% merah</small><br><span>sulit dijangkau</span></div>' +
     '<div class="kartu"><b>' + angka(h.tanpaTitik) + '</b><span>belum ada titik maps</span></div>' +
     '<div class="kartu"><b>' + angka(h.tanpaJarak) + '</b><span>belum ada jarak</span></div>';
+  const ar = areaTerpilih();
+  $('ringkasArea').hidden = !ar.length;
+  if (ar.length) {
+    const c = { HIJAU: 0, KUNING: 0, MERAH: 0 }; let nt = 0, nx = 0;
+    ar.forEach(a => { if (c[a.warna] !== undefined) c[a.warna]++; nt += a.nToko; nx += a.nTak; });
+    $('ringkasArea').innerHTML = '<b>Data ringkas per kabupaten:</b> ' + angka(ar.length) + ' kabupaten · ' + angka(nt) + ' toko, ' +
+      angka(nx) + ' di antaranya tidak terjangkau (' + persen(nx, nt) + '%) · ' +
+      URUT_WARNA.map(w => '<span class="cap ' + w + '">' + c[w] + ' ' + w.toLowerCase() + '</span>').join(' ') +
+      ' <span style="color:var(--abu)">— belum termasuk di kartu toko di atas.</span>';
+  }
   if (tabAktif === 'peta') gambarPeta(d);
   if (tabAktif === 'area') gambarArea(d);
   if (tabAktif === 'sales') gambarSales(d);
@@ -403,6 +449,15 @@ function isiPopup(t, p) {
     '<p>' + (p ? '<a href="' + esc(p.u) + '" target="_blank" rel="noopener">Buka di Google Maps</a> · ' : '') +
     '<a href="#" data-ubah="' + esc(t.id) + '">Ubah data</a></p></div>';
 }
+function isiPopupArea(a) {
+  return '<div class="popup"><b>' + esc(a.kab) + '</b>' +
+    '<p><span class="cap ' + esc(a.warna) + '">' + esc(a.warna) + ' · ' + esc((WARNA[a.warna] || {}).t || '') + '</span> <span class="cap abu">data per kabupaten</span></p>' +
+    '<p>' + esc(a.wil) + '</p>' +
+    '<p>Status dari TS: ' + esc(a.status || '-') + '<br>Jumlah toko: ' + angka(a.nToko) + '<br>Tidak terjangkau: ' + angka(a.nTak) + ' toko (' + persen(a.nTak, a.nToko) + '%)</p>' +
+    '<p>Keterangan: ' + esc(a.ket || '-') + '</p>' +
+    (a.tgl ? '<p style="color:#5d6b7a">Diperbarui ' + esc(a.tgl) + (a.oleh ? ' oleh ' + esc(a.oleh) : '') + '</p>' : '') +
+    '<p style="color:#5d6b7a">Letak kotak = perkiraan tengah kabupaten, bukan lokasi toko.</p></div>';
+}
 function gambarPeta(d) {
   if (!window.L) { $('ketPeta').textContent = 'Peta gagal dimuat (cek sambungan internet).'; return; }
   if (!peta) {
@@ -427,9 +482,22 @@ function gambarPeta(d) {
       batas.push([p.lat, p.lng]);
     });
   }));
+  const nTitik = batas.length;
+  const ar = areaTerpilih();
+  let nKab = 0;
+  ar.forEach(a => {
+    if (a.lat === null) return;
+    nKab++;
+    L.marker([a.lat, a.lng], {
+      icon: L.divIcon({ className: 'kotak-kab', iconSize: [34, 22], iconAnchor: [17, 11], html: '<div class="' + esc(a.warna) + '" style="background:' + (WARNA[a.warna] || { c: '#777' }).c + '">' + angka(a.nToko) + '</div>' }),
+      title: a.kab, keyboard: false
+    }).bindPopup(() => isiPopupArea(a), { maxWidth: 300, autoPanPaddingTopLeft: [56, 12], autoPanPaddingBottomRight: [12, 12] }).addTo(lapis);
+    batas.push([a.lat, a.lng]);
+  });
   if (batas.length) peta.fitBounds(batas, { padding: [28, 28], maxZoom: 14 });
-  $('ketPeta').textContent = angka(nToko) + ' toko tampil di peta (' + angka(batas.length) + ' titik). ' +
-    angka(d.length - nToko) + ' toko belum punya titik maps.';
+  $('ketPeta').textContent = angka(nToko) + ' toko tampil di peta (' + angka(nTitik) + ' titik). ' +
+    angka(d.length - nToko) + ' toko belum punya titik maps.' +
+    (ar.length ? ' ' + angka(nKab) + ' kabupaten ringkas tampil sebagai kotak' + (ar.length - nKab ? ', ' + angka(ar.length - nKab) + ' belum punya titik' : '') + '.' : '');
 }
 
 /* ================================================================ tabel umum */
@@ -493,7 +561,44 @@ function gambarArea(d) {
     F.wil = x.contoh.wil; F.kab = lv === 'wil' ? '' : x.contoh.kab; F.kec = lv === 'kec' ? x.contoh.kec : '';
     isiPilihan(); bukaTab('peta');
   });
+  gambarAreaKab();
 }
+function gambarAreaKab() {
+  const ar = areaTerpilih();
+  $('areaKabKotak').hidden = !ar.length;
+  if (!ar.length) return;
+  const m = new Map();
+  ar.forEach(a => {
+    let g = m.get(a.wil);
+    if (!g) { g = { wil: a.wil, n: 0, toko: 0, tak: 0, HIJAU: 0, KUNING: 0, MERAH: 0 }; m.set(a.wil, g); }
+    g.n++; g.toko += a.nToko; g.tak += a.nTak; if (g[a.warna] !== undefined) g[a.warna]++;
+  });
+  const prov = Array.from(m.values());
+  prov.forEach(g => { g.pt = persen(g.tak, g.toko); });
+  tabel('tblAreaProv', [
+    { k: 'wil', j: 'Provinsi / wilayah' }, { k: 'n', j: 'Kabupaten', num: true },
+    { k: 'HIJAU', j: 'Kab. hijau', num: true }, { k: 'KUNING', j: 'Kab. kuning', num: true }, { k: 'MERAH', j: 'Kab. merah', num: true },
+    { k: 'bar', j: 'Susunan', urut: false, f: bar },
+    { k: 'toko', j: 'Toko', num: true, f: g => angka(g.toko) }, { k: 'tak', j: 'Tidak terjangkau', num: true, f: g => angka(g.tak) },
+    { k: 'pt', j: '% tidak terjangkau', num: true, f: g => g.pt + '%' }
+  ], prov, { k: 'tak', naik: false }, g => { F.wil = g.wil; F.kab = ''; isiPilihan(); gambar(); });
+  ar.forEach(a => { a.pt = persen(a.nTak, a.nToko); });
+  tabel('tblAreaKab', [
+    { k: 'wil', j: 'Provinsi / wilayah' }, { k: 'kab', j: 'Kabupaten / Kota' },
+    { k: 'warna', j: 'Warna', f: a => '<span class="cap ' + esc(a.warna) + '">' + esc(a.warna) + '</span>' },
+    { k: 'status', j: 'Status dari TS' },
+    { k: 'nToko', j: 'Toko', num: true }, { k: 'nTak', j: 'Tidak terjangkau', num: true },
+    { k: 'pt', j: '%', num: true, f: a => a.pt + '%' },
+    { k: 'ket', j: 'Keterangan' }
+  ], ar, { k: 'nTak', naik: false }, a => { F.wil = a.wil; F.kab = a.kab; isiPilihan(); bukaTab('peta'); });
+}
+$('btnUnduhArea').onclick = () => {
+  const ar = areaTerpilih();
+  if (!ar.length) return;
+  const u8 = buatXlsx([['ID', 'WILAYAH', 'KAB', 'JUMLAH TOKO', 'TIDAK TERJANGKAU', 'STATUS', 'PETA', 'KETERANGAN', 'TITIK']]
+    .concat(ar.map(a => [a.id, a.wil, a.kab, a.toko, a.tak, a.status, a.warna, a.ket, a.titik])));
+  simpanFile(u8, 'Peta-Jangkauan-Kabupaten' + (F.wil ? '-' + F.wil.replace(/\s+/g, '-') : '') + '-' + (WAKTU || '').slice(0, 10) + '.xlsx');
+};
 $('areaLevel').onchange = () => { delete urutan.tblArea; gambar(); };
 $('areaBelum').onchange = gambar;
 
@@ -547,13 +652,14 @@ async function gambarRiwayat() {
     } catch (e) { $('riwPesan').innerHTML = '<div class="pesan salah">Riwayat gagal dimuat: ' + esc(e.message) + '</div>'; return; }
   }
   let d = RIWAYAT.filter(r => (!F.wil || r.wil === F.wil) && (!F.q || (r.cust || '').toUpperCase().indexOf(F.q) >= 0));
-  if ($('riwWarna').checked) d = d.filter(r => r.aksi === 'UBAH' && r.lama !== r.baru);
+  const ubah = r => /UBAH$/.test(r.aksi) && r.lama !== r.baru;
+  if ($('riwWarna').checked) d = d.filter(ubah);
   $('riwPesan').innerHTML = '<p class="catatan">' + angka(d.length) + ' catatan' + (RIWAYAT.length >= 2000 ? ' (2.000 catatan terakhir)' : '') + '. Mengikuti saringan wilayah dan nama toko.</p>';
   const cap = w => w ? '<span class="cap ' + esc(w) + '">' + esc(w) + '</span>' : '<span class="cap abu">-</span>';
   tabel('tblRiwayat', [
     { k: 'waktu', j: 'Waktu (WIB)' }, { k: 'oleh', j: 'Oleh' }, { k: 'aksi', j: 'Aksi' },
     { k: 'cust', j: 'Toko' }, { k: 'wil', j: 'Wilayah' },
-    { k: 'warna', j: 'Warna', urut: false, f: r => r.aksi === 'UBAH' && r.lama !== r.baru ? cap(r.lama) + ' → ' + cap(r.baru) : cap(r.baru || r.lama) },
+    { k: 'warna', j: 'Warna', urut: false, f: r => ubah(r) ? cap(r.lama) + ' → ' + cap(r.baru) : cap(r.baru || r.lama) },
     { k: 'rinci', j: 'Rincian' }
   ], d, { k: 'waktu', naik: false });
 }
@@ -587,7 +693,9 @@ function buatXlsx(baris) {
   }, { level: 6 });
 }
 function unduhExcel(daftar, nama) {
-  const u8 = buatXlsx([KOLOM_EXCEL].concat(daftar.map(barisExcel)));
+  simpanFile(buatXlsx([KOLOM_EXCEL].concat(daftar.map(barisExcel))), nama);
+}
+function simpanFile(u8, nama) {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([u8], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
   a.download = nama;
@@ -718,10 +826,11 @@ async function bacaExcel(file, maju) {
       for (const k in r.sel) { const c = r.sel[k]; o[k] = rapi(c.t === 's' ? (ss[+c.v] || '') : xmlAsli(c.v)); }
       return { r: r.r, sel: o };
     });
-    let iJudul = -1;
+    let iJudul = -1, jenis = '';
     for (let i = 0; i < Math.min(rows.length, 15); i++) {
       const j = Object.values(rows[i].sel).map(v => v.toUpperCase());
-      if (j.indexOf('CUSTOMER') >= 0 && (j.indexOf('PETA') >= 0 || j.indexOf('WARNA') >= 0)) { iJudul = i; break; }
+      if (j.indexOf('CUSTOMER') >= 0 && (j.indexOf('PETA') >= 0 || j.indexOf('WARNA') >= 0)) { iJudul = i; jenis = 'toko'; break; }
+      if (j.some(v => /^(KABUPATEN|KAB)\b/.test(v)) && j.some(v => /^JUMLAH TOKO/.test(v))) { iJudul = i; jenis = 'area'; break; }
     }
     if (iJudul < 0) continue;
     const rel = {};
@@ -729,9 +838,54 @@ async function bacaExcel(file, maju) {
     if (tr) { const re = /<Relationship\b[^>]*>/g; let m; while ((m = re.exec(tr))) { const id = /\bId="([^"]+)"/.exec(m[0]), tg = /\bTarget="([^"]*)"/.exec(m[0]); if (id && tg) rel[id[1]] = xmlAsli(tg[1]); } }
     const link = {};
     for (const ref in h.link) if (rel[h.link[ref]]) link[ref] = rel[h.link[ref]];
-    return { judul: rows[iJudul], isi: rows.slice(iJudul + 1), link: link };
+    return { jenis: jenis, judul: rows[iJudul], isi: rows.slice(iJudul + 1), link: link };
   }
-  throw new Error('Tidak ada sheet dengan judul kolom CUSTOMER dan PETA.');
+  throw new Error('Judul kolom tidak dikenali. File per toko wajib punya CUSTOMER dan PETA; file per kabupaten wajib punya KABUPATEN dan JUMLAH TOKO.');
+}
+
+/* Warna untuk file per kabupaten yang belum punya kolom PETA:
+   BISA DIJANGKAU = hijau, BUTUH WAKTU = kuning, BUTUH PERJADIN = kuning, BUTUH PERJADIN + ada kata "jauh" di baris itu = merah. */
+function warnaDariStatus(status, semuaTeks) {
+  const s = rapi(status).toUpperCase();
+  if (s === 'BISA DIJANGKAU') return 'HIJAU';
+  if (s.indexOf('PERJADIN') >= 0) return /jauh/i.test(semuaTeks) ? 'MERAH' : 'KUNING';
+  if (s === 'BUTUH WAKTU') return 'KUNING';
+  return '';
+}
+
+/* Ubah hasil bacaExcel (file per kabupaten) jadi daftar kabupaten untuk dikirim ke server. */
+function excelKeArea(x) {
+  const peta_ = {};
+  const pakai = (kol, k) => { if (!Object.values(peta_).includes(k)) peta_[kol] = k; };
+  for (const kol in x.judul.sel) {
+    const j = x.judul.sel[kol].toUpperCase();
+    if (j === 'ID') pakai(kol, 'id');
+    else if (/^(PROVINSI|WILAYAH)\b/.test(j)) pakai(kol, 'wil');
+    else if (/^(KABUPATEN|KAB)\b/.test(j)) pakai(kol, 'kab');
+    else if (j === 'TIDAK TERJANGKAU' || (/^JUMLAH TOKO/.test(j) && /(GA|GAK|TIDAK|TDK|TAK) ?BISA|TIDAK TERJANGKAU/.test(j))) pakai(kol, 'tak');
+    else if (/^JUMLAH TOKO/.test(j)) pakai(kol, 'toko');
+    else if (j === 'PETA' || j === 'WARNA') pakai(kol, 'warna');
+    else if (j === 'STATUS' || /BUTUH PERJADIN|BISA DIJANGKAU/.test(j)) pakai(kol, 'status');
+    else if (/^KETERANGAN/.test(j)) pakai(kol, 'ket');
+    else if (j === 'TITIK' || /^LINK MAPS/.test(j)) pakai(kol, 'titik');
+  }
+  if (!Object.values(peta_).includes('wil')) throw new Error('File per kabupaten wajib punya kolom PROVINSI atau WILAYAH.');
+  const out = [];
+  let wil = '';
+  x.isi.forEach(row => {
+    const o = { baris: row.r };
+    for (const kol in peta_) {
+      const k = peta_[kol], v = row.sel[kol] || '';
+      if (k === 'titik') o.titik = x.link[kol + row.r] || v;
+      else o[k] = v;
+    }
+    if (o.wil) wil = o.wil; else o.wil = wil; // provinsi hanya ditulis di baris pertama (sel gabung)
+    if (!o.kab) return;
+    if (o.ket === '-') o.ket = '';
+    if (!o.warna) o.warna = warnaDariStatus(o.status, Object.values(row.sel).join(' '));
+    out.push(o);
+  });
+  return out;
 }
 
 /* Ubah hasil bacaExcel jadi daftar toko untuk dikirim ke server. */
@@ -901,18 +1055,21 @@ function bukaForm(t) {
 }
 
 /* ---- upload excel ---- */
-let barisUpload = null;
+let barisUpload = null, jenisUpload = 'toko';
 function tampilSimulasi(r) {
   const x = r.ringkas;
-  let h = '<div class="pesan info"><b>Hasil pemeriksaan file (belum disimpan)</b><br>' +
-    angka(x.total) + ' baris toko dibaca: <b>' + angka(x.baru) + ' toko baru</b>, <b>' + angka(x.berubah) + ' toko berubah</b>' +
+  const apa = r.area ? 'kabupaten' : 'toko';
+  let h = '<div class="pesan info"><b>Hasil pemeriksaan file ' + (r.area ? 'per kabupaten ' : '') + '(belum disimpan)</b><br>' +
+    angka(x.total) + ' baris ' + apa + ' dibaca: <b>' + angka(x.baru) + ' ' + apa + ' baru</b>, <b>' + angka(x.berubah) + ' ' + apa + ' berubah</b>' +
     (x.ubahWarna ? ' (' + angka(x.ubahWarna) + ' berubah warna)' : '') + ', ' + angka(x.sama) + ' sama persis, <b>' + angka(x.ditolak) + ' ditolak</b>.' +
-    (x.linkTanpaTitik ? '<br>' + angka(x.linkTanpaTitik) + ' link maps belum terbaca titiknya (link pendek). Saat disimpan, aplikasi mencoba membukanya (paling banyak 40 link sekali upload).' : '') + '</div>';
+    (r.area ? '<br>Warna sesudah upload: ' + URUT_WARNA.map(w => '<span class="cap ' + w + '">' + angka(x[w] || 0) + ' ' + w.toLowerCase() + '</span>').join(' ') +
+      (x.linkTanpaTitik ? '<br>' + angka(x.linkTanpaTitik) + ' titik tidak terbaca dan dikosongkan.' : '')
+      : (x.linkTanpaTitik ? '<br>' + angka(x.linkTanpaTitik) + ' link maps belum terbaca titiknya (link pendek). Saat disimpan, aplikasi mencoba membukanya (paling banyak 40 link sekali upload).' : '')) + '</div>';
   if (r.tolak.length) h += '<details open><summary><b>Ditolak (' + angka(x.ditolak) + ')</b></summary><div class="gulir" style="max-height:220px;overflow:auto"><table><thead><tr><th>Baris</th><th>Toko</th><th>Alasan</th></tr></thead><tbody>' +
     r.tolak.map(t => '<tr><td>' + esc(t.baris) + '</td><td>' + esc(t.cust) + '</td><td>' + esc(t.alasan) + '</td></tr>').join('') + '</tbody></table></div></details>';
-  if (r.ubah.length) h += '<details><summary><b>Berubah (' + angka(x.berubah) + ')</b></summary><div class="gulir" style="max-height:260px;overflow:auto"><table><thead><tr><th>Toko</th><th>Wilayah</th><th>Perubahan</th></tr></thead><tbody>' +
+  if (r.ubah.length) h += '<details><summary><b>Berubah (' + angka(x.berubah) + ')</b></summary><div class="gulir" style="max-height:260px;overflow:auto"><table><thead><tr><th>Nama</th><th>Wilayah</th><th>Perubahan</th></tr></thead><tbody>' +
     r.ubah.map(t => '<tr><td>' + esc(t.cust) + '</td><td>' + esc(t.wil) + '</td><td>' + t.beda.map(esc).join('<br>') + '</td></tr>').join('') + '</tbody></table></div></details>';
-  if (r.baru.length) h += '<details><summary><b>Toko baru (' + angka(x.baru) + ')</b></summary><div class="gulir" style="max-height:220px;overflow:auto"><table><thead><tr><th>Toko</th><th>Wilayah</th><th>Warna</th></tr></thead><tbody>' +
+  if (r.baru.length) h += '<details><summary><b>' + (r.area ? 'Kabupaten' : 'Toko') + ' baru (' + angka(x.baru) + ')</b></summary><div class="gulir" style="max-height:220px;overflow:auto"><table><thead><tr><th>Nama</th><th>Wilayah</th><th>Warna</th></tr></thead><tbody>' +
     r.baru.map(t => '<tr><td>' + esc(t.cust) + '</td><td>' + esc(t.wil) + '</td><td><span class="cap ' + esc(t.warna) + '">' + esc(t.warna) + '</span></td></tr>').join('') +
     (x.baru > r.baru.length ? '<tr><td colspan="3">… dan ' + angka(x.baru - r.baru.length) + ' lainnya</td></tr>' : '') + '</tbody></table></div></details>';
   if (x.baru + x.berubah > 0) h += '<p><button type="button" class="tombol utama" id="btnSimpanUpload">Simpan ' + angka(x.baru + x.berubah) + ' perubahan</button> <button type="button" class="tombol" id="btnBatalUpload">Batal</button></p>';
@@ -930,13 +1087,14 @@ async function periksaExcel(file) {
   try {
     el.innerHTML = '<div class="pesan info">Membaca file…</div>';
     const x = await bacaExcel(file, p => { el.innerHTML = '<div class="pesan info">Membaca file… ' + Math.round(p * 100) + '%</div>'; });
-    const baris = excelKeToko(x);
-    if (!baris.length) throw new Error('File tidak berisi baris toko.');
-    el.innerHTML = '<div class="pesan info">' + angka(baris.length) + ' baris toko terbaca. Memeriksa…</div>';
-    const r = await apiTulis('upload', { simulasi: true, baris: baris });
+    const area = x.jenis === 'area';
+    const baris = area ? excelKeArea(x) : excelKeToko(x);
+    if (!baris.length) throw new Error('File tidak berisi baris ' + (area ? 'kabupaten.' : 'toko.'));
+    el.innerHTML = '<div class="pesan info">' + angka(baris.length) + ' baris ' + (area ? 'kabupaten' : 'toko') + ' terbaca. Memeriksa…</div>';
+    const r = await apiTulis(area ? 'uploadArea' : 'upload', { simulasi: true, baris: baris });
     if (r.tolak === true) { setAkun('', ''); throw new Error(r.pesan); }
     if (!r.ok) throw new Error(r.pesan);
-    barisUpload = baris;
+    barisUpload = baris; jenisUpload = area ? 'area' : 'toko';
     tampilSimulasi(r);
     return r;
   } catch (e) { el.innerHTML = '<div class="pesan salah">' + esc(e.message || e) + '</div>'; throw e; }
@@ -946,12 +1104,13 @@ async function simpanUpload() {
   const el = $('uploadPesan');
   $('btnSimpanUpload').disabled = true;
   try {
-    const r = await apiTulis('upload', { simulasi: false, baris: barisUpload });
+    const apa = jenisUpload === 'area' ? 'kabupaten' : 'toko';
+    const r = await apiTulis(jenisUpload === 'area' ? 'uploadArea' : 'upload', { simulasi: false, baris: barisUpload });
     if (r.tolak === true) { setAkun('', ''); throw new Error(r.pesan); }
     if (!r.ok) throw new Error(r.pesan);
     barisUpload = null; $('fileExcel').value = '';
     await muat();
-    el.innerHTML = '<div class="pesan ok">Tersimpan: ' + angka(r.ringkas.baru) + ' toko baru, ' + angka(r.ringkas.berubah) + ' toko berubah' +
+    el.innerHTML = '<div class="pesan ok">Tersimpan: ' + angka(r.ringkas.baru) + ' ' + apa + ' baru, ' + angka(r.ringkas.berubah) + ' ' + apa + ' berubah' +
       (r.ringkas.ditolak ? ', ' + angka(r.ringkas.ditolak) + ' baris ditolak' : '') + '.</div>';
     return r;
   } catch (e) { el.innerHTML = '<div class="pesan salah">' + esc(e.message || e) + '</div>'; throw e; }
