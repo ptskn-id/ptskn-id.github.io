@@ -224,7 +224,7 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
         </div>
         <div class="kotak">
           <h3 style="font-size:15px;margin:0 0 8px">Ubah banyak toko sekaligus (Excel)</h3>
-          <p class="catatan" style="margin-top:0">Unduh Excel, ubah isinya, lalu upload lagi. Untuk menambah titik, tempel link Google Maps di kolom LINK MAPS yang kosong (boleh tambah kolom sampai LINK MAPS 6). Upload hanya mengubah dan menambah toko. Toko yang tidak ada di file tidak dihapus, dan sel kosong tidak menghapus isi lama. File ringkas per kabupaten (kolom PROVINSI, KABUPATEN, JUMLAH TOKO) juga bisa diupload di sini.</p>
+          <p class="catatan" style="margin-top:0">Unduh Excel, ubah isinya, lalu upload lagi. Untuk menambah titik, tempel link Google Maps di kolom LOKASI TOKO. Kolom LOKASI CABANG hanya diisi kalau toko punya tempat lain (boleh tambah kolom sampai LOKASI CABANG 5). Upload hanya mengubah dan menambah toko. Toko yang tidak ada di file tidak dihapus, dan sel kosong tidak menghapus isi lama. File ringkas per kabupaten (kolom PROVINSI, KABUPATEN, JUMLAH TOKO) juga bisa diupload di sini.</p>
           <input id="fileExcel" type="file" accept=".xlsx">
           <div id="uploadPesan"></div>
         </div>
@@ -713,7 +713,7 @@ function buatXlsx(baris) {
 function unduhExcel(daftar, nama) {
   const n = jumlahKolomLink(daftar);
   const judul = KOLOM_EXCEL.slice();
-  for (let i = 1; i <= n; i++) judul.push('LINK MAPS ' + i);
+  for (let i = 1; i <= n; i++) judul.push(i === 1 ? 'LOKASI TOKO' : 'LOKASI CABANG ' + (i - 1) + ' (kalau ada)');
   simpanFile(buatXlsx([judul].concat(daftar.map(t => barisExcel(t, n)))), nama);
 }
 function simpanFile(u8, nama) {
@@ -927,6 +927,12 @@ function excelKeToko(x) {
     let m;
     if (alias[j] && !Object.values(peta_).includes(alias[j])) peta_[kol] = alias[j];
     else if ((m = /^LINK MAPS ?(\d)$/.exec(j))) peta_[kol] = 'u' + m[1];
+    else if (/^LOKASI TOKO\b/.test(j) || (m = /^LOKASI CABANG ?(\d)?/.exec(j))) {
+      // judul baru: LOKASI TOKO = titik 1, LOKASI CABANG n = titik n+1; kalau nomornya sudah terpakai, pakai nomor kosong berikutnya
+      let no = m ? +(m[1] || 1) + 1 : 1;
+      while (no <= MAKS_TITIK && Object.values(peta_).includes('u' + no)) no++;
+      if (no <= MAKS_TITIK) peta_[kol] = 'u' + no;
+    }
     else if ((m = /^NAMA TITIK ?(\d)$/.exec(j))) peta_[kol] = 'n' + m[1];
   }
   const kurang = ['wil', 'cust', 'warna'].filter(k => !Object.values(peta_).includes(k));
