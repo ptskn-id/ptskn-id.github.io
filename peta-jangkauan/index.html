@@ -81,6 +81,12 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
 .kotak-kab div{position:absolute;transform:translate(-50%,-50%);display:flex;height:22px;border-radius:4px;border:2px solid #fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.45);white-space:nowrap}
 .kotak-kab i{font:700 11px/18px system-ui,Arial,sans-serif;font-style:normal;color:#fff;min-width:20px;text-align:center;padding:0 4px}
 .kotak-kab i.KUNING{color:#3a2a00}
+.kotak-kab div.bantu{border-color:#1565c0;box-shadow:0 0 0 2px #1565c0,0 1px 3px rgba(0,0,0,.45)}
+.kotak-kab u{font:700 10px/18px system-ui,Arial,sans-serif;text-decoration:none;background:#1565c0;color:#fff;padding:0 4px}
+.pin-hb div{position:absolute;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:#263238;color:#fff;font:700 11px/18px system-ui,Arial,sans-serif;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+.pin-hb div.AE{background:#1565c0}
+.legenda b.hb{display:inline-block;width:18px;height:18px;border-radius:50%;background:#263238;color:#fff;font:700 10px/18px system-ui,Arial,sans-serif;text-align:center;margin-right:4px}
+.legenda b.hb.AE{background:#1565c0}
 .legenda b.kk{display:inline-block;min-width:20px;height:14px;border-radius:3px;background:#5d6b7a;color:#fff;font-size:10px;line-height:14px;text-align:center;margin-right:5px;vertical-align:-2px}
 .strip{background:#fff;border:1px solid var(--garis);border-left:5px solid #5d6b7a;border-radius:10px;padding:9px 12px;margin:-4px 0 12px;font-size:13.5px}
 .popup b{font-size:14px} .popup p{margin:4px 0;font-size:13px}
@@ -136,6 +142,9 @@ tr.klik{cursor:pointer} tr.klik:hover td{background:#f5f8fc}
       <span><i style="background:var(--merah)"></i>Merah: sulit dijangkau</span>
       <span><i style="background:#5d6b7a"></i>Bulat = satu toko</span>
       <span><b class="kk">11|16</b>Kotak = satu kabupaten: jumlah toko per warna (merah = tidak bisa dijangkau atau butuh perjadin, kuning = butuh waktu, hijau = bisa dijangkau)</span>
+      <span><b class="kk" style="box-shadow:0 0 0 2px #1565c0">AE</b>Bingkai biru = sulit untuk SCL, tetapi AE lebih mudah menjangkau</span>
+      <span><b class="hb">S</b>Homebase SCL</span>
+      <span><b class="hb AE">A</b>Homebase AE</span>
       <span id="ketPeta"></span>
     </div>
   </section>
@@ -256,6 +265,10 @@ const persen = (a, b) => b ? Math.round(a * 100 / b) : 0;
 
 let DATA = [];
 let AREA = [];   // data ringkas per kabupaten
+let HOMEBASE = []; // homebase SCL dan AE
+// Perkiraan titik tengah kabupaten wilayah Timur (dari OpenStreetMap; Pulau Taliabu diisi manual). Dipakai kalau kabupaten belum punya titik.
+const TITIK_KAB = {"GORONTALO|KABUPATEN BONE BOLANGO":"0.5564,123.30997","GORONTALO|KABUPATEN GORONTALO":"0.70118,122.72331","GORONTALO|KABUPATEN POHUWATO":"0.70182,121.64707","GORONTALO|KOTA GORONTALO":"0.53844,123.0595","MALUKU UTARA|KABUPATEN HALMAHERA BARAT":"1.36311,127.5738","MALUKU UTARA|KABUPATEN HALMAHERA SELATAN":"-1.53437,127.71656","MALUKU UTARA|KABUPATEN HALMAHERA TENGAH":"0.38888,128.58322","MALUKU UTARA|KABUPATEN HALMAHERA TIMUR":"1.00279,128.24879","MALUKU UTARA|KABUPATEN HALMAHERA UTARA":"1.61787,127.85847","MALUKU UTARA|KABUPATEN KEPULAUAN SULA":"-1.86254,125.83065","MALUKU UTARA|KABUPATEN PULAU MOROTAI":"2.31292,128.44186","MALUKU UTARA|KOTA TERNATE":"0.7852,127.38323","MALUKU UTARA|KOTA TIDORE KEPULAUAN":"0.67868,127.44832","MALUKU|KABUPATEN BURU":"-3.35391,126.64892","MALUKU|KABUPATEN BURU SELATAN":"-3.48668,126.35015","MALUKU|KABUPATEN KEPULAUAN ARU":"-6.22794,134.49784","MALUKU|KABUPATEN KEPULAUAN TANIMBAR":"-7.57405,131.42239","MALUKU|KABUPATEN MALUKU BARAT DAYA":"-7.78672,126.24278","MALUKU|KABUPATEN MALUKU TENGAH":"-3.12145,129.45999","MALUKU|KABUPATEN MALUKU TENGGARA":"-5.77149,132.73776","MALUKU|KABUPATEN SERAM BAGIAN BARAT":"-3.16421,128.48366","MALUKU|KABUPATEN SERAM BAGIAN TIMUR":"-3.42316,130.39109","MALUKU|KOTA AMBON":"-3.69594,128.17879","MALUKU|KOTA TUAL":"-5.54114,132.71878","SULAWESI BARAT|KABUPATEN MAJENE":"-3.243,118.87334","SULAWESI BARAT|KABUPATEN MAMASA":"-3.00037,119.32091","SULAWESI BARAT|KABUPATEN MAMUJU":"-2.53942,119.38895","SULAWESI BARAT|KABUPATEN MAMUJU TENGAH":"-2.02144,119.54054","SULAWESI BARAT|KABUPATEN PASANGKAYU":"-1.34474,119.37951","SULAWESI BARAT|KABUPATEN POLEWALI MANDAR":"-3.30319,119.14505","SULAWESI SELATAN|KABUPATEN BANTAENG":"-5.47094,119.98717","SULAWESI SELATAN|KABUPATEN BARRU":"-4.43373,119.67783","SULAWESI SELATAN|KABUPATEN BONE":"-4.6801,120.09467","SULAWESI SELATAN|KABUPATEN BULUKUMBA":"-5.55924,120.19293","SULAWESI SELATAN|KABUPATEN ENREKANG":"-3.48801,119.86585","SULAWESI SELATAN|KABUPATEN GOWA":"-5.32909,119.76603","SULAWESI SELATAN|KABUPATEN JENEPONTO":"-5.67968,119.74746","SULAWESI SELATAN|KABUPATEN KEPULAUAN SELAYAR":"-7.30149,120.96266","SULAWESI SELATAN|KABUPATEN LUWU":"-3.34795,120.22145","SULAWESI SELATAN|KABUPATEN LUWU TIMUR":"-2.53048,121.12242","SULAWESI SELATAN|KABUPATEN LUWU UTARA":"-2.40379,120.13013","SULAWESI SELATAN|KABUPATEN MAROS":"-4.9655,119.69284","SULAWESI SELATAN|KABUPATEN PANGKAJENE DAN KEPULAUAN":"-4.75445,119.58931","SULAWESI SELATAN|KABUPATEN PINRANG":"-3.79326,119.65287","SULAWESI SELATAN|KABUPATEN SIDENRENG RAPPANG":"-3.80786,120.04502","SULAWESI SELATAN|KABUPATEN SINJAI":"-5.20067,120.14419","SULAWESI SELATAN|KABUPATEN SOPPENG":"-4.31887,119.91851","SULAWESI SELATAN|KABUPATEN TAKALAR":"-5.40665,119.53754","SULAWESI SELATAN|KABUPATEN TANA TORAJA":"-3.11694,119.69376","SULAWESI SELATAN|KABUPATEN TORAJA UTARA":"-2.86124,119.84201","SULAWESI SELATAN|KABUPATEN WAJO":"-3.96558,120.12794","SULAWESI SELATAN|KOTA MAKASSAR":"-5.1343,119.41243","SULAWESI SELATAN|KOTA PALOPO":"-2.99963,120.19207","SULAWESI SELATAN|KOTA PAREPARE":"-4.00571,119.62361","SULAWESI TENGAH|KABUPATEN BANGGAI":"-0.92105,122.69751","SULAWESI TENGAH|KABUPATEN BANGGAI KEPULAUAN":"-1.35185,123.18086","SULAWESI TENGAH|KABUPATEN BANGGAI LAUT":"-1.84281,123.10258","SULAWESI TENGAH|KABUPATEN BUOL":"1.01237,121.31205","SULAWESI TENGAH|KABUPATEN DONGGALA":"-1.04782,119.67585","SULAWESI TENGAH|KABUPATEN MOROWALI":"-2.71515,121.88241","SULAWESI TENGAH|KABUPATEN MOROWALI UTARA":"-1.84188,121.07717","SULAWESI TENGAH|KABUPATEN PARIGI MOUTONG":"-0.23836,119.95993","SULAWESI TENGAH|KABUPATEN POSO":"-1.65685,120.54216","SULAWESI TENGAH|KABUPATEN PULAU TALIABU":"-1.83,124.7","SULAWESI TENGAH|KABUPATEN SIGI":"-1.32116,119.99873","SULAWESI TENGAH|KABUPATEN TOJO UNA-UNA":"-1.21314,121.61961","SULAWESI TENGAH|KABUPATEN TOLITOLI":"1.0392,120.8169","SULAWESI TENGAH|KOTA PALU":"-0.90515,119.87224","SULAWESI TENGGARA|KABUPATEN BOMBANA":"-4.63926,121.75721","SULAWESI TENGGARA|KABUPATEN BUTON TENGAH":"-5.29181,122.38828","SULAWESI TENGGARA|KABUPATEN BUTON UTARA":"-4.7565,122.94892","SULAWESI TENGGARA|KABUPATEN KOLAKA":"-4.12135,121.69294","SULAWESI TENGGARA|KABUPATEN KOLAKA TIMUR":"-3.82073,121.7542","SULAWESI TENGGARA|KABUPATEN KOLAKA UTARA":"-3.2605,121.0934","SULAWESI TENGGARA|KABUPATEN KONAWE":"-3.51167,121.65233","SULAWESI TENGGARA|KABUPATEN KONAWE KEPULAUAN":"-4.11948,123.09856","SULAWESI TENGGARA|KABUPATEN KONAWE SELATAN":"-4.25992,122.44985","SULAWESI TENGGARA|KABUPATEN KONAWE UTARA":"-3.45496,121.97626","SULAWESI TENGGARA|KABUPATEN MUNA":"-4.91915,122.69183","SULAWESI TENGGARA|KABUPATEN MUNA BARAT":"-4.80367,122.45145","SULAWESI TENGGARA|KABUPATEN WAKATOBI":"-5.31567,123.58504","SULAWESI TENGGARA|KOTA BAUBAU":"-5.46203,122.60577","SULAWESI TENGGARA|KOTA KENDARI":"-3.99181,122.51801","SULAWESI UTARA|KABUPATEN BOLAANG MONGONDOW":"0.72077,123.98704","SULAWESI UTARA|KABUPATEN BOLAANG MONGONDOW SELATAN":"0.45334,124.17963","SULAWESI UTARA|KABUPATEN BOLAANG MONGONDOW TIMUR":"0.71157,124.48952","SULAWESI UTARA|KABUPATEN KEPULAUAN SANGIHE":"3.55271,125.54656","SULAWESI UTARA|KABUPATEN KEPULAUAN SIAU TAGULANDANG BIARO":"2.34952,125.42026","SULAWESI UTARA|KABUPATEN KEPULAUAN TALAUD":"4.26949,126.81355","SULAWESI UTARA|KABUPATEN MINAHASA":"1.21517,124.79789","SULAWESI UTARA|KABUPATEN MINAHASA SELATAN":"1.07031,124.43616","SULAWESI UTARA|KABUPATEN MINAHASA TENGGARA":"0.98827,124.73065","SULAWESI UTARA|KABUPATEN MINAHASA UTARA":"1.5333,124.99994","SULAWESI UTARA|KOTA BITUNG":"1.44344,125.19408","SULAWESI UTARA|KOTA KOTAMOBAGU":"0.73522,124.31541","SULAWESI UTARA|KOTA MANADO":"1.49004,124.84077","SULAWESI UTARA|KOTA TOMOHON":"1.32559,124.83861"};
+const URUTAN_SULIT = { HIJAU: 0, KUNING: 1, MERAH: 2 };
 let WAKTU = '';
 let RIWAYAT = null;
 const F = { wil: '', kab: '', kec: '', scl: '', aei: '', aet: '', q: '', warna: { HIJAU: true, KUNING: true, MERAH: true } };
@@ -316,6 +329,7 @@ async function muat() {
     if (!r.ok) throw new Error(r.pesan || 'Gagal memuat');
     DATA = r.toko.map(siapkan);
     AREA = (r.area || []).map(siapkanArea);
+    HOMEBASE = (r.homebase || []).map(h => { const k = koordinat(h.titik); h.lat = k ? parseFloat(k[0]) : null; h.lng = k ? parseFloat(k[1]) : null; return h; });
     WAKTU = r.waktu || '';
     RIWAYAT = null;
     $('ket').textContent = angka(DATA.length) + ' toko' + (AREA.length ? ' + ' + angka(AREA.length) + ' kabupaten ringkas' : '') + ' · dimuat ' + WAKTU + ' WIB';
@@ -341,10 +355,11 @@ function lolos(t, tanpa) {
 const terpilih = () => DATA.filter(t => lolos(t));
 
 function siapkanArea(a) {
-  const k = koordinat(a.titik);
+  const k = koordinat(a.titik) || koordinat(TITIK_KAB[a.wil + '|' + a.kab] || '');
   a.lat = k ? parseFloat(k[0]) : null; a.lng = k ? parseFloat(k[1]) : null;
   a.nToko = parseInt(a.toko, 10) || 0; a.nTak = parseInt(a.tak, 10) || 0;
-  a.cari = [a.kab, a.wil, a.ket, a.status].join(' ').toUpperCase();
+  a.scl = a.scl || ''; a.ae = a.ae || ''; a.statusAe = a.statusAe || '';
+  a.cari = [a.kab, a.wil, a.ket, a.status, a.scl, a.ae].join(' ').toUpperCase();
   // Aturan user (20 Nov 2026, final): toko di kolom "tidak bisa dijangkau" = MERAH apa pun statusnya;
   // sisa tokonya ikut status kabupaten: bisa dijangkau = HIJAU, butuh waktu = KUNING, butuh perjadin = MERAH.
   const tak = Math.min(a.nTak, a.nToko);
@@ -355,6 +370,10 @@ function siapkanArea(a) {
   a.jml.MERAH += tak;
   a.jml[sisa] += a.nToko - tak;
   a.warnaSisa = sisa;
+  // Bisa dibantu AE: status AE lebih ringan daripada status SCL (mis. SCL merah, AE hijau atau kuning).
+  a.warnaAe = warnaDariStatus(a.statusAe);
+  a.bantu = !!a.warnaAe && URUTAN_SULIT[a.warnaAe] < URUTAN_SULIT[sisa];
+  a.ketBantu = a.bantu ? 'Bisa dibantu AE' : !a.warnaAe ? '' : sisa === 'HIJAU' ? 'SCL sudah bisa' : 'AE juga sulit';
   return a;
 }
 /* Bagian kabupaten yang tampil menurut saringan warna. Kabupaten tanpa toko ikut warna statusnya. */
@@ -367,6 +386,7 @@ function lolosArea(a) {
   if (F.kec || F.scl || F.aei || F.aet) return false; // data kabupaten tidak punya kecamatan dan nama sales
   if (F.wil && a.wil !== F.wil) return false;
   if (F.kab && a.kab !== F.kab) return false;
+  if (F.bantu && !a.bantu) return false;
   if (!bagianArea(a).length) return false;
   if (F.q && a.cari.indexOf(F.q) < 0) return false;
   return true;
@@ -400,7 +420,7 @@ function gambarChip() {
 let tunda = 0;
 $('fQ').oninput = e => { clearTimeout(tunda); tunda = setTimeout(() => { F.q = rapi(e.target.value).toUpperCase(); gambar(); }, 200); };
 $('btnReset').onclick = () => {
-  Object.assign(F, { wil: '', kab: '', kec: '', scl: '', aei: '', aet: '', q: '', warna: { HIJAU: true, KUNING: true, MERAH: true } });
+  Object.assign(F, { wil: '', kab: '', kec: '', scl: '', aei: '', aet: '', q: '', bantu: false, warna: { HIJAU: true, KUNING: true, MERAH: true } });
   $('fQ').value = ''; isiPilihan(); gambar();
 };
 $('btnMuat').onclick = muat;
@@ -429,13 +449,18 @@ function gambar() {
     '<div class="kartu"><b>' + angka(h.tanpaTitik) + '</b><span>belum ada titik maps</span></div>' +
     '<div class="kartu"><b>' + angka(h.tanpaJarak) + '</b><span>belum ada jarak</span></div>';
   const ar = areaTerpilih();
-  $('ringkasArea').hidden = !ar.length;
-  if (ar.length) {
-    const c = { HIJAU: 0, KUNING: 0, MERAH: 0 }; let nt = 0, nx = 0;
-    ar.forEach(a => { URUT_WARNA.forEach(w => { c[w] += a.jml[w]; }); nt += a.nToko; nx += a.nTak; });
+  $('ringkasArea').hidden = !ar.length && !F.bantu;
+  if (ar.length || F.bantu) {
+    const c = { HIJAU: 0, KUNING: 0, MERAH: 0 }; let nt = 0, nx = 0, nb = 0;
+    ar.forEach(a => { URUT_WARNA.forEach(w => { c[w] += a.jml[w]; }); nt += a.nToko; nx += a.nTak; if (a.bantu) nb++; });
+    const adaAe = AREA.some(a => a.warnaAe);
     $('ringkasArea').innerHTML = '<b>Data ringkas per kabupaten:</b> ' + angka(ar.length) + ' kabupaten · ' + angka(nt) + ' toko: ' +
       URUT_WARNA.map(w => '<span class="cap ' + w + '">' + angka(c[w]) + ' toko ' + w.toLowerCase() + '</span>').join(' ') +
-      ' <span style="color:var(--abu)">— belum termasuk di kartu toko di atas.</span>';
+      ' <span style="color:var(--abu)">— belum termasuk di kartu toko di atas.</span>' +
+      (adaAe || F.bantu ? '<br><b>' + angka(nb) + ' kabupaten bisa dibantu AE</b> (sulit untuk SCL, AE lebih mudah menjangkau) ' +
+        '<button type="button" class="chip' + (F.bantu ? '' : ' mati') + '" id="chipBantu" aria-pressed="' + !!F.bantu + '">Tampilkan hanya yang bisa dibantu AE</button>' : '');
+    const cb = $('chipBantu');
+    if (cb) cb.onclick = () => { F.bantu = !F.bantu; gambar(); };
   }
   if (tabAktif === 'peta') gambarPeta(d);
   if (tabAktif === 'area') gambarArea(d);
@@ -470,7 +495,10 @@ function isiPopupArea(a) {
     '<p>' + (URUT_WARNA.filter(w => a.jml[w] > 0).map(w => '<span class="cap ' + w + '">' + angka(a.jml[w]) + ' toko ' + w.toLowerCase() + '</span>').join(' ') || '<span class="cap abu">belum ada toko</span>') +
     ' <span class="cap abu">data per kabupaten</span></p>' +
     '<p>' + esc(a.wil) + '</p>' +
-    '<p>Status dari TS: ' + esc(a.status || '-') + '<br>Jumlah toko: ' + angka(a.nToko) + '<br>Tidak terjangkau: ' + angka(a.nTak) + ' toko (' + persen(a.nTak, a.nToko) + '%)</p>' +
+    '<p>SCL: ' + esc(a.scl || '-') + ' — ' + esc(a.status || 'status belum diisi') +
+    '<br>AE: ' + esc(a.ae || '-') + (a.statusAe ? ' — ' + esc(a.statusAe) : '') +
+    (a.ketBantu ? '<br><b style="color:' + (a.bantu ? '#1565c0' : '#5d6b7a') + '">' + esc(a.ketBantu) + '</b>' : '') + '</p>' +
+    '<p>Jumlah toko: ' + angka(a.nToko) + '<br>Tidak terjangkau: ' + angka(a.nTak) + ' toko (' + persen(a.nTak, a.nToko) + '%)</p>' +
     '<p>Keterangan: ' + esc(a.ket || '-') + '</p>' +
     (a.tgl ? '<p style="color:#5d6b7a">Diperbarui ' + esc(a.tgl) + (a.oleh ? ' oleh ' + esc(a.oleh) : '') + '</p>' : '') +
     '<p style="color:#5d6b7a">Letak kotak = perkiraan tengah kabupaten, bukan lokasi toko.</p></div>';
@@ -506,15 +534,28 @@ function gambarPeta(d) {
     if (a.lat === null) return;
     nKab++;
     L.marker([a.lat, a.lng], {
-      icon: L.divIcon({ className: 'kotak-kab', iconSize: [0, 0], iconAnchor: [0, 0], html: '<div>' + bagianArea(a).map(b => '<i class="' + b.w + '" style="background:' + WARNA[b.w].c + '">' + angka(b.n) + '</i>').join('') + '</div>' }),
-      title: a.kab, keyboard: false
+      icon: L.divIcon({ className: 'kotak-kab', iconSize: [0, 0], iconAnchor: [0, 0], html: '<div' + (a.bantu ? ' class="bantu"' : '') + '>' + bagianArea(a).map(b => '<i class="' + b.w + '" style="background:' + WARNA[b.w].c + '">' + angka(b.n) + '</i>').join('') + (a.bantu ? '<u>AE</u>' : '') + '</div>' }),
+      title: a.kab + (a.bantu ? ' (bisa dibantu AE)' : ''), keyboard: false
     }).bindPopup(() => isiPopupArea(a), { maxWidth: 300, autoPanPaddingTopLeft: [56, 12], autoPanPaddingBottomRight: [12, 12] }).addTo(lapis);
     batas.push([a.lat, a.lng]);
+  });
+  // homebase SCL (S) dan AE (A): tampil untuk wilayah yang sedang dipilih
+  let nHb = 0;
+  HOMEBASE.forEach(h => {
+    if (h.lat === null || (F.wil && h.wil !== F.wil)) return;
+    nHb++;
+    const ae = h.jab === 'AE';
+    L.marker([h.lat, h.lng], {
+      icon: L.divIcon({ className: 'pin-hb', iconSize: [0, 0], iconAnchor: [0, 0], html: '<div' + (ae ? ' class="AE"' : '') + '>' + (ae ? 'A' : 'S') + '</div>' }),
+      title: 'Homebase ' + h.jab + ' ' + h.nama, keyboard: false, zIndexOffset: 500
+    }).bindPopup('<div class="popup"><b>Homebase ' + esc(h.jab) + '</b><p>' + esc(h.nama) + '</p><p>' + esc(h.kota || '-') + '<br>' + esc(h.wil) + '</p></div>', { maxWidth: 260 }).addTo(lapis);
+    if (ar.length) batas.push([h.lat, h.lng]);
   });
   if (batas.length) peta.fitBounds(batas, { padding: [28, 28], maxZoom: 14 });
   $('ketPeta').textContent = angka(nToko) + ' toko tampil di peta (' + angka(nTitik) + ' titik). ' +
     angka(d.length - nToko) + ' toko belum punya titik maps.' +
-    (ar.length ? ' ' + angka(nKab) + ' kabupaten ringkas tampil sebagai kotak' + (ar.length - nKab ? ', ' + angka(ar.length - nKab) + ' belum punya titik' : '') + '.' : '');
+    (ar.length ? ' ' + angka(nKab) + ' kabupaten ringkas tampil sebagai kotak' + (ar.length - nKab ? ', ' + angka(ar.length - nKab) + ' belum punya titik' : '') + '.' : '') +
+    (nHb ? ' ' + angka(nHb) + ' homebase tampil.' : '');
 }
 
 /* ================================================================ tabel umum */
@@ -602,7 +643,9 @@ function gambarAreaKab() {
   ar.forEach(a => { a.pt = persen(a.nTak, a.nToko); a.jH = a.jml.HIJAU; a.jK = a.jml.KUNING; a.jM = a.jml.MERAH; });
   tabel('tblAreaKab', [
     { k: 'wil', j: 'Provinsi / wilayah' }, { k: 'kab', j: 'Kabupaten / Kota' },
-    { k: 'status', j: 'Status dari TS' },
+    { k: 'scl', j: 'SCL' }, { k: 'status', j: 'Status SCL' },
+    { k: 'ae', j: 'AE' }, { k: 'statusAe', j: 'Status AE' },
+    { k: 'ketBantu', j: 'Bantuan AE', f: a => a.bantu ? '<span class="cap" style="background:#1565c0;color:#fff">Bisa dibantu AE</span>' : esc(a.ketBantu) },
     { k: 'nToko', j: 'Toko', num: true },
     { k: 'jH', j: 'Hijau', num: true }, { k: 'jK', j: 'Kuning', num: true }, { k: 'jM', j: 'Merah', num: true },
     { k: 'bar', j: 'Susunan', urut: false, f: a => bar(a.jml) },
@@ -612,8 +655,9 @@ function gambarAreaKab() {
 $('btnUnduhArea').onclick = () => {
   const ar = areaTerpilih();
   if (!ar.length) { alert('Tidak ada kabupaten yang cocok dengan saringan ini, jadi tidak ada yang bisa diunduh.'); return; }
-  const u8 = buatXlsx([['ID', 'WILAYAH', 'KAB', 'JUMLAH TOKO', 'TIDAK TERJANGKAU', 'STATUS', 'PETA', 'KETERANGAN', 'TITIK']]
-    .concat(ar.map(a => [a.id, a.wil, a.kab, a.toko, a.tak, a.status, a.warna, a.ket, a.titik])));
+  // judul sama dengan format isian TS, supaya file unduhan bisa langsung diisi lalu diupload lagi
+  const u8 = buatXlsx([['ID', 'PROVINSI', 'KABUPATEN', 'JUMLAH TOKO', 'TOKO TIDAK BISA DIJANGKAU', 'NAMA SCL', 'STATUS SCL', 'NAMA AE', 'STATUS AE', 'KETERANGAN', 'TITIK']]
+    .concat(ar.map(a => [a.id, a.wil, a.kab, a.toko, a.tak, a.scl, a.status, a.ae, a.statusAe, a.ket, a.titik])));
   simpanFile(u8, 'Peta-Jangkauan-Kabupaten' + (F.wil ? '-' + F.wil.replace(/\s+/g, '-') : '') + '-' + (WAKTU || '').slice(0, 10) + '.xlsx');
 };
 $('areaLevel').onchange = () => { delete urutan.tblArea; gambar(); };
@@ -861,7 +905,9 @@ async function bacaExcel(file, maju) {
     }
   }
   // pilih sheet pertama yang punya judul CUSTOMER dan PETA
+  // (file format isian TS punya beberapa lembar: HOMEBASE + satu lembar kabupaten per wilayah; semuanya dibaca)
   const nama = Object.keys(sheets).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+  const dapat = [];
   for (const nm of nama) {
     const h = sheets[nm].hasil();
     const rows = h.rows.map(r => {
@@ -874,6 +920,7 @@ async function bacaExcel(file, maju) {
       const j = Object.values(rows[i].sel).map(v => v.toUpperCase());
       if (j.indexOf('CUSTOMER') >= 0 && (j.indexOf('PETA') >= 0 || j.indexOf('WARNA') >= 0)) { iJudul = i; jenis = 'toko'; break; }
       if (j.some(v => /^(KABUPATEN|KAB)\b/.test(v)) && j.some(v => /^JUMLAH TOKO/.test(v))) { iJudul = i; jenis = 'area'; break; }
+      if (j.indexOf('NAMA') >= 0 && j.indexOf('JABATAN') >= 0 && j.some(v => /HOMEBASE/.test(v))) { iJudul = i; jenis = 'homebase'; break; }
     }
     if (iJudul < 0) continue;
     const rel = {};
@@ -881,8 +928,15 @@ async function bacaExcel(file, maju) {
     if (tr) { const re = /<Relationship\b[^>]*>/g; let m; while ((m = re.exec(tr))) { const id = /\bId="([^"]+)"/.exec(m[0]), tg = /\bTarget="([^"]*)"/.exec(m[0]); if (id && tg) rel[id[1]] = xmlAsli(tg[1]); } }
     const link = {};
     for (const ref in h.link) if (rel[h.link[ref]]) link[ref] = rel[h.link[ref]];
-    return { jenis: jenis, judul: rows[iJudul], isi: rows.slice(iJudul + 1), link: link };
+    dapat.push({ jenis: jenis, judul: rows[iJudul], isi: rows.slice(iJudul + 1), link: link });
   }
+  const utama = dapat.find(s => s.jenis === 'toko') || dapat.find(s => s.jenis === 'area');
+  const hb = dapat.find(s => s.jenis === 'homebase');
+  if (utama) {
+    if (utama.jenis === 'area') { utama.lembarLain = dapat.filter(s => s.jenis === 'area' && s !== utama); utama.homebase = hb || null; }
+    return utama;
+  }
+  if (hb) return { jenis: 'area', kosong: true, lembarLain: [], homebase: hb };
   throw new Error('Judul kolom tidak dikenali. File per toko wajib punya CUSTOMER dan PETA; file per kabupaten wajib punya KABUPATEN dan JUMLAH TOKO.');
 }
 
@@ -898,6 +952,33 @@ function warnaDariStatus(status, semuaTeks) {
 
 /* Ubah hasil bacaExcel (file per kabupaten) jadi daftar kabupaten untuk dikirim ke server. */
 function excelKeArea(x) {
+  if (x.kosong) return [];
+  let out = satuLembarArea(x);
+  (x.lembarLain || []).forEach(l => { out = out.concat(satuLembarArea(l)); });
+  return out;
+}
+/* Lembar HOMEBASE: WILAYAH, NAMA, JABATAN, KOTA HOMEBASE, LINK MAPS HOMEBASE. */
+function excelKeHomebase(x) {
+  const hb = x.homebase;
+  if (!hb) return [];
+  const peta_ = {};
+  for (const kol in hb.judul.sel) {
+    const j = hb.judul.sel[kol].toUpperCase();
+    if (/^(WILAYAH|PROVINSI)\b/.test(j)) peta_[kol] = 'wil';
+    else if (j === 'NAMA') peta_[kol] = 'nama';
+    else if (j === 'JABATAN') peta_[kol] = 'jab';
+    else if (/^KOTA/.test(j)) peta_[kol] = 'kota';
+    else if (/^LINK MAPS|^TITIK/.test(j)) peta_[kol] = 'titik';
+  }
+  const out = [];
+  hb.isi.forEach(row => {
+    const o = {};
+    for (const kol in peta_) { const k = peta_[kol]; o[k] = k === 'titik' ? (hb.link[kol + row.r] || row.sel[kol] || '') : (row.sel[kol] || ''); }
+    if (o.nama && (o.kota || o.titik)) out.push(o); // nama yang belum dilengkapi kota/link dilewati
+  });
+  return out;
+}
+function satuLembarArea(x) {
   const peta_ = {};
   const pakai = (kol, k) => { if (!Object.values(peta_).includes(k)) peta_[kol] = k; };
   for (const kol in x.judul.sel) {
@@ -905,14 +986,18 @@ function excelKeArea(x) {
     if (j === 'ID') pakai(kol, 'id');
     else if (/^(PROVINSI|WILAYAH)\b/.test(j)) pakai(kol, 'wil');
     else if (/^(KABUPATEN|KAB)\b/.test(j)) pakai(kol, 'kab');
-    else if (j === 'TIDAK TERJANGKAU' || (/^JUMLAH TOKO/.test(j) && /(GA|GAK|TIDAK|TDK|TAK) ?BISA|TIDAK TERJANGKAU/.test(j))) pakai(kol, 'tak');
+    else if (j === 'TIDAK TERJANGKAU' || /^TOKO (GA|GAK|TIDAK|TDK|TAK) ?BISA/.test(j) || (/^JUMLAH TOKO/.test(j) && /(GA|GAK|TIDAK|TDK|TAK) ?BISA|TIDAK TERJANGKAU/.test(j))) pakai(kol, 'tak');
     else if (/^JUMLAH TOKO/.test(j)) pakai(kol, 'toko');
     else if (j === 'PETA' || j === 'WARNA') pakai(kol, 'warna');
-    else if (j === 'STATUS' || /BUTUH PERJADIN|BISA DIJANGKAU/.test(j)) pakai(kol, 'status');
+    else if (j === 'STATUS AE') pakai(kol, 'statusAe');
+    else if (j === 'NAMA AE' || j === 'AE') pakai(kol, 'ae');
+    else if (j === 'NAMA SCL' || j === 'SCL' || j === 'NAMA SALES') pakai(kol, 'scl');
+    else if (j === 'STATUS' || j === 'STATUS SCL' || /BUTUH PERJADIN|BISA DIJANGKAU/.test(j)) pakai(kol, 'status');
     else if (/^KETERANGAN/.test(j)) pakai(kol, 'ket');
     else if (j === 'TITIK' || /^LINK MAPS/.test(j)) pakai(kol, 'titik');
   }
   if (!Object.values(peta_).includes('wil')) throw new Error('File per kabupaten wajib punya kolom PROVINSI atau WILAYAH.');
+  const formatBaru = Object.values(peta_).includes('statusAe');
   const out = [];
   let wil = '';
   x.isi.forEach(row => {
@@ -925,7 +1010,11 @@ function excelKeArea(x) {
     if (o.wil) wil = o.wil; else o.wil = wil; // provinsi hanya ditulis di baris pertama (sel gabung)
     if (!o.kab) return;
     if (o.ket === '-') o.ket = '';
+    // format isian TS (punya kolom STATUS AE): baris yang status SCL dan status AE-nya belum diisi dilewati,
+    // supaya lembar wilayah lain yang masih kosong tidak dianggap salah
+    if (formatBaru && !rapi(o.status) && !rapi(o.statusAe)) return;
     if (!o.warna) o.warna = warnaDariStatus(o.status, Object.values(row.sel).join(' '));
+    if (!o.titik) { const tk = TITIK_KAB[rapi(o.wil).toUpperCase() + '|' + rapi(o.kab).toUpperCase()]; if (tk) o.titik = tk; }
     out.push(o);
   });
   return out;
@@ -1107,7 +1196,7 @@ function bukaForm(t) {
 }
 
 /* ---- upload excel ---- */
-let barisUpload = null, jenisUpload = 'toko';
+let barisUpload = null, homebaseUpload = [], jenisUpload = 'toko';
 function tampilSimulasi(r) {
   const x = r.ringkas;
   const apa = r.area ? 'kabupaten' : 'toko';
@@ -1124,7 +1213,11 @@ function tampilSimulasi(r) {
   if (r.baru.length) h += '<details><summary><b>' + (r.area ? 'Kabupaten' : 'Toko') + ' baru (' + angka(x.baru) + ')</b></summary><div class="gulir" style="max-height:220px;overflow:auto"><table><thead><tr><th>Nama</th><th>Wilayah</th><th>Warna</th></tr></thead><tbody>' +
     r.baru.map(t => '<tr><td>' + esc(t.cust) + '</td><td>' + esc(t.wil) + '</td><td><span class="cap ' + esc(t.warna) + '">' + esc(t.warna) + '</span></td></tr>').join('') +
     (x.baru > r.baru.length ? '<tr><td colspan="3">… dan ' + angka(x.baru - r.baru.length) + ' lainnya</td></tr>' : '') + '</tbody></table></div></details>';
-  if (x.baru + x.berubah > 0) h += '<p><button type="button" class="tombol utama" id="btnSimpanUpload">Simpan ' + angka(x.baru + x.berubah) + ' perubahan</button> <button type="button" class="tombol" id="btnBatalUpload">Batal</button></p>';
+  const hb = r.homebase;
+  if (hb) h += '<div class="pesan info"><b>Lembar HOMEBASE</b><br>' + angka(hb.total) + ' orang terbaca: <b>' + angka(hb.baru) + ' baru</b>, <b>' + angka(hb.berubah) + ' berubah</b>, ' + angka(hb.sama) + ' sama persis.' +
+    (hb.linkPendek ? '<br>' + angka(hb.linkPendek) + ' link maps berupa link pendek; titiknya dicari saat disimpan (paling banyak 40 sekali upload).' : '') + '</div>';
+  const nUbah = x.baru + x.berubah + (hb ? hb.baru + hb.berubah : 0);
+  if (nUbah > 0) h += '<p><button type="button" class="tombol utama" id="btnSimpanUpload">Simpan ' + angka(nUbah) + ' perubahan</button> <button type="button" class="tombol" id="btnBatalUpload">Batal</button></p>';
   else h += '<p class="catatan">Tidak ada yang perlu disimpan.</p>';
   $('uploadPesan').innerHTML = h;
   const b = $('btnSimpanUpload');
@@ -1141,13 +1234,14 @@ async function periksaExcel(file) {
     const x = await bacaExcel(file, p => { el.innerHTML = '<div class="pesan info">Membaca file… ' + Math.round(p * 100) + '%</div>'; });
     const area = x.jenis === 'area';
     const baris = area ? excelKeArea(x) : excelKeToko(x);
+    const hb = area ? excelKeHomebase(x) : [];
     if (!area) pertahankanNamaTitik(baris);
-    if (!baris.length) throw new Error('File tidak berisi baris ' + (area ? 'kabupaten.' : 'toko.'));
-    el.innerHTML = '<div class="pesan info">' + angka(baris.length) + ' baris ' + (area ? 'kabupaten' : 'toko') + ' terbaca. Memeriksa…</div>';
-    const r = await apiTulis(area ? 'uploadArea' : 'upload', { simulasi: true, baris: baris });
+    if (!baris.length && !hb.length) throw new Error(area ? 'Belum ada yang terisi di file ini: isi STATUS SCL di lembar kabupaten, atau kota / link maps di lembar HOMEBASE.' : 'File tidak berisi baris toko.');
+    el.innerHTML = '<div class="pesan info">' + angka(baris.length) + ' baris ' + (area ? 'kabupaten' : 'toko') + (hb.length ? ' dan ' + angka(hb.length) + ' homebase' : '') + ' terbaca. Memeriksa…</div>';
+    const r = await apiTulis(area ? 'uploadArea' : 'upload', { simulasi: true, baris: baris, homebase: hb });
     if (r.tolak === true) { setAkun('', ''); throw new Error(r.pesan); }
     if (!r.ok) throw new Error(r.pesan);
-    barisUpload = baris; jenisUpload = area ? 'area' : 'toko';
+    barisUpload = baris; homebaseUpload = hb; jenisUpload = area ? 'area' : 'toko';
     tampilSimulasi(r);
     return r;
   } catch (e) { el.innerHTML = '<div class="pesan salah">' + esc(e.message || e) + '</div>'; throw e; }
@@ -1158,13 +1252,15 @@ async function simpanUpload() {
   $('btnSimpanUpload').disabled = true;
   try {
     const apa = jenisUpload === 'area' ? 'kabupaten' : 'toko';
-    const r = await apiTulis(jenisUpload === 'area' ? 'uploadArea' : 'upload', { simulasi: false, baris: barisUpload });
+    const r = await apiTulis(jenisUpload === 'area' ? 'uploadArea' : 'upload', { simulasi: false, baris: barisUpload, homebase: homebaseUpload });
     if (r.tolak === true) { setAkun('', ''); throw new Error(r.pesan); }
     if (!r.ok) throw new Error(r.pesan);
-    barisUpload = null; $('fileExcel').value = '';
+    barisUpload = null; homebaseUpload = []; $('fileExcel').value = '';
     await muat();
+    const hb = r.homebase;
     el.innerHTML = '<div class="pesan ok">Tersimpan: ' + angka(r.ringkas.baru) + ' ' + apa + ' baru, ' + angka(r.ringkas.berubah) + ' ' + apa + ' berubah' +
-      (r.ringkas.ditolak ? ', ' + angka(r.ringkas.ditolak) + ' baris ditolak' : '') + '.</div>';
+      (r.ringkas.ditolak ? ', ' + angka(r.ringkas.ditolak) + ' baris ditolak' : '') +
+      (hb ? '; homebase: ' + angka(hb.baru) + ' baru, ' + angka(hb.berubah) + ' berubah' + (hb.tanpaTitik ? ', ' + angka(hb.tanpaTitik) + ' link maps tidak terbaca titiknya (cek link-nya, lalu upload ulang)' : '') : '') + '.</div>';
     return r;
   } catch (e) { el.innerHTML = '<div class="pesan salah">' + esc(e.message || e) + '</div>'; throw e; }
 }
