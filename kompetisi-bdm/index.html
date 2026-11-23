@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kompetisi Business Development Manager - Aksesoris HP</title>
+<meta name="description" content="Kompetisi terbuka mencari calon pemegang bisnis aksesoris HP merek sendiri (casing dan anti gores). Dinilai dari karya, tanpa interview.">
+<style>
+:root { --navy:#14294B; --gold:#F2B705; --ink:#1B2430; --mute:#5B6675; --line:#DDE3EA; --bg:#F5F7FA; --ok:#1A8A7A; --bad:#B3261E; --blue:#1E6FB8; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; color:var(--ink); background:var(--bg); line-height:1.5; font-size:16px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+header { background:var(--navy); color:#fff; padding: 28px 0 26px; }
+header .tag { display:inline-block; background:var(--gold); color:var(--navy); font-weight:700; font-size:13px; padding:4px 10px; border-radius:20px; letter-spacing:.3px; }
+header h1 { margin:12px 0 8px; font-size:28px; line-height:1.2; }
+header p { margin:0; color:#DCE6F5; }
+.card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; margin:16px 0; }
+h2 { font-size:19px; margin:0 0 10px; color:var(--navy); }
+h3 { font-size:16px; margin:18px 0 6px; color:var(--navy); }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.item { border:1px solid var(--line); border-radius:10px; padding:12px; background:#FAFBFD; }
+.item b { display:block; color:var(--navy); }
+.item span { font-size:14px; color:var(--mute); }
+.bobot { display:flex; gap:4px; margin-top:8px; }
+.bobot div { color:#fff; border-radius:8px; padding:8px 4px; text-align:center; font-size:12.5px; line-height:1.25; }
+.bobot b { display:block; font-size:18px; }
+.info { display:grid; grid-template-columns:auto 1fr; gap:4px 14px; font-size:15px; }
+.info dt { color:var(--mute); } .info dd { margin:0; font-weight:600; }
+.btn { display:inline-block; border:0; border-radius:10px; padding:13px 18px; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit; text-align:center; }
+.btn.utama { background:var(--gold); color:var(--navy); }
+.btn.dua { background:#fff; color:var(--navy); border:2px solid var(--navy); }
+.btn.kecil { padding:9px 14px; font-size:14.5px; }
+.btn:disabled { opacity:.5; cursor:default; }
+.aksi { display:flex; gap:10px; flex-wrap:wrap; }
+.aksi .btn { flex:1 1 220px; }
+label { display:block; font-weight:600; margin:12px 0 4px; font-size:15px; }
+label small, .ket { font-weight:400; color:var(--mute); font-size:13.5px; }
+input[type=text], input[type=tel], input[type=url], select, textarea { width:100%; padding:11px 12px; border:1px solid #B9C3CF; border-radius:8px; font-size:16px; font-family:inherit; background:#fff; color:var(--ink); }
+textarea { min-height:110px; resize:vertical; }
+input:focus, select:focus, textarea:focus { outline:2px solid var(--blue); outline-offset:1px; }
+input[type=file] { width:100%; font-size:15px; padding:8px 0; }
+.bagian { border-top:3px solid var(--navy); margin-top:26px; padding-top:6px; }
+.bagian:first-child { border-top:0; margin-top:0; }
+.dua-kolom { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.baris-angka { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; background:#FAFBFD; }
+.baris-angka > b { font-size:15px; }
+.baris-angka label { margin:6px 0 2px; font-size:13px; font-weight:400; color:var(--mute); }
+.pesan { border-radius:10px; padding:12px 14px; margin:12px 0; font-size:15px; }
+.pesan.salah { background:#FCE8E6; color:var(--bad); border:1px solid #F3B8B3; }
+.pesan.benar { background:#E8F6F3; color:#0E5E52; border:1px solid #A9DCD3; }
+.pesan.catat { background:#FFF7DD; color:#6B5200; border:1px solid #F0DC9A; }
+.kode { font-size:34px; font-weight:800; letter-spacing:2px; color:var(--navy); background:#FFF7DD; border:2px dashed var(--gold); border-radius:12px; padding:12px; text-align:center; margin:10px 0; }
+.cek { display:flex; gap:10px; align-items:flex-start; font-weight:400; }
+.cek input { margin-top:5px; width:18px; height:18px; flex:none; }
+.daftar-kirim .baris { border:1px solid var(--line); border-radius:10px; padding:12px; margin:10px 0; }
+.daftar-kirim .judul { display:flex; justify-content:space-between; gap:8px; align-items:center; font-weight:700; }
+.lencana { font-size:12.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+.lencana.ok { background:#E8F6F3; color:#0E5E52; } .lencana.belum { background:#FCE8E6; color:var(--bad); }
+.sembunyi { display:none !important; }
+.jebakan { position:absolute; left:-9999px; height:0; overflow:hidden; }
+details { border:1px solid var(--line); border-radius:10px; padding:10px 14px; margin:10px 0; background:#fff; }
+summary { font-weight:700; color:var(--navy); cursor:pointer; }
+table { border-collapse:collapse; width:100%; font-size:14px; margin:8px 0; }
+th, td { border:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:top; }
+th { background:#EEF2F7; }
+footer { color:var(--mute); font-size:13px; text-align:center; padding:20px 0 34px; }
+@media (max-width:560px) { header h1 { font-size:23px; } .grid2, .dua-kolom { grid-template-columns:1fr; } .bobot div { font-size:11px; } }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="tag">KOMPETISI TERBUKA</span>
+  <h1>Business Development Manager<br>Aksesoris HP</h1>
+  <p>Kami mencari satu orang untuk memegang bisnis aksesoris HP merek sendiri (casing dan anti gores), dari nol sampai berkembang. Dinilai dari karya Anda. Tanpa interview dan tanpa tes di tempat.</p>
+</div></header>
+
+<div class="wrap">
+
+<!-- ================= BERANDA ================= -->
+<div id="vBeranda">
+  <div id="infoTutup" class="pesan salah sembunyi"></div>
+  <div class="card">
+    <div class="aksi">
+      <button class="btn utama" id="bDaftar" onclick="buka('vDaftar')">Daftar sekarang</button>
+      <button class="btn dua" onclick="buka('vLengkapi')">Sudah daftar? Lengkapi kiriman</button>
+    </div>
+    <dl class="info sembunyi" id="infoKompetisi" style="margin:16px 0 0"></dl>
+  </div>
+
+  <div class="card">
+    <h2>Siapa yang kami cari</h2>
+    <ul>
+      <li>Kreatif.</li>
+      <li>Bisa mengurus bisnis dari awal sampai jadi dan berkembang.</li>
+      <li>Pernah ikut membangun satu merek dari awal sampai berkembang.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Yang Anda kirim</h2>
+    <div class="grid2">
+      <div class="item"><b>1. Form pendaftaran</b><span>Data diri dan cerita satu merek yang pernah Anda bangun, lengkap dengan angka.</span></div>
+      <div class="item"><b>2. CV dan portofolio</b><span>Riwayat kerja dan bukti merek yang Anda ceritakan. PDF atau tautan.</span></div>
+      <div class="item"><b>3. Rencana bisnis</b><span>Rencana membangun merek casing dan anti gores dari nol sampai 12 bulan. PDF, paling banyak 10 halaman atau 15 slide.</span></div>
+      <div class="item"><b>4. Video</b><span>Anda sendiri menceritakan pengalaman dan strategi. Paling lama 5 menit, satu kali rekam.</span></div>
+    </div>
+    <p class="ket" style="margin:10px 0 0">Form, CV, dan portofolio diisi saat mendaftar. Rencana bisnis dan video boleh menyusul lewat menu "Lengkapi kiriman" sebelum batas kirim.</p>
+  </div>
+
+  <div class="card">
+    <h2>Cara penilaian</h2>
+    <div class="bobot">
+      <div style="flex:30;background:#1E6FB8"><b>30%</b>Bukti pengalaman</div>
+      <div style="flex:30;background:#1A8A7A"><b>30%</b>Rencana bisnis</div>
+      <div style="flex:25;background:#D98A00"><b>25%</b>Kreatif</div>
+      <div style="flex:15;background:#8E2F6B"><b>15%</b>Komunikasi</div>
+    </div>
+    <ul style="margin-top:12px">
+      <li>Semua peserta dinilai juri dengan lembar nilai yang sama. Juara ditentukan setelah semua nilai masuk.</li>
+      <li>Karya harus buatan sendiri. Alat bantu boleh dipakai, tetapi isi dan angkanya tanggung jawab Anda.</li>
+      <li>Kiriman tanpa CV, portofolio, rencana bisnis, atau video tidak dinilai.</li>
+      <li>Rencana yang Anda kirim tetap milik Anda bila tidak terpilih.</li>
+    </ul>
+  </div>
+
+  <div id="panduan">
+  <details>
+    <summary>Isi rencana bisnis</summary>
+    <p>Anda bebas menentukan angka dan cara. Perusahaan <b>tidak memberi data</b>: harga pabrik, harga pasar, jumlah toko, dan angka lain Anda cari atau perkirakan sendiri. Tulis sumber atau dasar perkiraannya.</p>
+    <ol>
+      <li><b>Merek</b>: nama, pembeli yang dituju, kelas harga, dan kemasan. Jelaskan kenapa.</li>
+      <li><b>Barang</b>: produk dan tipe HP pertama yang dijual, cara mencari dan memilih pabrik, cara memeriksa mutu, aturan garansi atau tukar barang.</li>
+      <li><b>Harga dan untung</b>: harga ke toko, harga ke pembeli, untung toko, untung perusahaan, lengkap dengan cara hitungnya.</li>
+      <li><b>Jalur jual</b>: toko HP, toko aksesoris, online. Mana yang lebih dulu dan kenapa.</li>
+      <li><b>Cara membuat owner toko mau memajang</b> merek yang belum dikenal.</li>
+      <li><b>Modal</b>: berapa modal yang Anda perlukan untuk 12 bulan dan dipakai untuk apa saja.</li>
+      <li><b>Angka per bulan</b>: isi tabel di bawah, dan sebutkan kapan modal kembali.</li>
+      <li><b>3 risiko terbesar</b> dan jalan keluarnya.</li>
+      <li><b>1 ide yang belum dipakai pesaing.</b></li>
+      <li><b>30 hari pertama</b>: apa yang Anda kerjakan tiap minggu.</li>
+    </ol>
+    <table>
+      <tr><th></th><th>Bulan 1</th><th>Bulan 3</th><th>Bulan 6</th><th>Bulan 12</th></tr>
+      <tr><td>Toko yang menjual</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Jumlah terjual (pc)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Omzet</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Modal yang sudah terpakai</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Untung / rugi bulan itu</td><td></td><td></td><td></td><td></td></tr>
+    </table>
+  </details>
+  <details>
+    <summary>Isi video (paling lama 5 menit)</summary>
+    <table>
+      <tr><th>Bagian</th><th>Lama</th><th>Yang diceritakan</th></tr>
+      <tr><td>1. Perkenalan</td><td>15 detik</td><td>Nama dan pekerjaan sekarang.</td></tr>
+      <tr><td>2. Pengalaman</td><td>kira-kira 2 menit</td><td>Merek apa yang Anda bangun dan sejak kapan Anda ikut. Apa peran Anda. Satu keputusan Anda sendiri yang paling berpengaruh, dengan angka sebelum dan sesudah. Satu kegagalan dan apa yang Anda ubah.</td></tr>
+      <tr><td>3. Strategi</td><td>kira-kira 2,5 menit</td><td>Merek aksesoris Anda untuk siapa dan apa bedanya dari yang ada. Apa yang Anda kerjakan di 90 hari pertama. Satu ide andalan. Risiko terbesar dan jalan keluarnya.</td></tr>
+      <tr><td>4. Penutup</td><td>15 detik</td><td>Kenapa Anda orang yang tepat memegang bisnis ini.</td></tr>
+    </table>
+    <ul>
+      <li>Satu kali rekam, tanpa potongan dan tanpa editan.</li>
+      <li>Wajah terlihat, bicara sendiri, tidak membaca teks.</li>
+      <li>Cukup direkam dengan HP. Boleh sambil menunjukkan contoh produk.</li>
+      <li>Dikirim sebagai tautan (misalnya Google Drive) yang bisa dibuka siapa saja yang punya tautannya.</li>
+      <li>Bagian setelah menit ke-5 tidak dinilai.</li>
+    </ul>
+  </details>
+  </div>
+</div>
+
+<!-- ================= FORM DAFTAR ================= -->
+<div id="vDaftar" class="sembunyi">
+  <p><a href="#" onclick="buka('vBeranda');return false">&larr; Kembali</a></p>
+  <div class="card">
+    <h2>Form pendaftaran</h2>
+    <div class="pesan catat">Isi dengan jujur dan pakai angka. Angka perkiraan boleh, cukup tulis "kira-kira". Form ini dinilai bersama CV dan portofolio Anda, jadi isinya harus cocok satu sama lain.</div>
+    <form id="fDaftar" onsubmit="kirimDaftar(event)" novalidate>
+      <div class="jebakan"><label>Situs<input type="text" id="situs" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="bagian"><h3>A. Data diri</h3>
+        <label for="nama">Nama lengkap</label><input type="text" id="nama" maxlength="80" autocomplete="name">
+        <label for="wa">Nomor WhatsApp <small>dipakai untuk masuk lagi saat melengkapi kiriman</small></label><input type="tel" id="wa" maxlength="16" placeholder="081234567890" autocomplete="tel">
+        <label for="domisili">Domisili</label><input type="text" id="domisili" maxlength="80" placeholder="Kota tempat tinggal">
+        <label for="pekerjaan">Pekerjaan sekarang</label><input type="text" id="pekerjaan" maxlength="120">
+      </div>
+
+      <div class="bagian"><h3>B. Merek yang diceritakan (pilih SATU saja)</h3>
+        <label for="merek">Nama merek</label><input type="text" id="merek" maxlength="80">
+        <label for="jenis">Jenis produk</label><input type="text" id="jenis" maxlength="120">
+        <label for="milik">Merek ini milik siapa</label>
+        <select id="milik"><option value="">Pilih</option><option>Perusahaan tempat saya bekerja</option><option>Milik saya sendiri</option><option>Merek orang lain yang saya distribusikan</option></select>
+        <div class="dua-kolom">
+          <div><label for="mulai">Merek mulai dijual <small>bulan, tahun</small></label><input type="text" id="mulai" maxlength="40" placeholder="Maret 2019"></div>
+          <div><label for="gabung">Saya bergabung <small>bulan, tahun</small></label><input type="text" id="gabung" maxlength="40" placeholder="Mei 2019"></div>
+        </div>
+        <label for="umur">Saat saya bergabung, merek sudah berjalan berapa bulan</label><input type="text" id="umur" maxlength="20" placeholder="2 bulan">
+        <label for="berhenti">Saya berhenti <small>bulan, tahun, atau tulis "masih bekerja"</small></label><input type="text" id="berhenti" maxlength="60">
+        <label for="jabatan">Jabatan saya: awal sampai akhir</label><input type="text" id="jabatan" maxlength="150" placeholder="Staf penjualan sampai Kepala merek">
+      </div>
+
+      <div class="bagian"><h3>C. Angka</h3>
+        <p class="ket">Tulis angka saat Anda bergabung dan saat terbaik atau terakhir.</p>
+        <div id="angka"></div>
+      </div>
+
+      <div class="bagian"><h3>D. Peran saya</h3>
+        <p class="ket">Pilih satu jawaban untuk tiap pekerjaan.</p>
+        <div id="peran"></div>
+      </div>
+
+      <div class="bagian"><h3>E. Cerita singkat</h3>
+        <p class="ket">Tiap jawaban paling banyak 5 kalimat.</p>
+        <div id="cerita"></div>
+      </div>
+
+      <div class="bagian"><h3>F. Lampiran</h3>
+        <label for="fCv">CV (wajib, PDF paling besar 10 MB) <small>riwayat kerja lengkap dengan bulan dan tahun</small></label><input type="file" id="fCv" accept="application/pdf,.pdf">
+        <label for="fPorto">Portofolio merek yang diceritakan <small>wajib salah satu: file PDF atau tautan. Foto produk dan kemasan, katalog, atau tautan toko online / media sosial merek itu</small></label>
+        <input type="file" id="fPorto" accept="application/pdf,.pdf">
+        <input type="url" id="portoTautan" maxlength="500" placeholder="https://  (tautan portofolio, bila ada)" style="margin-top:6px">
+        <p class="ket">Rencana bisnis dan video boleh dikirim sekarang atau menyusul sebelum batas kirim.</p>
+        <label for="fRencana">Rencana bisnis <small>PDF paling besar 10 MB, boleh menyusul</small></label><input type="file" id="fRencana" accept="application/pdf,.pdf">
+        <label for="video">Tautan video <small>boleh menyusul</small></label><input type="url" id="video" maxlength="500" placeholder="https://">
+      </div>
+
+      <div class="bagian">
+        <label class="cek"><input type="checkbox" id="setuju"><span>Saya menyatakan isi form dan semua lampiran ini benar dan buatan saya sendiri. Bila terbukti tidak benar, saya bersedia digugurkan. Saya setuju data ini dipakai panitia untuk penilaian kompetisi.</span></label>
+      </div>
+      <div id="pesanDaftar"></div>
+      <button class="btn utama" id="bKirim" type="submit" style="width:100%;margin-top:8px">Kirim pendaftaran</button>
+    </form>
+  </div>
+</div>
+
+<!-- ================= BERHASIL ================= -->
+<div id="vBerhasil" class="sembunyi">
+  <div class="card">
+    <h2>Pendaftaran diterima</h2>
+    <p>Terima kasih, <b id="namaBerhasil"></b>. Ini kode peserta Anda:</p>
+    <div class="kode" id="kodeBerhasil"></div>
+    <div class="pesan catat"><b>Simpan kode ini</b> (tangkap layar). Kode ini dan nomor WhatsApp Anda dipakai untuk masuk lagi saat melengkapi atau mengganti kiriman.</div>
+    <div id="hasilUnggah"></div>
+    <button class="btn utama" style="width:100%" onclick="keLengkapi()">Lihat status kiriman saya</button>
+  </div>
+</div>
+
+<!-- ================= LENGKAPI ================= -->
+<div id="vLengkapi" class="sembunyi">
+  <p><a href="#" onclick="buka('vBeranda');return false">&larr; Kembali</a></p>
+  <div class="card" id="kMasuk">
+    <h2>Lengkapi kiriman</h2>
+    <label for="mKode">Kode peserta</label><input type="text" id="mKode" maxlength="12" placeholder="BDM-XXXXX" autocapitalize="characters">
+    <label for="mWa">Nomor WhatsApp yang didaftarkan</label><input type="tel" id="mWa" maxlength="16" placeholder="081234567890">
+    <div id="pesanMasuk"></div>
+    <button class="btn utama" id="bMasuk" style="width:100%;margin-top:12px" onclick="masuk()">Masuk</button>
+  </div>
+  <div class="card sembunyi" id="kStatus">
+    <h2>Kiriman <span id="sNama"></span></h2>
+    <p class="ket">Kode peserta: <b id="sKode"></b></p>
+    <div id="sRingkas"></div>
+    <div class="daftar-kirim" id="sDaftar"></div>
+    <div id="pesanStatus"></div>
+    <p class="ket">File baru menggantikan file lama. Panduan isi rencana bisnis dan video ada di halaman depan.</p>
+  </div>
+</div>
+
+<footer>PT Satelit Komunika Nusantara<span id="kontak"></span></footer>
+</div>
+
+<script>
+var API_URL = 'https://script.google.com/macros/s/AKfycbxbvQAG1XYwKpdk9-jpc76SaZwsIs4QInmVD0PwKIAH8E-17952PoHMIH1UhDtDKGFM/exec';
+var MAKS = 10 * 1024 * 1024;
+var ANGKA = ['Omzet per bulan', 'Jumlah toko / penjual yang menjual merek ini', 'Jumlah jenis produk yang dijual', 'Jumlah anggota tim', 'Jalur jual (toko, online, grosir, lainnya)'];
+var PERAN = ['Mencari dan memilih pabrik / pemasok', 'Menentukan nama merek dan kemasan', 'Menentukan harga jual', 'Menentukan jumlah pesanan dan stok', 'Memeriksa mutu barang', 'Mencari toko / pembeli pertama', 'Promosi', 'Penjualan online', 'Merekrut dan memimpin tim'];
+var PILIHAN = ['Saya putuskan sendiri', 'Saya usulkan, atasan putuskan', 'Saya hanya menjalankan', 'Bukan bagian saya'];
+var CERITA = [
+  'Bagaimana 10 toko atau pembeli pertama didapat?',
+  'Satu keputusan Anda yang paling menaikkan penjualan. Tulis angka sebelum dan sesudahnya.',
+  'Satu kegagalan terbesar Anda di merek ini. Berapa ruginya, dan apa yang Anda ubah sesudahnya?',
+  'Pernah punya stok yang tidak laku? Berapa banyak, dan bagaimana Anda menghabiskannya?',
+  'Ceritakan masa paling berat Anda saat membangun merek itu (ditekan, rugi, atau berselisih dengan orang lain). Apa yang Anda rasakan dan apa yang Anda lakukan?'
+];
+var sesi = { kode: '', wa: '' };
+
+function run(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  if (window.SERVER_UJI) return window.SERVER_UJI(fn, args);
+  return fetch(API_URL, { method: 'POST', credentials: 'omit', redirect: 'follow', body: JSON.stringify({ fn: fn, args: args }) })
+    .then(function (r) { if (!r.ok) throw new Error('Server tidak merespons (' + r.status + '). Coba lagi.'); return r.json(); })
+    .then(function (j) { if (!j.ok) throw new Error(j.error); return j.data; });
+}
+function el(id) { return document.getElementById(id); }
+function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function pesan(id, jenis, teks) { el(id).innerHTML = teks ? '<div class="pesan ' + jenis + '">' + esc(teks) + '</div>' : ''; }
+function galat(e) { return (e && e.message === 'Failed to fetch') ? 'Tidak tersambung ke server. Periksa internet Anda lalu coba lagi.' : ((e && e.message) || String(e)); }
+function buka(id) {
+  ['vBeranda', 'vDaftar', 'vBerhasil', 'vLengkapi'].forEach(function (v) { el(v).classList.toggle('sembunyi', v !== id); });
+  window.scrollTo(0, 0);
+}
+
+// ---------- bangun bagian C, D, E
+(function () {
+  var h = '';
+  ANGKA.forEach(function (a, i) {
+    h += '<div class="baris-angka"><b>' + esc(a) + '</b><div class="dua-kolom">' +
+      '<div><label for="a' + (i * 2 + 1) + '">Saat saya bergabung</label><input type="text" id="a' + (i * 2 + 1) + '" maxlength="120"' + (i === 0 ? ' placeholder="Rp"' : '') + '></div>' +
+      '<div><label for="a' + (i * 2 + 2) + '">Saat terbaik / terakhir</label><input type="text" id="a' + (i * 2 + 2) + '" maxlength="120"' + (i === 0 ? ' placeholder="Rp"' : '') + '></div></div></div>';
+  });
+  el('angka').innerHTML = h;
+  h = '';
+  PERAN.forEach(function (p, i) {
+    h += '<label for="p' + (i + 1) + '">' + esc(p) + '</label><select id="p' + (i + 1) + '"><option value="">Pilih</option>' +
+      PILIHAN.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('') + '</select>';
+  });
+  el('peran').innerHTML = h;
+  h = '';
+  CERITA.forEach(function (c, i) {
+    h += '<label for="e' + (i + 1) + '">' + (i + 1) + '. ' + esc(c) + '</label><textarea id="e' + (i + 1) + '" maxlength="1500"></textarea>';
+  });
+  el('cerita').innerHTML = h;
+})();
+
+// ---------- info kompetisi
+run('apiInfo').then(function (i) {
+  var h = '';
+  if (i.batas) h += '<dt>Batas kirim</dt><dd>' + esc(i.batas) + '</dd>';
+  if (i.pengumuman) h += '<dt>Pengumuman juara</dt><dd>' + esc(i.pengumuman) + '</dd>';
+  if (i.hadiah) h += '<dt>Untuk juara</dt><dd>' + esc(i.hadiah) + '</dd>';
+  if (h) { el('infoKompetisi').innerHTML = h; el('infoKompetisi').classList.remove('sembunyi'); }
+  if (i.kontak) el('kontak').textContent = '  |  Panitia: ' + i.kontak;
+  if (!i.buka) {
+    el('infoTutup').textContent = i.alasan;
+    el('infoTutup').classList.remove('sembunyi');
+    el('bDaftar').disabled = true;
+  }
+}).catch(function () { /* halaman tetap bisa dibaca */ });
+
+// ---------- file
+function ambilFile(id, label) {
+  var f = el(id).files[0];
+  if (!f) return null;
+  if (!/\.pdf$/i.test(f.name) && f.type !== 'application/pdf') throw new Error(label + ' harus berbentuk PDF.');
+  if (f.size > MAKS) throw new Error(label + ' lebih besar dari 10 MB. Perkecil dulu filenya.');
+  return f;
+}
+function bacaB64(f) {
+  return new Promise(function (ok, gagal) {
+    var r = new FileReader();
+    r.onload = function () { ok(String(r.result).split(',')[1] || ''); };
+    r.onerror = function () { gagal(new Error('File tidak bisa dibaca.')); };
+    r.readAsDataURL(f);
+  });
+}
+function unggah(jenis, f) {
+  return bacaB64(f).then(function (b64) { return run('apiUnggah', sesi.kode, sesi.wa, jenis, f.name, b64); });
+}
+
+// ---------- daftar
+function kirimDaftar(ev) {
+  ev.preventDefault();
+  var d = { situs: el('situs').value, setuju: el('setuju').checked };
+  ['nama', 'wa', 'domisili', 'pekerjaan', 'merek', 'jenis', 'milik', 'mulai', 'gabung', 'umur', 'berhenti', 'jabatan', 'portoTautan', 'video'].forEach(function (k) { d[k] = el(k).value.trim(); });
+  var i;
+  for (i = 1; i <= 10; i++) d['a' + i] = el('a' + i).value.trim();
+  for (i = 1; i <= 9; i++) d['p' + i] = el('p' + i).value;
+  for (i = 1; i <= 5; i++) d['e' + i] = el('e' + i).value.trim();
+  var cv, porto, rencana;
+  try {
+    cv = ambilFile('fCv', 'CV'); porto = ambilFile('fPorto', 'Portofolio'); rencana = ambilFile('fRencana', 'Rencana bisnis');
+    if (!cv) throw new Error('CV belum dipilih.');
+    if (!porto && !d.portoTautan) throw new Error('Portofolio belum ada. Pilih file PDF atau isi tautannya.');
+  } catch (e) { pesan('pesanDaftar', 'salah', e.message); return; }
+  var b = el('bKirim');
+  b.disabled = true;
+  pesan('pesanDaftar', 'catat', 'Mengirim pendaftaran. Jangan tutup halaman ini.');
+  run('apiDaftar', d).then(function (r) {
+    sesi = { kode: r.kode, wa: d.wa };
+    try { localStorage.setItem('bdmSesi', JSON.stringify(sesi)); } catch (e) { /* abaikan */ }
+    el('namaBerhasil').textContent = r.nama;
+    el('kodeBerhasil').textContent = r.kode;
+    buka('vBerhasil');
+    var antre = [['cv', cv, 'CV'], ['porto', porto, 'Portofolio'], ['rencana', rencana, 'Rencana bisnis']].filter(function (x) { return x[1]; });
+    var catatan = [];
+    function lanjut(n) {
+      if (n >= antre.length) {
+        el('hasilUnggah').innerHTML = catatan.join('') + (d.video ? '' : '<div class="pesan catat">Rencana bisnis dan video yang belum dikirim bisa menyusul lewat menu "Lengkapi kiriman".</div>');
+        return;
+      }
+      el('hasilUnggah').innerHTML = catatan.join('') + '<div class="pesan catat">Mengunggah ' + antre[n][2] + ' (' + (n + 1) + ' dari ' + antre.length + '). Jangan tutup halaman ini.</div>';
+      unggah(antre[n][0], antre[n][1]).then(function () {
+        catatan.push('<div class="pesan benar">' + antre[n][2] + ' sudah diterima.</div>');
+        lanjut(n + 1);
+      }).catch(function (e) {
+        catatan.push('<div class="pesan salah">' + antre[n][2] + ' gagal diunggah: ' + esc(galat(e)) + ' Unggah ulang lewat tombol di bawah.</div>');
+        lanjut(n + 1);
+      });
+    }
+    lanjut(0);
+  }).catch(function (e) {
+    pesan('pesanDaftar', 'salah', galat(e));
+  }).then(function () { b.disabled = false; });
+}
+
+// ---------- lengkapi
+function keLengkapi() {
+  buka('vLengkapi');
+  el('mKode').value = sesi.kode; el('mWa').value = sesi.wa;
+  if (sesi.kode) masuk();
+}
+function masuk() {
+  var kode = el('mKode').value.trim().toUpperCase(), wa = el('mWa').value.trim();
+  if (!kode || !wa) { pesan('pesanMasuk', 'salah', 'Isi kode peserta dan nomor WhatsApp.'); return; }
+  el('bMasuk').disabled = true;
+  pesan('pesanMasuk', 'catat', 'Memeriksa...');
+  run('apiMasukPeserta', kode, wa).then(function (s) {
+    sesi = { kode: kode, wa: wa };
+    try { localStorage.setItem('bdmSesi', JSON.stringify(sesi)); } catch (e) { /* abaikan */ }
+    pesan('pesanMasuk', '', '');
+    el('kMasuk').classList.add('sembunyi'); el('kStatus').classList.remove('sembunyi');
+    tampilStatus(s);
+  }).catch(function (e) { pesan('pesanMasuk', 'salah', galat(e)); }).then(function () { el('bMasuk').disabled = false; });
+}
+function tampilStatus(s) {
+  el('sNama').textContent = s.nama; el('sKode').textContent = s.kode;
+  var tutup = s.buka === false;
+  el('sRingkas').innerHTML = s.kurang.length
+    ? '<div class="pesan salah">Belum lengkap. Masih kurang: ' + esc(s.kurang.join(', ')) + '.' + (s.batas ? ' Batas kirim ' + esc(s.batas) + '.' : '') + '</div>'
+    : '<div class="pesan benar">Kiriman Anda sudah lengkap dan akan dinilai. Anda masih boleh mengganti file sampai batas kirim.</div>';
+  if (tutup) el('sRingkas').innerHTML += '<div class="pesan salah">' + esc(s.alasan) + ' Kiriman tidak bisa diubah lagi.</div>';
+  function lencana(ok) { return '<span class="lencana ' + (ok ? 'ok">Sudah diterima' : 'belum">Belum ada') + '</span>'; }
+  function file(jenis, judul, ok) {
+    return '<div class="baris"><div class="judul"><span>' + judul + '</span>' + lencana(ok) + '</div>' +
+      (tutup ? '' : '<input type="file" id="u_' + jenis + '" accept="application/pdf,.pdf"><button class="btn dua kecil" onclick="kirimFile(\'' + jenis + '\',\'' + judul + '\')">' + (ok ? 'Ganti file' : 'Unggah') + '</button>') + '</div>';
+  }
+  function tautan(jenis, judul, isi) {
+    return '<div class="baris"><div class="judul"><span>' + judul + '</span>' + lencana(!!isi) + '</div>' +
+      (tutup ? '' : '<input type="url" id="t_' + jenis + '" maxlength="500" placeholder="https://" value="' + esc(isi) + '" style="margin:8px 0"><button class="btn dua kecil" onclick="kirimTautan(\'' + jenis + '\')">Simpan tautan</button>') + '</div>';
+  }
+  el('sDaftar').innerHTML = file('cv', 'CV (PDF)', s.punya.cv) + file('porto', 'Portofolio (PDF)', s.punya.porto) +
+    tautan('portoTautan', 'Tautan portofolio', s.punya.portoTautan) + file('rencana', 'Rencana bisnis (PDF)', s.punya.rencana) + tautan('video', 'Tautan video', s.punya.video);
+}
+function kirimFile(jenis, judul) {
+  var f;
+  try { f = ambilFile('u_' + jenis, judul); if (!f) throw new Error('Pilih filenya dulu.'); } catch (e) { pesan('pesanStatus', 'salah', e.message); return; }
+  pesan('pesanStatus', 'catat', 'Mengunggah ' + judul + '. Jangan tutup halaman ini.');
+  unggah(jenis, f).then(function (s) { pesan('pesanStatus', 'benar', judul + ' sudah diterima.'); tampilStatus(Object.assign({ buka: true }, s)); })
+    .catch(function (e) { pesan('pesanStatus', 'salah', galat(e)); });
+}
+function kirimTautan(jenis) {
+  var u = el('t_' + jenis).value.trim();
+  pesan('pesanStatus', 'catat', 'Menyimpan...');
+  run('apiSimpanTautan', sesi.kode, sesi.wa, jenis, u).then(function (s) { pesan('pesanStatus', 'benar', 'Tautan sudah disimpan.'); tampilStatus(Object.assign({ buka: true }, s)); })
+    .catch(function (e) { pesan('pesanStatus', 'salah', galat(e)); });
+}
+try { var simpan = JSON.parse(localStorage.getItem('bdmSesi') || 'null'); if (simpan && simpan.kode) { sesi = simpan; el('mKode').value = sesi.kode; el('mWa').value = sesi.wa; } } catch (e) { /* abaikan */ }
+</script>
+</body>
+</html>

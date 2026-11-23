@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Penilaian Juri - Kompetisi BDM</title>
+<style>
+:root { --navy:#14294B; --gold:#F2B705; --ink:#1B2430; --mute:#5B6675; --line:#DDE3EA; --bg:#F5F7FA; --ok:#1A8A7A; --bad:#B3261E; --blue:#1E6FB8; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; color:var(--ink); background:var(--bg); line-height:1.45; font-size:15.5px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 14px 40px; }
+header { background:var(--navy); color:#fff; padding:14px 0; }
+header .wrap { display:flex; justify-content:space-between; align-items:center; gap:10px; padding-bottom:0; flex-wrap:wrap; }
+header h1 { margin:0; font-size:19px; }
+header span { color:#DCE6F5; font-size:14px; }
+.tab { display:flex; gap:6px; margin:14px 0 4px; }
+.tab button { border:1px solid var(--line); background:#fff; padding:9px 16px; border-radius:20px; font-weight:700; cursor:pointer; font-family:inherit; font-size:14.5px; color:var(--navy); }
+.tab button.aktif { background:var(--navy); color:#fff; border-color:var(--navy); }
+.card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; margin:12px 0; }
+h2 { font-size:18px; margin:0 0 10px; color:var(--navy); }
+h3 { font-size:15.5px; margin:16px 0 6px; color:var(--navy); }
+input[type=password], input[type=text], select, textarea { width:100%; padding:10px 12px; border:1px solid #B9C3CF; border-radius:8px; font-size:16px; font-family:inherit; background:#fff; color:var(--ink); }
+textarea { min-height:90px; resize:vertical; }
+.btn { border:0; border-radius:10px; padding:11px 16px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; }
+.btn.utama { background:var(--gold); color:var(--navy); }
+.btn.dua { background:#fff; color:var(--navy); border:2px solid var(--navy); }
+.btn:disabled { opacity:.5; cursor:default; }
+.pesan { border-radius:10px; padding:10px 14px; margin:10px 0; }
+.pesan.salah { background:#FCE8E6; color:var(--bad); border:1px solid #F3B8B3; }
+.pesan.benar { background:#E8F6F3; color:#0E5E52; border:1px solid #A9DCD3; }
+.pesan.catat { background:#FFF7DD; color:#6B5200; border:1px solid #F0DC9A; }
+.sembunyi { display:none !important; }
+table { border-collapse:collapse; width:100%; font-size:14.5px; }
+th, td { border-bottom:1px solid var(--line); padding:8px 8px; text-align:left; vertical-align:top; }
+th { background:#EEF2F7; color:var(--navy); font-size:13px; white-space:nowrap; }
+tr.klik { cursor:pointer; } tr.klik:hover { background:#F2F6FB; }
+.gulir { overflow-x:auto; }
+.lencana { font-size:12.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; display:inline-block; }
+.lencana.ok { background:#E8F6F3; color:#0E5E52; } .lencana.belum { background:#FCE8E6; color:var(--bad); } .lencana.sebagian { background:#FFF7DD; color:#6B5200; } .lencana.abu { background:#EEF2F7; color:var(--mute); }
+.dua { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap:14px; align-items:start; }
+@media (max-width:900px) { .dua { grid-template-columns:1fr; } }
+.kv { display:grid; grid-template-columns: 190px 1fr; gap:3px 12px; font-size:14.5px; }
+.kv dt { color:var(--mute); } .kv dd { margin:0; }
+@media (max-width:560px) { .kv { grid-template-columns:1fr; } .kv dd { margin-bottom:6px; font-weight:600; } }
+.cerita { background:#FAFBFD; border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:6px 0 12px; white-space:pre-wrap; }
+.tautan { display:flex; flex-wrap:wrap; gap:8px; }
+.tautan a { background:var(--navy); color:#fff; text-decoration:none; padding:9px 14px; border-radius:8px; font-weight:700; font-size:14.5px; }
+.tautan span { background:#EEF2F7; color:var(--mute); padding:9px 14px; border-radius:8px; font-size:14.5px; }
+.kel { border-left:6px solid var(--blue); padding-left:12px; margin:18px 0; }
+.kel > .judul { display:flex; justify-content:space-between; gap:10px; font-weight:800; color:var(--navy); }
+.kel > .sumber { color:var(--mute); font-size:13.5px; margin-bottom:6px; }
+.hal { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; }
+.hal b { display:block; margin-bottom:6px; }
+.angka { display:flex; gap:6px; }
+.angka button { flex:1; border:1px solid #B9C3CF; background:#fff; border-radius:8px; padding:9px 0; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit; color:var(--ink); }
+.angka button.pilih { background:var(--navy); color:#fff; border-color:var(--navy); }
+.patokan { font-size:13.5px; color:var(--mute); margin:8px 0 0; padding:0; list-style:none; }
+.patokan li { margin:2px 0; } .patokan li b { display:inline; color:var(--ink); }
+.patokan li.kena { color:var(--ink); background:#FFF7DD; border-radius:6px; padding:2px 6px; margin-left:-6px; }
+.total { position:sticky; bottom:0; background:#fff; border-top:2px solid var(--navy); padding:10px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+.total .angkaAkhir { font-size:22px; font-weight:800; color:var(--navy); }
+.kecil { font-size:13.5px; color:var(--mute); }
+.rank { font-size:20px; font-weight:800; color:var(--navy); }
+.batang { display:flex; height:10px; border-radius:6px; overflow:hidden; background:#EEF2F7; min-width:120px; }
+.batang i { display:block; height:100%; }
+.rinci { background:#FAFBFD; }
+.rinci td { font-size:14px; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Penilaian Juri - Kompetisi BDM Aksesoris HP</h1>
+  <span id="siapa"></span>
+</div></header>
+<div class="wrap">
+
+<div class="card" id="kMasuk" style="max-width:420px;margin:30px auto">
+  <h2>Masuk</h2>
+  <label for="pin">PIN juri</label>
+  <input type="password" id="pin" inputmode="numeric" maxlength="12" autocomplete="off" onkeydown="if(event.key==='Enter')masuk()">
+  <div id="pesanMasuk"></div>
+  <button class="btn utama" id="bMasuk" style="width:100%;margin-top:12px" onclick="masuk()">Masuk</button>
+  <p class="kecil">Halaman ini rahasia. Jangan bagikan PIN dan jangan berunding dengan juri lain sebelum semua nilai masuk.</p>
+</div>
+
+<div id="kDalam" class="sembunyi">
+  <div class="tab">
+    <button id="tPeserta" class="aktif" onclick="tab('peserta')">Peserta</button>
+    <button id="tHasil" class="sembunyi" onclick="tab('hasil')">Hasil dan peringkat</button>
+    <button onclick="keluar()" style="margin-left:auto">Keluar</button>
+  </div>
+
+  <!-- daftar peserta -->
+  <div id="vPeserta">
+    <div class="card">
+      <h2>Daftar peserta</h2>
+      <div id="ringkasPeserta" class="kecil"></div>
+      <div class="gulir"><table id="tblPeserta"></table></div>
+    </div>
+  </div>
+
+  <!-- detail + nilai -->
+  <div id="vDetail" class="sembunyi">
+    <p><a href="#" onclick="kembali();return false">&larr; Kembali ke daftar peserta</a></p>
+    <div class="dua">
+      <div>
+        <div class="card" id="dKiriman"></div>
+      </div>
+      <div>
+        <div class="card" id="dNilai"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- hasil -->
+  <div id="vHasil" class="sembunyi">
+    <div class="card">
+      <h2>Hasil dan peringkat</h2>
+      <div id="ringkasHasil"></div>
+      <div class="gulir"><table id="tblHasil"></table></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+var API_URL = 'https://script.google.com/macros/s/AKfycbxbvQAG1XYwKpdk9-jpc76SaZwsIs4QInmVD0PwKIAH8E-17952PoHMIH1UhDtDKGFM/exec';
+var WARNA = ['#1E6FB8', '#1A8A7A', '#D98A00', '#8E2F6B'];
+var pin = '', saya = null, buka = null, nilai = null, berubah = false;
+
+function run(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  if (window.SERVER_UJI) return window.SERVER_UJI(fn, args);
+  return fetch(API_URL, { method: 'POST', credentials: 'omit', redirect: 'follow', body: JSON.stringify({ fn: fn, args: args }) })
+    .then(function (r) { if (!r.ok) throw new Error('Server tidak merespons (' + r.status + '). Coba lagi.'); return r.json(); })
+    .then(function (j) { if (!j.ok) throw new Error(j.error); return j.data; });
+}
+function el(id) { return document.getElementById(id); }
+function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function pesan(id, jenis, teks) { el(id).innerHTML = teks ? '<div class="pesan ' + jenis + '">' + esc(teks) + '</div>' : ''; }
+function galat(e) { return (e && e.message === 'Failed to fetch') ? 'Tidak tersambung ke server. Periksa internet lalu coba lagi.' : ((e && e.message) || String(e)); }
+function angka1(x) { return x === null || x === undefined ? '-' : String(x).replace('.', ','); }
+function tautanAman(u) { return /^https?:\/\//i.test(u || '') ? u : ''; }
+
+// ---------- masuk
+function masuk() {
+  var p = el('pin').value.trim();
+  if (!p) return;
+  el('bMasuk').disabled = true;
+  pesan('pesanMasuk', 'catat', 'Memeriksa...');
+  run('apiMasukJuri', p).then(function (j) {
+    pin = p; saya = j;
+    try { sessionStorage.setItem('bdmPin', p); } catch (e) { /* abaikan */ }
+    pesan('pesanMasuk', '', '');
+    el('kMasuk').classList.add('sembunyi'); el('kDalam').classList.remove('sembunyi');
+    el('siapa').textContent = j.nama;
+    el('tHasil').classList.toggle('sembunyi', !j.lihatHasil);
+    tab('peserta');
+  }).catch(function (e) { pesan('pesanMasuk', 'salah', galat(e)); }).then(function () { el('bMasuk').disabled = false; });
+}
+function keluar() {
+  try { sessionStorage.removeItem('bdmPin'); } catch (e) { /* abaikan */ }
+  location.reload();
+}
+function tab(nama) {
+  if (berubah && !confirm('Nilai yang belum disimpan akan hilang. Lanjut?')) return;
+  berubah = false;
+  el('tPeserta').classList.toggle('aktif', nama === 'peserta');
+  el('tHasil').classList.toggle('aktif', nama === 'hasil');
+  el('vPeserta').classList.toggle('sembunyi', nama !== 'peserta');
+  el('vHasil').classList.toggle('sembunyi', nama !== 'hasil');
+  el('vDetail').classList.add('sembunyi');
+  if (nama === 'peserta') muatPeserta(); else muatHasil();
+}
+function kembali() { tab('peserta'); }
+
+// ---------- daftar peserta
+function muatPeserta() {
+  el('tblPeserta').innerHTML = '<tr><td>Memuat...</td></tr>';
+  run('apiDaftarPeserta', pin).then(function (d) {
+    var lengkap = d.filter(function (p) { return !p.kurang.length; });
+    var selesai = lengkap.filter(function (p) { return p.nilai === 'selesai'; }).length;
+    el('ringkasPeserta').textContent = d.length + ' pendaftar, ' + lengkap.length + ' kiriman lengkap' + (saya.menilai ? ', ' + selesai + ' sudah Anda nilai.' : '.') + ' Klik nama untuk membuka.';
+    if (!d.length) { el('tblPeserta').innerHTML = '<tr><td>Belum ada pendaftar.</td></tr>'; return; }
+    d.sort(function (a, b) { return (a.kurang.length ? 1 : 0) - (b.kurang.length ? 1 : 0) || (a.waktu < b.waktu ? -1 : 1); });
+    var label = { belum: 'Belum dinilai', sebagian: 'Baru sebagian', selesai: 'Selesai' }, kls = { belum: 'belum', sebagian: 'sebagian', selesai: 'ok' };
+    var h = '<tr><th>Kode</th><th>Nama</th><th>Merek yang diceritakan</th><th>Domisili</th><th>Kiriman</th><th>Nilai saya</th></tr>';
+    d.forEach(function (p) {
+      h += '<tr class="klik" onclick="bukaPeserta(\'' + esc(p.kode) + '\')"><td>' + esc(p.kode) + '</td><td><b>' + esc(p.nama) + '</b></td><td>' + esc(p.merek) + '</td><td>' + esc(p.domisili) + '</td><td>' +
+        (p.kurang.length ? '<span class="lencana belum">Kurang: ' + esc(p.kurang.join(', ')) + '</span>' : '<span class="lencana ok">Lengkap</span>') + '</td><td>' +
+        (p.kurang.length ? '<span class="lencana abu">Belum bisa dinilai</span>' : '<span class="lencana ' + kls[p.nilai] + '">' + label[p.nilai] + '</span>') + '</td></tr>';
+    });
+    el('tblPeserta').innerHTML = h;
+  }).catch(function (e) { el('tblPeserta').innerHTML = '<tr><td><div class="pesan salah">' + esc(galat(e)) + '</div></td></tr>'; });
+}
+
+// ---------- detail
+function bukaPeserta(kode) {
+  el('vPeserta').classList.add('sembunyi'); el('vDetail').classList.remove('sembunyi');
+  el('dKiriman').innerHTML = 'Memuat...'; el('dNilai').innerHTML = '';
+  window.scrollTo(0, 0);
+  run('apiDetailPeserta', pin, kode).then(function (d) {
+    buka = d; nilai = d.nilai; berubah = false;
+    tampilKiriman(); tampilNilai();
+  }).catch(function (e) { el('dKiriman').innerHTML = '<div class="pesan salah">' + esc(galat(e)) + '</div>'; });
+}
+function tampilKiriman() {
+  var p = buka.p, L = saya.label, i;
+  function t(u, teks) { var a = tautanAman(u); return a ? '<a href="' + esc(a) + '" target="_blank" rel="noopener noreferrer">' + teks + '</a>' : '<span>' + teks + ': belum ada</span>'; }
+  var h = '<h2>' + esc(p.nama) + ' <span class="kecil">' + esc(p.kode) + '</span></h2>';
+  if (buka.kurang.length) h += '<div class="pesan salah">Kiriman belum lengkap (kurang: ' + esc(buka.kurang.join(', ')) + '). Belum bisa dinilai.</div>';
+  h += '<div class="tautan">' + t(p.cv, 'Buka CV') + t(p.porto, 'Buka portofolio (PDF)') + t(p.portoTautan, 'Buka tautan portofolio') + t(p.rencana, 'Buka rencana bisnis') + t(p.video, 'Buka video') + '</div>';
+  h += '<h3>A. Data diri</h3><dl class="kv"><dt>Domisili</dt><dd>' + esc(p.domisili) + '</dd><dt>Pekerjaan sekarang</dt><dd>' + esc(p.pekerjaan) + '</dd><dt>WhatsApp</dt><dd>' + esc(p.wa) + '</dd><dt>Mendaftar</dt><dd>' + esc(p.waktu) + '</dd></dl>';
+  h += '<h3>B. Merek yang diceritakan</h3><dl class="kv"><dt>Nama merek</dt><dd>' + esc(p.merek) + '</dd><dt>Jenis produk</dt><dd>' + esc(p.jenis) + '</dd><dt>Milik siapa</dt><dd>' + esc(p.milik) +
+    '</dd><dt>Merek mulai dijual</dt><dd>' + esc(p.mulai) + '</dd><dt>Peserta bergabung</dt><dd>' + esc(p.gabung) + '</dd><dt>Umur merek saat bergabung</dt><dd>' + esc(p.umur) +
+    '</dd><dt>Berhenti</dt><dd>' + esc(p.berhenti) + '</dd><dt>Jabatan awal sampai akhir</dt><dd>' + esc(p.jabatan) + '</dd></dl>';
+  h += '<h3>C. Angka</h3><table><tr><th></th><th>Saat bergabung</th><th>Saat terbaik / terakhir</th></tr>';
+  for (i = 0; i < 5; i++) h += '<tr><td>' + esc(L.angka[i]) + '</td><td>' + esc(p['a' + (i * 2 + 1)]) + '</td><td>' + esc(p['a' + (i * 2 + 2)]) + '</td></tr>';
+  h += '</table><h3>D. Peran</h3><table>';
+  for (i = 0; i < 9; i++) h += '<tr><td>' + esc(L.peran[i]) + '</td><td><b>' + esc(p['p' + (i + 1)]) + '</b></td></tr>';
+  h += '</table><h3>E. Cerita</h3>';
+  for (i = 0; i < 5; i++) h += '<div class="kecil">' + (i + 1) + '. ' + esc(L.cerita[i]) + '</div><div class="cerita">' + esc(p['e' + (i + 1)]) + '</div>';
+  el('dKiriman').innerHTML = h;
+}
+function hitung() {
+  var idx = 0, total = 0, lengkap = true, kel = [];
+  saya.rubrik.forEach(function (g) {
+    var jml = 0, isi = 0;
+    g.hal.forEach(function () { if (nilai.n[idx] !== '' && nilai.n[idx] !== null && nilai.n[idx] !== undefined) { jml += Number(nilai.n[idx]); isi++; } idx++; });
+    if (isi < g.hal.length) lengkap = false;
+    kel.push({ jml: jml, isi: isi, maks: g.maks * g.hal.length });
+    total += jml / (g.maks * g.hal.length) * g.bobot;
+  });
+  return { kel: kel, lengkap: lengkap, akhir: Math.round(total * 10) / 10 };
+}
+function tampilNilai() {
+  var bisa = saya.menilai && !buka.kurang.length;
+  var h = '<h2>Lembar nilai</h2>';
+  if (!saya.menilai) h += '<div class="pesan catat">Akun ini hanya melihat, tidak ditugaskan menilai.</div>';
+  h += '<details style="margin:6px 0 4px"><summary style="cursor:pointer;font-weight:700;color:var(--navy)">Tanda cerita yang perlu diragukan</summary><ul>' + saya.tanda.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></details>';
+  var idx = 0;
+  saya.rubrik.forEach(function (g, gi) {
+    h += '<div class="kel" style="border-color:' + WARNA[gi] + '"><div class="judul"><span>' + esc(g.nama) + ' (' + g.bobot + '%)</span><span id="jml' + gi + '"></span></div><div class="sumber">Dilihat dari: ' + esc(g.sumber) + '. Nilai ' + g.min + ' sampai ' + g.maks + '.</div>';
+    g.hal.forEach(function (hal) {
+      h += '<div class="hal"><b>' + (idx + 1) + '. ' + esc(hal[0]) + '</b><div class="angka" id="ang' + idx + '">';
+      for (var v = g.min; v <= g.maks; v++) h += '<button type="button" data-i="' + idx + '" data-v="' + v + '"' + (bisa ? '' : ' disabled') + ' onclick="pilih(' + idx + ',' + v + ')">' + v + '</button>';
+      h += '</div><ul class="patokan" id="pat' + idx + '">' +
+        '<li data-v="' + g.min + '"><b>' + g.min + '</b> = ' + esc(hal[1]) + '</li>' +
+        '<li data-v="' + (g.min + 2) + '"><b>' + (g.min + 2) + '</b> = ' + esc(hal[2]) + '</li>' +
+        '<li data-v="' + g.maks + '"><b>' + g.maks + '</b> = ' + esc(hal[3]) + '</li>' +
+        '<li class="kecil">' + (g.min + 1) + ' dan ' + (g.min + 3) + ' dipakai bila berada di antara dua keterangan.</li></ul></div>';
+      idx++;
+    });
+    h += '</div>';
+  });
+  h += '<h3>Mental dan Emosi</h3><div class="kecil">' + esc(saya.catatanMe) + '</div>' +
+    '<select id="me" style="margin-top:6px"' + (bisa ? '' : ' disabled') + ' onchange="nilai.me=this.value;berubah=true"><option value="">Belum dipilih</option><option>LAYAK</option><option>PERLU PERHATIAN</option></select>' +
+    '<h3>Catatan juri</h3><div class="kecil">Hal yang diragukan atau yang menonjol, untuk dibahas saat penentuan juara.</div>' +
+    '<textarea id="catatan" maxlength="1500" style="margin-top:6px"' + (bisa ? '' : ' disabled') + ' oninput="nilai.catatan=this.value;berubah=true"></textarea>' +
+    '<div id="pesanNilai"></div>' +
+    '<div class="total"><div><div class="kecil" id="ketAkhir"></div><div class="angkaAkhir" id="akhir"></div></div>' +
+    (bisa ? '<button class="btn utama" id="bSimpan" onclick="simpan()">Simpan nilai</button>' : '') + '</div>';
+  el('dNilai').innerHTML = h;
+  el('me').value = nilai.me || '';
+  el('catatan').value = nilai.catatan || '';
+  segarkan();
+}
+function pilih(i, v) {
+  nilai.n[i] = (nilai.n[i] === v) ? '' : v;
+  berubah = true;
+  segarkan();
+}
+function segarkan() {
+  for (var i = 0; i < 16; i++) {
+    var tombol = el('ang' + i).children, j;
+    for (j = 0; j < tombol.length; j++) tombol[j].classList.toggle('pilih', nilai.n[i] !== '' && Number(tombol[j].getAttribute('data-v')) === Number(nilai.n[i]));
+    var li = el('pat' + i).children;
+    for (j = 0; j < li.length; j++) li[j].classList.toggle('kena', nilai.n[i] !== '' && li[j].getAttribute('data-v') === String(nilai.n[i]));
+  }
+  var h = hitung();
+  h.kel.forEach(function (k, gi) { el('jml' + gi).textContent = k.jml + ' / ' + k.maks; });
+  var terisi = nilai.n.filter(function (v) { return v !== '' && v !== null && v !== undefined; }).length;
+  el('ketAkhir').textContent = h.lengkap ? 'Nilai akhir dari Anda' : 'Terisi ' + terisi + ' dari 16 hal';
+  el('akhir').textContent = h.lengkap ? angka1(h.akhir) + ' / 100' : '-';
+}
+function simpan() {
+  var b = el('bSimpan');
+  b.disabled = true;
+  pesan('pesanNilai', 'catat', 'Menyimpan...');
+  run('apiSimpanNilai', pin, buka.p.kode, { n: nilai.n, me: nilai.me || '', catatan: nilai.catatan || '' }).then(function (r) {
+    berubah = false;
+    pesan('pesanNilai', r.lengkap ? 'benar' : 'catat', r.lengkap ? 'Tersimpan. Nilai akhir dari Anda: ' + angka1(r.akhir) + '.' : 'Tersimpan sebagai sementara. Masih ada hal yang belum dinilai, jadi belum masuk hitungan peringkat.');
+  }).catch(function (e) { pesan('pesanNilai', 'salah', galat(e)); }).then(function () { b.disabled = false; });
+}
+
+// ---------- hasil
+function muatHasil() {
+  el('tblHasil').innerHTML = '<tr><td>Memuat...</td></tr>'; el('ringkasHasil').innerHTML = '';
+  run('apiHasil', pin).then(function (d) {
+    var r = '<div class="pesan ' + (d.final ? 'benar' : 'catat') + '">' + (d.final
+      ? '<b>PERINGKAT FINAL.</b> Semua juri sudah menilai semua kiriman yang lengkap.'
+      : '<b>PERINGKAT SEMENTARA.</b> ' + (d.pesertaLengkap ? d.belumSelesai + ' dari ' + d.pesertaLengkap + ' kiriman lengkap belum selesai dinilai semua juri.' : 'Belum ada kiriman yang lengkap.')) +
+      '</div><div class="kecil">' + d.pesertaTotal + ' pendaftar, ' + d.pesertaLengkap + ' kiriman lengkap. Juri penilai: ' + esc(d.penilai.join(', ') || '-') + '. Nilai akhir = rata-rata juri yang sudah selesai. Klik baris untuk melihat rincian.</div>';
+    el('ringkasHasil').innerHTML = r;
+    if (!d.daftar.length) { el('tblHasil').innerHTML = '<tr><td>Belum ada pendaftar.</td></tr>'; return; }
+    var h = '<tr><th>#</th><th>Peserta</th><th>Nilai akhir</th>' + d.bobot.map(function (b) { return '<th>' + esc(b.nama) + '<br>(' + b.bobot + ')</th>'; }).join('') + '<th>Juri selesai</th><th>Mental dan Emosi</th></tr>';
+    d.daftar.forEach(function (p, i) {
+      var me = p.perJuri.filter(function (x) { return x.me; });
+      var perlu = me.filter(function (x) { return x.me === 'PERLU PERHATIAN'; }).length;
+      h += '<tr class="klik" onclick="el(\'rin' + i + '\').classList.toggle(\'sembunyi\')"><td class="rank">' + (p.peringkat || '-') + '</td><td><b>' + esc(p.nama) + '</b><div class="kecil">' + esc(p.kode) + ' | ' + esc(p.merek) + ' | ' + esc(p.domisili) + '</div></td>';
+      if (p.kurang.length) h += '<td colspan="5"><span class="lencana belum">Tidak dinilai, kurang: ' + esc(p.kurang.join(', ')) + '</span></td><td></td></tr>';
+      else {
+        h += '<td><span class="rank">' + angka1(p.akhir) + '</span>' + (p.selisih !== null && p.selisih >= 15 ? '<div class="lencana sebagian">Beda antar juri ' + angka1(p.selisih) + '</div>' : '') + '</td>';
+        for (var g = 0; g < 4; g++) h += '<td>' + (p.kel ? angka1(p.kel[g]) + '<div class="batang"><i style="width:' + (p.kel[g] / d.bobot[g].bobot * 100) + '%;background:' + WARNA[g] + '"></i></div>' : '-') + '</td>';
+        h += '<td>' + p.juriSelesai + ' dari ' + p.juriTotal + '</td><td>' + (me.length ? (perlu ? '<span class="lencana belum">PERLU PERHATIAN (' + perlu + ' juri)</span>' : '<span class="lencana ok">LAYAK</span>') : '-') + '</td></tr>';
+      }
+      function t(u, teks) { var a = tautanAman(u); return a ? '<a href="' + esc(a) + '" target="_blank" rel="noopener noreferrer">' + teks + '</a>' : ''; }
+      h += '<tr class="rinci sembunyi" id="rin' + i + '"><td></td><td colspan="8"><div class="tautan" style="margin-bottom:8px">' + t(p.cv, 'CV') + t(p.porto, 'Portofolio') + t(p.portoTautan, 'Tautan portofolio') + t(p.rencana, 'Rencana bisnis') + t(p.video, 'Video') + '</div>' +
+        '<div class="kecil">WhatsApp: ' + esc(p.wa) + '</div>' +
+        (p.perJuri.length ? '<table><tr><th>Juri</th><th>Nilai akhir</th><th>Mental dan Emosi</th><th>Catatan juri</th></tr>' + p.perJuri.map(function (x) {
+          return '<tr><td>' + esc(x.juri) + '</td><td>' + (x.akhir === null ? 'belum selesai' : angka1(x.akhir)) + '</td><td>' + esc(x.me || '-') + '</td><td>' + esc(x.catatan || '-') + '</td></tr>';
+        }).join('') + '</table>' : '<div class="kecil">Belum ada juri yang menilai.</div>') + '</td></tr>';
+    });
+    el('tblHasil').innerHTML = h;
+  }).catch(function (e) { el('tblHasil').innerHTML = '<tr><td><div class="pesan salah">' + esc(galat(e)) + '</div></td></tr>'; });
+}
+
+window.addEventListener('beforeunload', function (e) { if (berubah) { e.preventDefault(); e.returnValue = ''; } });
+try { var simpanPin = sessionStorage.getItem('bdmPin'); if (simpanPin) { el('pin').value = simpanPin; masuk(); } } catch (e) { /* abaikan */ }
+</script>
+</body>
+</html>
