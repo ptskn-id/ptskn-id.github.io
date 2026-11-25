@@ -425,6 +425,14 @@ a.row{color:inherit}
 .flag-pts b{display:block;font-family:var(--serif);font-weight:500;font-size:14px;color:var(--red);letter-spacing:.06em}
 .flag-pts span{display:block;margin-top:6px;font-weight:500}
 .fcard{justify-content:flex-end}
+.fcard.foto{padding:0;min-height:0;justify-content:flex-start}
+.fcard.foto img{width:100%;height:auto;aspect-ratio:15/8;object-fit:cover;filter:saturate(.88);transition:transform 1.6s var(--ease),filter .6s}
+.fcard.foto:hover img{transform:scale(1.03);filter:none}
+.fbody{position:relative;padding:34px 40px 40px;background:var(--ink2)}
+.fcard.foto h3{font-size:clamp(32px,3.6vw,46px);margin:12px 0 14px}
+.fcard.foto p{max-width:none;font-size:15.5px}
+.fbody a{display:inline-block;margin-top:22px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-l);border-bottom:1px solid rgba(220,194,150,.5);padding-bottom:4px;transition:color .3s,border-color .3s}
+.fbody a:hover{color:#fff;border-color:#fff}
 html[lang^=zh]{--serif:"Noto Serif SC","Songti SC","Source Han Serif SC","SimSun",serif;--sans:"Inter","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif}
 html[lang^=zh] em,html[lang^=zh] blockquote,html[lang^=zh] .cap-n,html[lang^=zh] .foot-top p,html[lang^=zh] .orb .tag span{font-style:normal}
 html[lang^=zh] h1,html[lang^=zh] h2,html[lang^=zh] h3{letter-spacing:0;line-height:1.32}
@@ -442,6 +450,7 @@ html[lang^=zh] .label,html[lang^=zh] .menu a:not(.btn),html[lang^=zh] .btn{lette
   .brands.four{grid-template-columns:1fr}
   .four .bcard{padding:36px 0;border-top:0!important}
   .vision{margin-top:64px;padding-bottom:0}
+  .fbody{padding:28px 24px 32px}
   .lang button{padding:8px 6px;font-size:11px}
   .logo{height:36px}
 }
@@ -638,13 +647,17 @@ html[lang^=zh] .label,html[lang^=zh] .menu a:not(.btn),html[lang^=zh] .btn{lette
       <div><span class="label"><b>06</b><span data-t="b0">Pabrik</span></span><h2 data-t="b1">Didukung dua fasilitas pabrik.</h2></div>
     </div>
     <div class="fab-grid">
-      <article class="fcard rv">
-        <svg viewBox="0 0 380 380" aria-hidden="true" fill="none"><circle cx="190" cy="190" r="189" stroke="rgba(255,255,255,.1)"/><circle cx="190" cy="190" r="130" stroke="rgba(220,194,150,.38)"/><circle cx="190" cy="190" r="72" stroke="rgba(255,255,255,.1)"/><circle cx="60" cy="190" r="4" fill="#dcc296"/></svg>
-        <small><span data-t="b0">Pabrik</span> 01</small><h3>YIFANG</h3>
+      <article class="fcard foto rv">
+        <img src="img/pabrik/yifang.jpg" alt="YIFANG" loading="lazy" width="1200" height="640">
+        <div class="fbody"><small><span data-t="b0">Pabrik</span> 01</small><h3>YIFANG</h3>
+          <p>Kadu Agung, Kec. Tigaraksa, Kabupaten Tangerang, Banten 15720</p>
+          <a href="https://www.google.com/maps?ftid=0x2e420704dac936ad:0xabcf69b391a16209" target="_blank" rel="noopener"><span data-t="b2">Lihat di Google Maps</span> &#8599;</a></div>
       </article>
-      <article class="fcard rv">
-        <svg viewBox="0 0 380 380" aria-hidden="true" fill="none"><circle cx="190" cy="190" r="189" stroke="rgba(255,255,255,.1)"/><circle cx="190" cy="190" r="130" stroke="rgba(220,194,150,.38)"/><circle cx="190" cy="190" r="72" stroke="rgba(255,255,255,.1)"/><circle cx="190" cy="320" r="4" fill="#dcc296"/></svg>
-        <small><span data-t="b0">Pabrik</span> 02</small><h3>AMR</h3>
+      <article class="fcard foto rv">
+        <img src="img/pabrik/arm.jpg" alt="ARM" loading="lazy" width="1200" height="640">
+        <div class="fbody"><small><span data-t="b0">Pabrik</span> 02</small><h3>ARM</h3>
+          <p>Delta Silicon VI, Jl. Ramin 1 No. 6 Blok G6, Lippo Cikarang, Sukamahi, Kec. Cikarang Pusat, Kabupaten Bekasi, Jawa Barat 17550</p>
+          <a href="https://www.google.com/maps?ftid=0x2e699bc2546c40db:0x24c2c71a92e00101" target="_blank" rel="noopener"><span data-t="b2">Lihat di Google Maps</span> &#8599;</a></div>
       </article>
     </div>
   </div>
@@ -858,7 +871,7 @@ en:{n1:'About',n2:'Services',n3:'Depots &amp; Stores',n4:'Products',n5:'Contact 
  r3a:'Accessories',r3b:'Gadget companions for everyday needs.',
  r4a:'Memory',r4b:'Memory cards and storage media.',
  r5a:'Coffee',r5b:'Served by the coffee robot at our Flagship Store in Padang.',
- b0:'Factory',b1:'Backed by two factories.',
+ b0:'Factory',b1:'Backed by two factories.',b2:'View on Google Maps',
  m0:'Team &amp; Organization',m1:'The people behind every delivery.',m2:'Team members across 18 divisions',
  m3:'Warehouse',m4:'Sales &amp; field',m5:'Finance',m6:'Support &amp; online',m7:'Other divisions',
  g1:'Commissioner',g2:'President Director',g3:'Director',g4:'Regional supervisors',g5:'Field Sales Consultants',g6:'Purchasing Manager',g7:'Head of Finance',g8:'HR staff',
@@ -900,7 +913,7 @@ zh:{n1:'关于',n2:'服务',n3:'仓库与门店',n4:'产品',n5:'联系我们',
  r3a:'配件',r3b:'满足日常需求的数码配件。',
  r4a:'存储',r4b:'存储卡与存储设备。',
  r5a:'咖啡',r5b:'由巴东旗舰店的咖啡机器人呈现。',
- b0:'工厂',b1:'两座工厂提供支持。',
+ b0:'工厂',b1:'两座工厂提供支持。',b2:'在 Google 地图上查看',
  m0:'团队与组织',m1:'每一次配送背后的人。',m2:'名团队成员，分布于 18 个部门',
  m3:'仓储',m4:'销售与外勤',m5:'财务',m6:'支持与线上',m7:'其他部门',
  g1:'监事',g2:'总裁',g3:'董事',g4:'区域主管',g5:'外勤销售顾问',g6:'采购经理',g7:'财务负责人',g8:'人事专员',
