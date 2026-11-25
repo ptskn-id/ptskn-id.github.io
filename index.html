@@ -405,6 +405,8 @@ html.diam .tl::before{transform:none}
 .menu{margin-left:auto}
 .lang{display:flex;align-items:center;gap:2px;margin-left:26px}
 .lang button{background:none;border:0;border-bottom:1px solid transparent;color:#aeb6c6;font-size:11.5px;font-weight:600;letter-spacing:.12em;padding:8px 8px;transition:color .3s,border-color .3s}
+.lang button{white-space:nowrap}
+@media (max-width:360px){.nav .brand .logo{height:30px}.lang{margin-right:6px}.lang button{padding:8px 5px}.burger{width:42px;height:42px}}
 .lang button:hover{color:#fff}
 .lang button[aria-pressed=true]{color:#fff;border-color:var(--gold-l)}
 .about{align-items:end}
