@@ -365,6 +365,9 @@ function siapkanArea(a) {
   const tak = Math.min(a.nTak, a.nToko);
   const s = rapi(a.status).toUpperCase();
   let sisa = s === 'BISA DIJANGKAU' ? 'HIJAU' : s === 'BUTUH WAKTU' ? 'KUNING' : s.indexOf('PERJADIN') >= 0 ? 'MERAH' : a.warna;
+  // SCL kosong (VACANT) dan status SCL tidak diisi: kabupaten itu tidak dipegang SCL, jadi dihitung merah untuk SCL.
+  a.vakum = !s && (!a.scl || /^(VACANT|KOSONG|-)$/i.test(rapi(a.scl))) && !!rapi(a.statusAe);
+  if (a.vakum) sisa = 'MERAH';
   if (!WARNA[sisa]) sisa = 'HIJAU';
   a.jml = { HIJAU: 0, KUNING: 0, MERAH: 0 };
   a.jml.MERAH += tak;
@@ -495,7 +498,7 @@ function isiPopupArea(a) {
     '<p>' + (URUT_WARNA.filter(w => a.jml[w] > 0).map(w => '<span class="cap ' + w + '">' + angka(a.jml[w]) + ' toko ' + w.toLowerCase() + '</span>').join(' ') || '<span class="cap abu">belum ada toko</span>') +
     ' <span class="cap abu">data per kabupaten</span></p>' +
     '<p>' + esc(a.wil) + '</p>' +
-    '<p>SCL: ' + esc(a.scl || '-') + ' — ' + esc(a.status || 'status belum diisi') +
+    '<p>SCL: ' + esc(a.scl || '-') + ' — ' + esc(a.status || (a.vakum ? 'tidak ada SCL' : 'status belum diisi')) +
     '<br>AE: ' + esc(a.ae || '-') + (a.statusAe ? ' — ' + esc(a.statusAe) : '') +
     (a.ketBantu ? '<br><b style="color:' + (a.bantu ? '#1565c0' : '#5d6b7a') + '">' + esc(a.ketBantu) + '</b>' : '') + '</p>' +
     '<p>Jumlah toko: ' + angka(a.nToko) + '<br>Tidak terjangkau: ' + angka(a.nTak) + ' toko (' + persen(a.nTak, a.nToko) + '%)</p>' +
@@ -1215,7 +1218,7 @@ function tampilSimulasi(r) {
     (x.baru > r.baru.length ? '<tr><td colspan="3">… dan ' + angka(x.baru - r.baru.length) + ' lainnya</td></tr>' : '') + '</tbody></table></div></details>';
   const hb = r.homebase;
   if (hb) h += '<div class="pesan info"><b>Lembar HOMEBASE</b><br>' + angka(hb.total) + ' orang terbaca: <b>' + angka(hb.baru) + ' baru</b>, <b>' + angka(hb.berubah) + ' berubah</b>, ' + angka(hb.sama) + ' sama persis.' +
-    (hb.linkPendek ? '<br>' + angka(hb.linkPendek) + ' link maps berupa link pendek; titiknya dicari saat disimpan (paling banyak 40 sekali upload).' : '') + '</div>';
+    (hb.linkPendek ? '<br>' + angka(hb.linkPendek) + ' link maps berupa link pendek; titiknya dicari saat disimpan (paling banyak 150 sekali upload).' : '') + '</div>';
   const nUbah = x.baru + x.berubah + (hb ? hb.baru + hb.berubah : 0);
   if (nUbah > 0) h += '<p><button type="button" class="tombol utama" id="btnSimpanUpload">Simpan ' + angka(nUbah) + ' perubahan</button> <button type="button" class="tombol" id="btnBatalUpload">Batal</button></p>';
   else h += '<p class="catatan">Tidak ada yang perlu disimpan.</p>';
