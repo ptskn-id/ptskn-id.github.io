@@ -427,6 +427,9 @@ a.row{color:inherit}
 .flag-pts b{display:block;font-family:var(--serif);font-weight:500;font-size:14px;color:var(--red);letter-spacing:.06em}
 .flag-pts span{display:block;margin-top:6px;font-weight:500}
 .fcard{justify-content:flex-end}
+.gal-h{width:min(var(--wrap),100% - 48px);margin-inline:auto;display:flex;align-items:center;gap:16px;font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.gal-h::after{content:"";flex:1;height:1px;background:var(--line)}
+.gal-h+.mq+.gal-h{margin-top:14px}
 .fcard.foto{padding:0;min-height:0;justify-content:flex-start}
 .fcard.foto img{width:100%;height:auto;aspect-ratio:15/8;object-fit:cover;filter:saturate(.88);transition:transform 1.6s var(--ease),filter .6s}
 .fcard.foto:hover img{transform:scale(1.03);filter:none}
@@ -547,7 +550,7 @@ html[lang^=zh] .label,html[lang^=zh] .menu a:not(.btn),html[lang^=zh] .btn{lette
     <div class="tl" id="tl">
       <div class="tstep rv"><b data-t="t1a">2002 – 2010</b><p data-t="t1b">Berawal di Riau. Membangun service center dan memetakan pasar dari pintu ke pintu.</p></div>
       <div class="tstep rv"><b data-t="t2a">2010 – 2019</b><p data-t="t2b">Meluas ke seluruh provinsi di Sumatera, lalu ke Sulawesi.</p></div>
-      <div class="tstep rv"><b data-t="t3a">2019 – Sekarang</b><p data-t="t3b">Distributor resmi telepon seluler dan AIoT. Menjangkau Bodetabek, Sulawesi, dan Maluku.</p></div>
+      <div class="tstep rv"><b data-t="t3a">2019 – Sekarang</b><p data-t="t3b">Tumbuh menjadi distributor nasional, dengan depo dan store di seluruh Indonesia.</p></div>
     </div>
     <div class="vision rv" id="visi">
       <small data-t="v0">Visi</small>
@@ -638,7 +641,7 @@ html[lang^=zh] .label,html[lang^=zh] .menu a:not(.btn),html[lang^=zh] .btn{lette
       <article class="bcard rv"><small>01</small><div class="bname" data-t="r2a">Smartphone</div><p data-t="r2b">Telepon seluler dan smartphone untuk beragam segmen pasar.</p><i></i></article>
       <article class="bcard rv"><small>02</small><div class="bname" data-t="r3a">Aksesori</div><p data-t="r3b">Pelengkap gadget untuk kebutuhan sehari-hari.</p><i></i></article>
       <article class="bcard rv"><small>03</small><div class="bname" data-t="r4a">Memori</div><p data-t="r4b">Kartu memori dan media penyimpanan.</p><i></i></article>
-      <article class="bcard rv"><small>04</small><div class="bname" data-t="r5a">Kopi</div><p data-t="r5b">Hadir lewat robot kopi di Flagship Store Padang.</p><i></i></article>
+      <article class="bcard rv"><small>04</small><div class="bname" data-t="r5a">Kopi</div><p data-t="r5b">Hadir lewat robot kopi di store Padang dan Manado.</p><i></i></article>
     </div>
   </div>
 </section>
@@ -668,7 +671,7 @@ html[lang^=zh] .label,html[lang^=zh] .menu a:not(.btn),html[lang^=zh] .btn{lette
 <section class="sec" id="tim">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="label"><b>07</b><span data-t="m0">Tim &amp; Organisasi</span></span><h2 data-t="m1">Orang-orang di balik setiap pengiriman.</h2></div>
+      <div><span class="label"><b>07</b><span data-t="m0">Tim &amp; Organisasi</span></span><h2 data-t="m1">Didukung tim hebat di seluruh Indonesia.</h2></div>
     </div>
     <div class="team">
       <div class="team-n rv"><b><span data-count="227">227</span></b><span data-t="m2">Anggota tim di 18 divisi</span></div>
@@ -851,7 +854,7 @@ en:{n1:'About',n2:'Services',n3:'Depots &amp; Stores',n4:'Products',n5:'Contact 
  t3a:'2019 – Today',
  t1b:'Started in Riau. Built service centers and mapped the market door to door.',
  t2b:'Expanded to every province in Sumatra, then to Sulawesi.',
- t3b:'Authorized distributor of mobile phones and AIoT. Now reaching Greater Jakarta, Sulawesi, and Maluku.',
+ t3b:'Grown into a national distributor, with depots and stores across Indonesia.',
  v0:'Vision',v1:'“Serving People Who Serve Others”',v2:'To be a professional, trusted distribution company that gives its partners the best service.',
  l1:'One partner for distribution, market growth, and after-sales.',
  l2a:'Distribution Network',l2b:'Depots and business partners across Indonesia.',
@@ -872,9 +875,9 @@ en:{n1:'About',n2:'Services',n3:'Depots &amp; Stores',n4:'Products',n5:'Contact 
  r2a:'Smartphones',r2b:'Mobile phones and smartphones for every market segment.',
  r3a:'Accessories',r3b:'Gadget companions for everyday needs.',
  r4a:'Memory',r4b:'Memory cards and storage media.',
- r5a:'Coffee',r5b:'Served by the coffee robot at our Flagship Store in Padang.',
+ r5a:'Coffee',r5b:'Served by coffee robots at our Padang and Manado stores.',
  b0:'Factory',b1:'Backed by two factories.',b2:'View on Google Maps',
- m0:'Team &amp; Organization',m1:'The people behind every delivery.',m2:'Team members across 18 divisions',
+ m0:'Team &amp; Organization',m1:'Backed by a great team across Indonesia.',gd:'Depots',gs:'Stores',m2:'Team members across 18 divisions',
  m3:'Warehouse',m4:'Sales &amp; field',m5:'Finance',m6:'Support &amp; online',m7:'Other divisions',
  g1:'Commissioner',g2:'President Director',g3:'Director',g4:'Regional supervisors',g5:'Field Sales Consultants',g6:'Purchasing Manager',g7:'Head of Finance',g8:'HR staff',
  d0:'Leadership',d1:'Has built SKN since 2002, focused on a nationwide distribution network, partner trust, and consistent market growth.',
@@ -893,7 +896,7 @@ zh:{n1:'关于',n2:'服务',n3:'仓库与门店',n4:'产品',n5:'联系我们',
  t3a:'2019 年至今',
  t1b:'始于廖内省。建立服务中心，挨家挨户开拓市场。',
  t2b:'扩展至苏门答腊所有省份，随后进入苏拉威西。',
- t3b:'手机与 AIoT 产品的官方分销商，业务覆盖大雅加达地区、苏拉威西与马鲁古。',
+ t3b:'成长为全国性分销商，仓库与门店遍布印度尼西亚。',
  v0:'愿景',v1:'“服务那些服务他人的人”',v2:'成为专业、可信赖的分销企业，为合作伙伴提供最佳服务。',
  l1:'分销、市场拓展与售后，一站式合作伙伴。',
  l2a:'分销网络',l2b:'仓库与合作伙伴遍布印度尼西亚各地。',
@@ -914,9 +917,9 @@ zh:{n1:'关于',n2:'服务',n3:'仓库与门店',n4:'产品',n5:'联系我们',
  r2a:'智能手机',r2b:'面向各细分市场的手机与智能手机。',
  r3a:'配件',r3b:'满足日常需求的数码配件。',
  r4a:'存储',r4b:'存储卡与存储设备。',
- r5a:'咖啡',r5b:'由巴东旗舰店的咖啡机器人呈现。',
+ r5a:'咖啡',r5b:'由巴东和万鸦老门店的咖啡机器人呈现。',
  b0:'工厂',b1:'两座工厂提供支持。',b2:'在 Google 地图上查看',
- m0:'团队与组织',m1:'每一次配送背后的人。',m2:'名团队成员，分布于 18 个部门',
+ m0:'团队与组织',m1:'优秀团队遍布印度尼西亚，全力支持。',gd:'仓库',gs:'门店',m2:'名团队成员，分布于 18 个部门',
  m3:'仓储',m4:'销售与外勤',m5:'财务',m6:'支持与线上',m7:'其他部门',
  g1:'监事',g2:'总裁',g3:'董事',g4:'区域主管',g5:'外勤销售顾问',g6:'采购经理',g7:'财务负责人',g8:'人事专员',
  d0:'领导层',d1:'自 2002 年创立并发展 SKN，专注于全国分销网络、合作伙伴的信任与持续的市场增长。',
@@ -1072,13 +1075,15 @@ if('IntersectionObserver' in window){
     },function(){near.disabled=false;near.innerHTML=tx('j4');pesan='geoFail';render(false)},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
   });
 
-  /* galeri foto berjalan: dua baris, arah berlawanan, pelan */
+  /* galeri foto berjalan: baris atas DEPO, baris bawah STORE, arah berlawanan, pelan */
   (function(){
     var ada=[];LOKASI.forEach(function(d,i){if(d.f)ada.push(i)});
     function baris(ids,rev){var h=ids.map(function(i){var d=LOKASI[i];return '<button type="button" class="gitem" data-i="'+i+'" tabindex="-1"><img src="'+d.f+'" alt="" loading="lazy" width="300" height="200"><span>'+esc(d.n)+'</span></button>'}).join('');
       return '<div class="mq"><div class="mq-track'+(rev?' rev':'')+'">'+h+h+'</div></div>'}
-    var t=Math.ceil(ada.length/2);
-    $('#gal').innerHTML=baris(ada.slice(0,t),false)+baris(ada.slice(t),true);
+    var dp=ada.filter(function(i){return LOKASI[i].j==='depo'}),st=ada.filter(function(i){return LOKASI[i].j==='store'});
+    ASLI.gd='Depo';ASLI.gs='Store';
+    function judul(k){return '<div class="gal-h"><span data-t="'+k+'">'+tx(k)+'</span></div>'}
+    $('#gal').innerHTML=judul('gd')+baris(dp,false)+judul('gs')+baris(st.concat(st),true);
     $('#gal').addEventListener('click',function(e){var b=e.target.closest('.gitem');if(!b)return;
       bersih();chips();render(false);pilih(+b.dataset.i,true);
       $('#map').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})});
